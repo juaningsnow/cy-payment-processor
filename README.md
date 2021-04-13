@@ -23,3 +23,7 @@ run these commands on your favorite CLI.
     set the given address on .env as app url for the photos to load
     
     APP_URL=@baseAddress
+
+App Credentials
+User: admin or admin@praxxys.ph
+Pass: admin
