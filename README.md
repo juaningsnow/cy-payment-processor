@@ -20,3 +20,6 @@ run these commands on your favorite CLI.
      -php artisan mgirate --seed or php artisan migrate:fresh --seed
 
 5. php artisan serve
+    set the given address on .env as app url for the photos to load
+    
+    APP_URL=@baseAddress
