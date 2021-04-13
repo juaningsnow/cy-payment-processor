@@ -45,4 +45,11 @@ class ProductApiController extends Controller
         $product = ProductModel::find($id);
         return new ProductResource($product);
     }
+
+    public function destroy($id)
+    {
+        $product = ProductModel::find($id);
+        $product->delete();
+        return response('success', 200);
+    }
 }

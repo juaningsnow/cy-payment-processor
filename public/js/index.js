@@ -21928,7 +21928,7 @@ new vue__WEBPACK_IMPORTED_MODULE_2__.default({
       id: 'category',
       text: 'Category'
     }],
-    baseUrl: 'api/products',
+    baseUrl: '/api/products',
     exportBaseUrl: typeof exportBaseUrl !== "undefined" ? exportBaseUrl : '',
     items: [],
     totals: {},

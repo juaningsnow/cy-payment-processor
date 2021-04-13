@@ -23,4 +23,5 @@ Route::prefix('products')->group(function () {
     Route::get('/', [ProductApiController::class, 'index']);
     Route::get('{id}', [ProductApiController::class, 'show']);
     Route::post('/', [ProductApiController::class, 'store']);
+    Route::delete('{id}', [ProductApiController::class, 'destroy']);
 });

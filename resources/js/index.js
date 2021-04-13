@@ -12,7 +12,7 @@ new Vue({
             {id: 'keyword', text: 'Keyword'},
             {id: 'category', text: 'Category'}
         ],
-        baseUrl: 'api/products',
+        baseUrl: '/api/products',
         exportBaseUrl: typeof exportBaseUrl !== "undefined" ? exportBaseUrl : '',
         items: [],
         totals: {},
