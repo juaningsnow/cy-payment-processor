@@ -2,7 +2,7 @@
 Installation steps
 
 run these commands on your favorite CLI.
-1. **git clone https://github.com/juaningsnow/praxxys-exam.git** and navigate to folder e.g. cd praxxys-exam
+1. **git clone https://github.com/juaningsnow/praxxys-exam.git** and navigate to folder e.g. **cd praxxys-exam**
 2. **composer install**
 3. **npm install**
 4. if you don't want to create a local database, you can leave it, it is configured to use db4free.net but performance may be slow, just run 
