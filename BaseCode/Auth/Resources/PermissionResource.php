@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace BaseCode\Auth\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MediaResource extends JsonResource
+class PermissionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,10 +15,8 @@ class MediaResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'publicUrl' => $this->getUrl(),
-            'name' => $this->file_name,
-            'publicFullUrl' => $this->getFullUrl(),
-            'fullPathOnDisk' => $this->getPath()
+            'id' => $this->id,
+            'name' => $this->name,
         ];
     }
 }

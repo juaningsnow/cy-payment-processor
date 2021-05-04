@@ -25,9 +25,4 @@ class HomeController extends Controller
     {
         return view('dashboard', ['title' => "Dashboard"]);
     }
-
-    public function videos()
-    {
-        return view('videos.player', ['title' => "Videos"]);
-    }
 }
