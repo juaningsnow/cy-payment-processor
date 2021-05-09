@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\InvoiceBatchController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,10 +29,17 @@ Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('dashboard');
 
-Route::get('/videos', [HomeController::class, 'videos'])->name('videos');
 
-Route::prefix('products')->group(function () {
-    Route::get('/', [ProductController::class, 'index'])->name('products');
-    Route::get('/create', [ProductController::class, 'create'])->name('product_create');
-    Route::get('/{id}/edit', [ProductController::class, 'edit'])->name('product_edit');
+Route::prefix('suppliers')->group(function () {
+    Route::get('/', [SupplierController::class, 'index'])->name('suppliers');
+    Route::get('/create', [SupplierController::class, 'create'])->name('supplier_create');
+    Route::get('/{id}', [SupplierController::class, 'show'])->name('supplier_show');
+    Route::get('/{id}/edit', [SupplierController::class, 'edit'])->name('supplier_edit');
+});
+
+Route::prefix('invoice-batches')->group(function () {
+    Route::get('/', [InvoiceBatchController::class, 'index'])->name('invoice-batches');
+    Route::get('/create', [InvoiceBatchController::class, 'create'])->name('invoice-batches_create');
+    Route::get('/{id}', [InvoiceBatchController::class, 'show'])->name('invoice-batches_show');
+    Route::get('/{id}/edit', [InvoiceBatchController::class, 'edit'])->name('invoice-batches_edit');
 });

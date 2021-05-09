@@ -5,17 +5,16 @@
         </div>
         <div v-if="!isSaving">
             <i class="fa fa-save"></i>
-            
         </div>
     </button>
 </template>
 
 <script>
-    export default {
-        props: ['is-busy', 'is-saving'],
+export default {
+    props: ["is-busy", "is-saving"],
 
-        mounted() {
-            console.log('Save button mounted.')
-        },
-    }
+    mounted() {
+        console.log("Save button mounted.");
+    },
+};
 </script>

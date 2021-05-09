@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Index from "./components/Index.vue";
-import {Form} from "./components/Form";
+import { Form } from "./components/Form";
 
 Vue.config.devtools = true;
 new Vue({
@@ -8,11 +8,8 @@ new Vue({
     components: { Index },
     data: {
         form: new Form(),
-        filterable: [
-            {id: 'keyword', text: 'Keyword'},
-            {id: 'category', text: 'Category'}
-        ],
-        baseUrl: '/api/products',
+        filterable: filterable,
+        baseUrl: baseUrl,
         exportBaseUrl: typeof exportBaseUrl !== "undefined" ? exportBaseUrl : '',
         items: [],
         totals: {},
@@ -24,7 +21,7 @@ new Vue({
     },
 
     methods: {
-        
+
         setSorter(sorter) {
             if (sorter == this.sorter) this.sortAscending = !this.sortAscending;
             else this.sortAscending = true;
@@ -39,10 +36,11 @@ new Vue({
             };
         },
 
-        destroy(url) {
+        destroy(url, redirectUrl) {
+            console.log(url, redirectUrl);
             this.form.deleteWithConfirmation(url).then(response => {
-                this.form.successModal('Product has been removed').then(() =>
-                    window.location = '/products/'
+                this.form.successModal('Item has been removed').then(() =>
+                    window.location = redirectUrl
                 );
             });
         },

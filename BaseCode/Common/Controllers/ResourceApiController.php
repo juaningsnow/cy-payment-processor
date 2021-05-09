@@ -2,6 +2,8 @@
 
 namespace BaseCode\Common\Controllers;
 
+use BaseCode\Common\Utils\RepoExporter;
+use BaseCode\Common\Utils\UriParserHelper;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +19,6 @@ abstract class ResourceApiController extends Controller
 
     public function __construct(Model $model)
     {
-        // $this->middleware(['auth:sanctum']);
         $this->query = $model->newQuery();
     }
 
@@ -53,15 +54,6 @@ abstract class ResourceApiController extends Controller
             }
         });
     }
-
-    // public function destroy($id)
-    // {
-    //     $data = \DB::transaction(function () use ($id) {
-    //         return $this->model->deleteById($id);
-    //     });
-    //     return $this->getResource($data);
-    // }
-
 
     protected function include(Request $request)
     {

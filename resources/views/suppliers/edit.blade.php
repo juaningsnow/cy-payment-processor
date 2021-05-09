@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 @include('layouts.section-header')
-<div id="product">
+<div id="supplier">
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -14,29 +14,38 @@
                     <div class="card-header">
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                            <i class="fas fa-minus"></i> 
+                                <i class="fas fa-minus"></i>
                             </button>
                         </div>
                     </div>
                     <form>
                         <div class="card-body">
-                            @include('products._form')
+                            @include('suppliers._form')
                         </div>
+                        <div class="card-footer">
+                            <div class="text-right">
+                                <button class="btn btn-success" @click="update" :disabled="form.isBusy">
+                                    <div v-if="form.isSaving">
+                                        <i class="fas fa-circle-notch fa-spin"></i> Saving...
+                                    </div>
+                                    <div v-if="!form.isSaving">
+                                        <i class="fa fa-save"></i>
+                                    </div>
+                                </button>
+                            </div>
                     </form>
-                    {{-- <div class="card-footer">
-                        <div class="text-right">
-                            <button class="btn btn-success" @click="store"><i class="fa fa-save"></i></button>
-                        </div>
-                    </div> --}}
-                    </div>
+
+                </div>
             </div>
         </div>
     </div>
 </div>
+</div>
 @endsection
 @push('scripts')
 <script type="text/javascript">
-var id = {!! json_encode($id) !!};
+    var id = {!! json_encode($id) !!};
+    var isShow = false;
 </script>
-<script src="{{ mix('js/product.js') }}"></script>
+<script src="{{ mix('js/supplier.js') }}"></script>
 @endpush
