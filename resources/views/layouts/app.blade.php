@@ -94,7 +94,8 @@
   </div>
   <!-- ./wrapper -->
 
-  <script src="{{ mix('js/app.js') }}" defer></script>
+  <script src="{{ mix('js/app.js') }}"></script>
+  <script src="{{ asset('js/select2.js') }}"></script>
   @stack('scripts')
 </body>
 

@@ -22,8 +22,8 @@ class InvoiceBatchResource extends JsonResource
             'date' => $this->getDate()->toFormattedDateString(),
             'total' => $this->getTotal(),
             'invoiceBatchDetails' => new InvoiceBatchDetailResourceCollection($this->whenLoaded('invoiceBatchDetails')),
-            'showUrl' => "/invoices/{$this->getId()}",
-            'editUrl' => "/invoices/{$this->getId()}/edit"
+            'showUrl' => "/invoice-batches/{$this->getId()}",
+            'editUrl' => "/invoice-batches/{$this->getId()}/edit"
         ];
     }
 }

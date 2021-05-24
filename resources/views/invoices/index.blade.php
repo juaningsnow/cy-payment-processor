@@ -36,7 +36,7 @@
                                     <a :href="item.editUrl"><button type="button" class="btn btn-info"><i
                                                 class="fas fa-edit"></i></button></a>
                                     <button type="button" class="btn btn-danger"
-                                        @click="destroy(`/api/invoices/${item.id}`,`/invoices`)"><i
+                                        @click="destroy(`/api/invoice-batches/${item.id}`,`/invoice-batches`)"><i
                                             class="fas fa-trash"></i></button>
                                 </div>
                             </td>

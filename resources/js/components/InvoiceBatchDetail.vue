@@ -1,21 +1,28 @@
 <template>
     <tr>
         <td>
-            <select3
-                class="custom-select"
-                required
-                :selected="defaultSupplier"
-                data-msg-required="Enter Supplier"
-                v-model.number="detail.supplierId"
-                search="name"
-                url="/api/suppliers"
-                :disabled="isShow"
-            ></select3>
+            <select
+                class="form-control select2"
+                v-model="detail.supplierId"
+                style="width: 100%"
+            >
+                <option selected="selected" disabled :value="null">
+                    -Select Supplier-
+                </option>
+                <option
+                    v-for="(item, index) in supplierSelections"
+                    :key="index"
+                    :value="item.id"
+                >
+                    {{ item.text }}
+                </option>
+            </select>
         </td>
         <td>
             <datepicker
                 input-class="form-control"
                 :disabled="isShow"
+                :typeable="true"
                 v-model="detail.date"
             ></datepicker>
         </td>
@@ -29,22 +36,27 @@
             />
         </td>
         <td>
-            <money
-                class="form-control"
-                v-model="detail.amount"
-                v-bind="money"
-            ></money>
+            <input
+                type="number"
+                :disabled="isShow"
+                class="form-control text-right"
+                placeholder="Amount"
+                v-model.number="detail.amount"
+            />
+        </td>
+        <td class="text-right">
+            <button type="button" class="btn btn-danger btn-sm" @click="remove">
+                <i class="fas fa-times"></i>
+            </button>
         </td>
     </tr>
 </template>
 
 <script>
-import Select3 from "./Select3";
 import Datepicker from "vuejs-datepicker";
-import { Money } from "v-money";
 
 export default {
-    components: { Select3, Datepicker },
+    components: { Datepicker },
 
     props: {
         detail: {
@@ -57,19 +69,14 @@ export default {
             type: Boolean,
             default: false,
         },
+        supplierSelections: {
+            type: Array,
+            default: [],
+        },
     },
 
     data() {
-        return {
-            money: {
-                decimal: ",",
-                thousands: ".",
-                prefix: "$ ",
-                precision: 2,
-                masked: false,
-            },
-            defaultSupplier: {},
-        };
+        return {};
     },
 
     watch: {},

@@ -11,12 +11,15 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
-} catch (e) {}
+} catch (e) { }
 
 import Vue from 'vue';
 
 import VueSweetalert2 from "vue-sweetalert2";
 Vue.use(VueSweetalert2);
+
+
+require('select2');
 
 
 /**

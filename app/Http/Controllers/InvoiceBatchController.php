@@ -21,8 +21,8 @@ class InvoiceBatchController extends Controller
             'filterable' => $this->availableFilters,
             'sorter' => 'batch_name',
             'sortAscending' => true,
-            'baseUrl' => '/api/invoices',
-            'exportBaseUrl' => '/invoices'
+            'baseUrl' => '/api/invoice-batches',
+            'exportBaseUrl' => '/invoice-batches'
         ];
         return view('invoices.index', ['title' => 'Invoice Batch', 'indexVariables' => $indexVariables]);
     }

@@ -10,7 +10,7 @@ class InvoiceBatch extends BaseModel
 {
     use HasFactory;
 
-    protected $table = 'invoice_batch';
+    protected $table = 'invoice_batches';
 
     protected $dates = ['date'];
 

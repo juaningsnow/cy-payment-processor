@@ -95,5 +95,4 @@ class InvoiceBatchDetail extends Model
     {
         return $this->id;
     }
-
 }

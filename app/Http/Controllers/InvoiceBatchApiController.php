@@ -6,10 +6,11 @@ use App\Http\Requests\InvoiceBatchRequest;
 use App\Http\Resources\InvoiceBatchResource;
 use App\Http\Resources\InvoiceBatchResourceCollection;
 use App\Models\InvoiceBatch;
+use BaseCode\Common\Controllers\ResourceApiController;
 use DateTime;
 use Illuminate\Http\Request;
 
-class InvoiceBatchApiController extends Controller
+class InvoiceBatchApiController extends ResourceApiController
 {
     const EXPORT_FILE_NAME = 'invoiceBatchs.xlsx';
 

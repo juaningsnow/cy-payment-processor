@@ -31,6 +31,8 @@ new Vue({
             }
         }),
         counter: -1,
+        supplierSelections: [],
+        suppliersInitialized: false,
         dataInitialized: true,
     },
 
@@ -54,7 +56,7 @@ new Vue({
             }
         },
         initializationComplete() {
-            return this.dataInitialized;
+            return this.dataInitialized && this.suppliersInitialized;
         },
     },
 
@@ -64,31 +66,31 @@ new Vue({
             this.form.invoiceBatchDetails.data.push({
                 id: --this.counter,
                 supplierId: null,
-                date: moment(),
+                date: moment().toString(),
                 invoiceNumber: "",
                 amount: 0.00
             });
         },
 
         store() {
-            this.form.post("/api/invoices").then(response => {
+            this.form.post("/api/invoice-batches").then(response => {
                 this.$swal({
                     title: "Invoice Batch created!",
                     text: "Invoice Batch was saved.",
                     type: "success"
-                }).then(() => window.location = "/invoices");
+                }).then(() => window.location = "/invoice-batches");
             }).catch(error => {
                 console.log(error);
             });
         },
 
         update() {
-            this.form.patch("/api/invoices/" + this.form.id).then(response => {
+            this.form.patch("/api/invoice-batches/" + this.form.id).then(response => {
                 this.$swal({
                     title: "Invoice Batch updated!",
                     text: "Changes saved to database.",
                     type: "success"
-                }).then(() => (window.location = "/invoices/" + id));
+                }).then(() => (window.location = "/invoice-batches/" + id));
             });
         },
         loadData(data) {
@@ -103,12 +105,16 @@ new Vue({
             this.isEdit = true;
             this.form
                 .get(
-                    "/api/invoices/" + id
+                    "/api/invoice-batches/" + id
                 ).then(response => {
                     this.loadData(response.data);
                     this.dataInitialized = true;
                 });
         }
+        this.form.get(`/api/suppliers?limit=${Number.MAX_SAFE_INTEGER}`).then(response => {
+            this.supplierSelections = response.data;
+            this.suppliersInitialized = true;
+        })
         this.isShow = typeof isShow !== "undefined" ? isShow : false;
     },
 });

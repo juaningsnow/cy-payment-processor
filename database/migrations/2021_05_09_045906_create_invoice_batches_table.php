@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInvoiceBatchTable extends Migration
+class CreateInvoiceBatchesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateInvoiceBatchTable extends Migration
      */
     public function up()
     {
-        Schema::create('invoice_batch', function (Blueprint $table) {
+        Schema::create('invoice_batches', function (Blueprint $table) {
             $table->id();
             $table->string('batch_name')->unique();
             $table->date('date');
@@ -29,6 +29,6 @@ class CreateInvoiceBatchTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('invoice_batch');
+        Schema::dropIfExists('invoice_batches');
     }
 }

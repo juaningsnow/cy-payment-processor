@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Models\InvoiceBatch;
 use App\Models\InvoiceBatchDetail;
-use App\Models\InvoiceBatchDetails;
 use App\Models\Supplier;
 use BaseCode\Common\Exceptions\GeneralApiException;
 use DateTime;
@@ -19,7 +17,7 @@ class InvoiceBatchRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -30,7 +28,7 @@ class InvoiceBatchRequest extends FormRequest
     public function rules()
     {
         return [
-            'batchName' => 'required|unique:invoice_batch,batch_name,' . $this->route('id') ?? null
+            'batchName' => 'required|unique:invoice_batches,batch_name,' . $this->route('id') ?? null
         ];
     }
 
@@ -49,7 +47,7 @@ class InvoiceBatchRequest extends FormRequest
         $this->checkIfInvoiceNumberIsDuplicate($this->input('invoiceBatchDetails.data'));
         return array_map(function ($item) {
             if (isset($item['id']) || $item['id'] < 0) {
-                $detail = new InvoiceBatchDetail;
+                $detail = new InvoiceBatchDetail();
                 $this->checkIfInvoiceExists($item['invoiceNumber']);
             } else {
                 $detail = InvoiceBatchDetail::find($item['id']);

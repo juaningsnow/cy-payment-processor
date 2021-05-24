@@ -16,7 +16,7 @@ class CreateInvoiceBatchDetailsTable extends Migration
         Schema::create('invoice_batch_details', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('invoice_batch_id')->unsigned();
-            $table->foreign('invoice_batch_id')->references('id')->on('invoice_batch')->onDelete('cascade');
+            $table->foreign('invoice_batch_id')->references('id')->on('invoice_batches')->onDelete('cascade');
             $table->bigInteger('supplier_id')->unsigned();
             $table->foreign('supplier_id')->references('id')->on('suppliers');
             $table->date('date');
