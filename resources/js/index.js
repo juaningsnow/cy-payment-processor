@@ -1,6 +1,17 @@
 import Vue from 'vue';
 import Index from "./components/Index.vue";
 import { Form } from "./components/Form";
+Vue.filter("numeric", function (value, decimals = 2) {
+    if (isNaN(Number(value))) {
+        return value;
+    }
+    var formatter = new Intl.NumberFormat("en-US", {
+        style: "decimal",
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+    });
+    return formatter.format(value);
+});
 
 Vue.config.devtools = true;
 new Vue({

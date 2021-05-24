@@ -9,6 +9,17 @@ import InvoiceBatchDetail from './components/InvoiceBatchDetail';
 Vue.use(VueSweetalert2);
 
 Vue.config.devtools = true;
+Vue.filter("numeric", function (value, decimals = 2) {
+    if (isNaN(Number(value))) {
+        return value;
+    }
+    var formatter = new Intl.NumberFormat("en-US", {
+        style: "decimal",
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+    });
+    return formatter.format(value);
+});
 
 new Vue({
     el: "#invoice",
@@ -34,6 +45,7 @@ new Vue({
         supplierSelections: [],
         suppliersInitialized: false,
         dataInitialized: true,
+        isShow: false,
     },
 
     watch: {
@@ -105,7 +117,7 @@ new Vue({
             this.isEdit = true;
             this.form
                 .get(
-                    "/api/invoice-batches/" + id
+                    "/api/invoice-batches/" + id + "?include=invoiceBatchDetails"
                 ).then(response => {
                     this.loadData(response.data);
                     this.dataInitialized = true;

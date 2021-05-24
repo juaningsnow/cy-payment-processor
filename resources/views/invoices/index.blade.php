@@ -27,7 +27,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="item in items" v-if="!isLoading">
-                            <td>@{{item.name}}</td>
+                            <td>@{{item.batchName}}</td>
                             <td>@{{item.date}}</td>
                             <td class="text-center">
                                 <div class="btn-group">

@@ -36,10 +36,10 @@
         <tfoot>
             <tr>
                 <td colspan="3" class="text-right">Total</td>
-                <td class="text-right">@{{form.total}}</td>
+                <td class="text-right">@{{form.total | numeric}}</td>
                 <td></td>
             </tr>
-            <tr>
+            <tr v-if="!isShow">
                 <td colspan="5">
                     <button type="button" class="btn btn-success btn-sm" @click="addDetail">Add Detail</button>
                 </td>

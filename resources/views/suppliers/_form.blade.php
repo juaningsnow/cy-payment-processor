@@ -16,7 +16,15 @@
 
 <div class="form-group">
     <label for="paymentType">Payment Type</label>
-    <input type="text" :disabled="isShow" class="form-control" placeholder="Payment Type" v-model="form.paymentType">
+    <select class="form-control select2" :disabled="isShow" v-model="form.paymentType">
+        <option selected="selected" disabled :value="null">
+            -Select Payment Type-
+        </option>
+        <option v-for="(item, index) in paymentTypes" :key="index" :value="item">
+            @{{ item }}
+        </option>
+    </select>
+    {{-- <input type="text" :disabled="isShow" class="form-control" placeholder="Payment Type" v-model="form.paymentType"> --}}
 </div>
 
 

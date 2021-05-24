@@ -5,6 +5,7 @@
                 class="form-control select2"
                 v-model="detail.supplierId"
                 style="width: 100%"
+                :disabled="isShow"
             >
                 <option selected="selected" disabled :value="null">
                     -Select Supplier-
@@ -45,7 +46,12 @@
             />
         </td>
         <td class="text-right">
-            <button type="button" class="btn btn-danger btn-sm" @click="remove">
+            <button
+                type="button"
+                :disabled="isShow"
+                class="btn btn-danger btn-sm"
+                @click="remove"
+            >
                 <i class="fas fa-times"></i>
             </button>
         </td>

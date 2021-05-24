@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -94,5 +95,17 @@ class InvoiceBatchDetail extends Model
     public function getId()
     {
         return $this->id;
+    }
+
+    public function scopeDateFrom($query, $date)
+    {
+        $date = new Carbon($date);
+        return $query->where('date', '>=', $date->startOfDay()->copy()->toDateString());
+    }
+
+    public function scopeDateTo($query,$date)
+    {
+        $date = new Carbon($date);
+        return $query->where('date', '<=', $date->endOfDay()->copy()->toDateString());
     }
 }

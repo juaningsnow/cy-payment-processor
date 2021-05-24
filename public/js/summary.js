@@ -1870,117 +1870,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/InvoiceBatchDetail.vue?vue&type=script&lang=js&":
-/*!*************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/InvoiceBatchDetail.vue?vue&type=script&lang=js& ***!
-  \*************************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  components: {
-    Datepicker: vuejs_datepicker__WEBPACK_IMPORTED_MODULE_0__.default
-  },
-  props: {
-    detail: {
-      type: Object
-    },
-    index: {
-      type: Number
-    },
-    isShow: {
-      type: Boolean,
-      "default": false
-    },
-    supplierSelections: {
-      type: Array,
-      "default": []
-    }
-  },
-  data: function data() {
-    return {};
-  },
-  watch: {},
-  methods: {
-    remove: function remove() {
-      this.$emit("remove");
-    }
-  },
-  created: function created() {
-    if (this.detail.supplierId) {
-      this.defaultSupplier = this.detail.supplier;
-    }
-  }
-});
-
-/***/ }),
-
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/SaveButton.vue?vue&type=script&lang=js&":
 /*!*****************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/SaveButton.vue?vue&type=script&lang=js& ***!
@@ -26983,45 +26872,6 @@ component.options.__file = "resources/js/components/DeleteButton.vue"
 
 /***/ }),
 
-/***/ "./resources/js/components/InvoiceBatchDetail.vue":
-/*!********************************************************!*\
-  !*** ./resources/js/components/InvoiceBatchDetail.vue ***!
-  \********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _InvoiceBatchDetail_vue_vue_type_template_id_69ddf969___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./InvoiceBatchDetail.vue?vue&type=template&id=69ddf969& */ "./resources/js/components/InvoiceBatchDetail.vue?vue&type=template&id=69ddf969&");
-/* harmony import */ var _InvoiceBatchDetail_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./InvoiceBatchDetail.vue?vue&type=script&lang=js& */ "./resources/js/components/InvoiceBatchDetail.vue?vue&type=script&lang=js&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-;
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
-  _InvoiceBatchDetail_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
-  _InvoiceBatchDetail_vue_vue_type_template_id_69ddf969___WEBPACK_IMPORTED_MODULE_0__.render,
-  _InvoiceBatchDetail_vue_vue_type_template_id_69ddf969___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/InvoiceBatchDetail.vue"
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
-
-/***/ }),
-
 /***/ "./resources/js/components/SaveButton.vue":
 /*!************************************************!*\
   !*** ./resources/js/components/SaveButton.vue ***!
@@ -27077,22 +26927,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/InvoiceBatchDetail.vue?vue&type=script&lang=js&":
-/*!*********************************************************************************!*\
-  !*** ./resources/js/components/InvoiceBatchDetail.vue?vue&type=script&lang=js& ***!
-  \*********************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceBatchDetail_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./InvoiceBatchDetail.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/InvoiceBatchDetail.vue?vue&type=script&lang=js&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceBatchDetail_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
-
-/***/ }),
-
 /***/ "./resources/js/components/SaveButton.vue?vue&type=script&lang=js&":
 /*!*************************************************************************!*\
   !*** ./resources/js/components/SaveButton.vue?vue&type=script&lang=js& ***!
@@ -27122,23 +26956,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DeleteButton_vue_vue_type_template_id_25843a28___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DeleteButton_vue_vue_type_template_id_25843a28___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./DeleteButton.vue?vue&type=template&id=25843a28& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/DeleteButton.vue?vue&type=template&id=25843a28&");
-
-
-/***/ }),
-
-/***/ "./resources/js/components/InvoiceBatchDetail.vue?vue&type=template&id=69ddf969&":
-/*!***************************************************************************************!*\
-  !*** ./resources/js/components/InvoiceBatchDetail.vue?vue&type=template&id=69ddf969& ***!
-  \***************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceBatchDetail_vue_vue_type_template_id_69ddf969___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceBatchDetail_vue_vue_type_template_id_69ddf969___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
-/* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceBatchDetail_vue_vue_type_template_id_69ddf969___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./InvoiceBatchDetail.vue?vue&type=template&id=69ddf969& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/InvoiceBatchDetail.vue?vue&type=template&id=69ddf969&");
 
 
 /***/ }),
@@ -27196,175 +27013,6 @@ var render = function() {
         : _vm._e()
     ]
   )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/InvoiceBatchDetail.vue?vue&type=template&id=69ddf969&":
-/*!******************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/InvoiceBatchDetail.vue?vue&type=template&id=69ddf969& ***!
-  \******************************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
-/* harmony export */ });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("tr", [
-    _c("td", [
-      _c(
-        "select",
-        {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.detail.supplierId,
-              expression: "detail.supplierId"
-            }
-          ],
-          staticClass: "form-control select2",
-          staticStyle: { width: "100%" },
-          attrs: { disabled: _vm.isShow },
-          on: {
-            change: function($event) {
-              var $$selectedVal = Array.prototype.filter
-                .call($event.target.options, function(o) {
-                  return o.selected
-                })
-                .map(function(o) {
-                  var val = "_value" in o ? o._value : o.value
-                  return val
-                })
-              _vm.$set(
-                _vm.detail,
-                "supplierId",
-                $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-              )
-            }
-          }
-        },
-        [
-          _c(
-            "option",
-            {
-              attrs: { selected: "selected", disabled: "" },
-              domProps: { value: null }
-            },
-            [_vm._v("\n                -Select Supplier-\n            ")]
-          ),
-          _vm._v(" "),
-          _vm._l(_vm.supplierSelections, function(item, index) {
-            return _c("option", { key: index, domProps: { value: item.id } }, [
-              _vm._v(
-                "\n                " + _vm._s(item.text) + "\n            "
-              )
-            ])
-          })
-        ],
-        2
-      )
-    ]),
-    _vm._v(" "),
-    _c(
-      "td",
-      [
-        _c("datepicker", {
-          attrs: {
-            "input-class": "form-control",
-            disabled: _vm.isShow,
-            typeable: true
-          },
-          model: {
-            value: _vm.detail.date,
-            callback: function($$v) {
-              _vm.$set(_vm.detail, "date", $$v)
-            },
-            expression: "detail.date"
-          }
-        })
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c("td", [
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.detail.invoiceNumber,
-            expression: "detail.invoiceNumber"
-          }
-        ],
-        staticClass: "form-control",
-        attrs: {
-          type: "text",
-          disabled: _vm.isShow,
-          placeholder: "Invoice Number"
-        },
-        domProps: { value: _vm.detail.invoiceNumber },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
-            }
-            _vm.$set(_vm.detail, "invoiceNumber", $event.target.value)
-          }
-        }
-      })
-    ]),
-    _vm._v(" "),
-    _c("td", [
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model.number",
-            value: _vm.detail.amount,
-            expression: "detail.amount",
-            modifiers: { number: true }
-          }
-        ],
-        staticClass: "form-control text-right",
-        attrs: { type: "number", disabled: _vm.isShow, placeholder: "Amount" },
-        domProps: { value: _vm.detail.amount },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
-            }
-            _vm.$set(_vm.detail, "amount", _vm._n($event.target.value))
-          },
-          blur: function($event) {
-            return _vm.$forceUpdate()
-          }
-        }
-      })
-    ]),
-    _vm._v(" "),
-    _c("td", { staticClass: "text-right" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-danger btn-sm",
-          attrs: { type: "button", disabled: _vm.isShow },
-          on: { click: _vm.remove }
-        },
-        [_c("i", { staticClass: "fas fa-times" })]
-      )
-    ])
-  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -42430,18 +42078,17 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 /*!*********************************!*\
-  !*** ./resources/js/invoice.js ***!
+  !*** ./resources/js/summary.js ***!
   \*********************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _components_Form__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/Form */ "./resources/js/components/Form.js");
 /* harmony import */ var _components_SaveButton__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/SaveButton */ "./resources/js/components/SaveButton.vue");
 /* harmony import */ var _components_DeleteButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/DeleteButton */ "./resources/js/components/DeleteButton.vue");
 /* harmony import */ var vue_sweetalert2__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-sweetalert2 */ "./node_modules/vue-sweetalert2/src/index.js");
-/* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _components_InvoiceBatchDetail__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/InvoiceBatchDetail */ "./resources/js/components/InvoiceBatchDetail.vue");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var vuejs_datepicker__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuejs-datepicker */ "./node_modules/vuejs-datepicker/dist/vuejs-datepicker.esm.js");
 
 
 
@@ -42449,10 +42096,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-vue__WEBPACK_IMPORTED_MODULE_7__.default.use(vue_sweetalert2__WEBPACK_IMPORTED_MODULE_3__.default);
-vue__WEBPACK_IMPORTED_MODULE_7__.default.config.devtools = true;
-vue__WEBPACK_IMPORTED_MODULE_7__.default.filter("numeric", function (value) {
+vue__WEBPACK_IMPORTED_MODULE_6__.default.use(vue_sweetalert2__WEBPACK_IMPORTED_MODULE_3__.default);
+vue__WEBPACK_IMPORTED_MODULE_6__.default.config.devtools = true;
+vue__WEBPACK_IMPORTED_MODULE_6__.default.filter("numeric", function (value) {
   var decimals = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
 
   if (isNaN(Number(value))) {
@@ -42466,112 +42112,67 @@ vue__WEBPACK_IMPORTED_MODULE_7__.default.filter("numeric", function (value) {
   });
   return formatter.format(value);
 });
-new vue__WEBPACK_IMPORTED_MODULE_7__.default({
-  el: "#invoice",
+new vue__WEBPACK_IMPORTED_MODULE_6__.default({
+  el: "#summary",
   components: {
     SaveButton: _components_SaveButton__WEBPACK_IMPORTED_MODULE_1__.default,
     DeleteButton: _components_DeleteButton__WEBPACK_IMPORTED_MODULE_2__.default,
-    Datepicker: vuejs_datepicker__WEBPACK_IMPORTED_MODULE_4__.default,
-    InvoiceBatchDetail: _components_InvoiceBatchDetail__WEBPACK_IMPORTED_MODULE_6__.default
+    Datepicker: vuejs_datepicker__WEBPACK_IMPORTED_MODULE_5__.default
   },
   data: {
     form: new _components_Form__WEBPACK_IMPORTED_MODULE_0__.Form({
-      id: null,
-      batchName: "",
-      date: moment__WEBPACK_IMPORTED_MODULE_5___default()(),
-      total: 0,
-      invoiceBatchDetails: {
-        data: []
-      }
+      dateFrom: "",
+      dateTo: ""
     }),
-    counter: -1,
-    supplierSelections: [],
-    suppliersInitialized: false,
-    dataInitialized: true,
-    isShow: false
+    trackedDateFrom: new Date(),
+    trackedDateTo: new Date(),
+    displayData: [],
+    totalDisplay: 0,
+    displayDataLoaded: true,
+    dataInitialized: true
   },
   watch: {
     initializationComplete: function initializationComplete(val) {
       this.form.isInitializing = !val;
-    },
-    totalAmount: function totalAmount(val) {
-      this.form.total = val;
     }
   },
   computed: {
-    totalAmount: function totalAmount() {
-      if (this.form.invoiceBatchDetails.length > 0) {
-        return this.form.invoiceBatchDetails.data.reduce(function (prev, curr) {
-          return prev + curr.amount;
-        }, 0.00);
-      } else {
-        return 0;
-      }
-    },
     initializationComplete: function initializationComplete() {
-      return this.dataInitialized && this.suppliersInitialized;
+      return this.dataInitialized;
     }
   },
   methods: {
-    addDetail: function addDetail() {
-      this.form.invoiceBatchDetails.data.push({
-        id: --this.counter,
-        supplierId: null,
-        date: moment__WEBPACK_IMPORTED_MODULE_5___default()().toString(),
-        invoiceNumber: "",
-        amount: 0.00
-      });
+    formatDateFrom: function formatDateFrom() {
+      var d = new Date(this.trackedDateFrom);
+      this.form.dateFrom = d.getUTCDate() + "-" + (d.getUTCMonth() + 1) + "-" + d.getUTCFullYear();
     },
-    store: function store() {
+    formateDateTo: function formateDateTo() {
+      var d = new Date(this.trackedDateTo);
+      this.form.dateTo = d.getUTCDate() + "-" + (d.getUTCMonth() + 1) + "-" + d.getUTCFullYear();
+    },
+    exportExcel: function exportExcel() {
+      var path = new URL("".concat(window.location.origin, "/summary/excel/").concat(this.form.dateFrom, "/").concat(this.form.dateTo));
+      window.open(path);
+    },
+    exportCsv: function exportCsv() {
+      var path = new URL("".concat(window.location.origin, "/summary/csv/").concat(this.form.dateFrom, "/").concat(this.form.dateTo));
+      window.open(path);
+    },
+    preview: function preview() {
       var _this = this;
 
-      this.form.post("/api/invoice-batches").then(function (response) {
-        _this.$swal({
-          title: "Invoice Batch created!",
-          text: "Invoice Batch was saved.",
-          type: "success"
-        }).then(function () {
-          return window.location = "/invoice-batches";
-        });
-      })["catch"](function (error) {
-        console.log(error);
+      axios.get("/api/invoice-batch-details?date_from=".concat(this.form.dateFrom, "&date_to=").concat(this.form.dateTo, "&include=invoiceBatch,supplier")).then(function (response) {
+        _this.displayData = response.data.data;
+        _this.totalDisplay = response.data.data.reduce(function (prev, curr) {
+          return prev + curr.amount;
+        }, 0.00);
+        _this.displayDataLoaded = true;
       });
-    },
-    update: function update() {
-      var _this2 = this;
-
-      this.form.patch("/api/invoice-batches/" + this.form.id).then(function (response) {
-        _this2.$swal({
-          title: "Invoice Batch updated!",
-          text: "Changes saved to database.",
-          type: "success"
-        }).then(function () {
-          return window.location = "/invoice-batches/" + id;
-        });
-      });
-    },
-    loadData: function loadData(data) {
-      this.form = new _components_Form__WEBPACK_IMPORTED_MODULE_0__.Form(data);
     }
   },
   created: function created() {
-    var _this3 = this;
-
-    if (id != null) {
-      this.dataInitialized = false;
-      this.isEdit = true;
-      this.form.get("/api/invoice-batches/" + id + "?include=invoiceBatchDetails").then(function (response) {
-        _this3.loadData(response.data);
-
-        _this3.dataInitialized = true;
-      });
-    }
-
-    this.form.get("/api/suppliers?limit=".concat(Number.MAX_SAFE_INTEGER)).then(function (response) {
-      _this3.supplierSelections = response.data;
-      _this3.suppliersInitialized = true;
-    });
-    this.isShow = typeof isShow !== "undefined" ? isShow : false;
+    this.formatDateFrom();
+    this.formateDateTo();
   }
 });
 })();

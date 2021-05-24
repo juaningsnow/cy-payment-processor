@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\InvoiceBatchApiController;
+use App\Http\Controllers\InvoiceBatchDetailApiController;
+use App\Http\Controllers\SummaryApiController;
 use App\Http\Controllers\SupplierApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -42,4 +44,8 @@ Route::prefix('invoice-batches')->group(function () {
     Route::post('/', [InvoiceBatchApiController::class, 'store']);
     Route::patch('{id}', [InvoiceBatchApiController::class, 'update']);
     Route::delete('{id}', [InvoiceBatchApiController::class, 'destroy']);
+});
+
+Route::prefix('invoice-batch-details')->group(function () {
+    Route::get('/', [InvoiceBatchDetailApiController::class, 'index']);
 });

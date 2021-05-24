@@ -64,8 +64,8 @@ class InvoiceBatchRequest extends FormRequest
     private function checkIfInvoiceExists($invoiceNumber)
     {
         $count = InvoiceBatchDetail::where('invoice_number', $invoiceNumber)->count();
-        if ($count > 0) {
-            throw new GeneralApiException("Invoice Number already exists in our records");
+        if ($count > 1) {
+            throw new GeneralApiException("Duplicate Invoice Number Entries");
         }
     }
 

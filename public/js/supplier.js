@@ -18195,6 +18195,20 @@ __webpack_require__.r(__webpack_exports__);
 
 vue__WEBPACK_IMPORTED_MODULE_4__.default.use(vue_sweetalert2__WEBPACK_IMPORTED_MODULE_3__.default);
 vue__WEBPACK_IMPORTED_MODULE_4__.default.config.devtools = true;
+vue__WEBPACK_IMPORTED_MODULE_4__.default.filter("numeric", function (value) {
+  var decimals = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+
+  if (isNaN(Number(value))) {
+    return value;
+  }
+
+  var formatter = new Intl.NumberFormat("en-US", {
+    style: "decimal",
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals
+  });
+  return formatter.format(value);
+});
 new vue__WEBPACK_IMPORTED_MODULE_4__.default({
   el: "#supplier",
   components: {
@@ -18210,7 +18224,8 @@ new vue__WEBPACK_IMPORTED_MODULE_4__.default({
       accountNumber: "",
       swiftCode: ""
     }),
-    dataInitialized: true
+    dataInitialized: true,
+    paymentTypes: ['FAST', 'GIRO']
   },
   watch: {
     initializationComplete: function initializationComplete(val) {

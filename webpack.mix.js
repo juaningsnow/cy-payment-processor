@@ -16,6 +16,7 @@ mix.copy('node_modules/admin-lte/plugins/select2/js/select2.full.js', 'public/js
     .js(`resources/js/index.js`, "public/js")
     .js(`resources/js/supplier.js`, "public/js")
     .js(`resources/js/invoice.js`, "public/js")
+    .js(`resources/js/summary.js`, "public/js")
     .sass('resources/sass/app.scss', 'public/css')
     .vue()
     .version();

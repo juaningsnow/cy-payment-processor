@@ -21,6 +21,8 @@ class InvoiceBatchDetailResource extends JsonResource
             'date' => $this->getDate(),
             'invoiceNumber' => $this->getInvoiceNumber(),
             'amount' => $this->getAmount(),
+            'invoiceBatch' => new InvoiceBatchResource($this->whenLoaded('invoiceBatch')),
+            'supplier' => new SupplierResource($this->whenLoaded('supplier')),
         ];
     }
 }

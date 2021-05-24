@@ -6,6 +6,17 @@ import VueSweetalert2 from "vue-sweetalert2";
 Vue.use(VueSweetalert2);
 
 Vue.config.devtools = true;
+Vue.filter("numeric", function (value, decimals = 2) {
+    if (isNaN(Number(value))) {
+        return value;
+    }
+    var formatter = new Intl.NumberFormat("en-US", {
+        style: "decimal",
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+    });
+    return formatter.format(value);
+});
 
 new Vue({
     el: "#supplier",
@@ -25,6 +36,10 @@ new Vue({
             swiftCode: "",
         }),
         dataInitialized: true,
+        paymentTypes: [
+            'FAST',
+            'GIRO'
+        ],
     },
 
     watch: {

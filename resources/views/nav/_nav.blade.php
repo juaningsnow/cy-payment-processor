@@ -19,4 +19,12 @@
             </p>
         </a>
     </li>
+    <li class="nav-item">
+        <a href="{{route('summary-create')}}" class="nav-link">
+            <i class="fas fa-list"></i>
+            <p>
+                Summary Reports
+            </p>
+        </a>
+    </li>
 </ul>
