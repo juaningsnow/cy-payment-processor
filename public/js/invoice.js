@@ -27353,17 +27353,19 @@ var render = function() {
       })
     ]),
     _vm._v(" "),
-    _c("td", { staticClass: "text-right" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-danger btn-sm",
-          attrs: { type: "button", disabled: _vm.isShow },
-          on: { click: _vm.remove }
-        },
-        [_c("i", { staticClass: "fas fa-times" })]
-      )
-    ])
+    !_vm.isShow
+      ? _c("td", { staticClass: "text-right" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-danger btn-sm",
+              attrs: { type: "button", disabled: _vm.isShow },
+              on: { click: _vm.remove }
+            },
+            [_c("i", { staticClass: "fas fa-times" })]
+          )
+        ])
+      : _vm._e()
   ])
 }
 var staticRenderFns = []
@@ -42500,13 +42502,9 @@ new vue__WEBPACK_IMPORTED_MODULE_7__.default({
   },
   computed: {
     totalAmount: function totalAmount() {
-      if (this.form.invoiceBatchDetails.length > 0) {
-        return this.form.invoiceBatchDetails.data.reduce(function (prev, curr) {
-          return prev + curr.amount;
-        }, 0.00);
-      } else {
-        return 0;
-      }
+      return this.form.invoiceBatchDetails.data.reduce(function (prev, curr) {
+        return prev + curr.amount;
+      }, 0.00);
     },
     initializationComplete: function initializationComplete() {
       return this.dataInitialized && this.suppliersInitialized;

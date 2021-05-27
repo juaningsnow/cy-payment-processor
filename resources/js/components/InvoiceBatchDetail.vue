@@ -45,7 +45,7 @@
                 v-model.number="detail.amount"
             />
         </td>
-        <td class="text-right">
+        <td class="text-right" v-if="!isShow">
             <button
                 type="button"
                 :disabled="isShow"

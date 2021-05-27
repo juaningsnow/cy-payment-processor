@@ -9,8 +9,15 @@
 </div>
 
 <div class="form-group">
-    <label for="purpose">Purpose</label>
-    <input type="text" :disabled="isShow" class="form-control" placeholder="Purpose" v-model="form.purpose">
+    <label for="paymentType">Purpose</label>
+    <select class="form-control select2" :disabled="isShow" v-model="form.purposeId">
+        <option selected="selected" disabled :value="null">
+            -Select Purpose-
+        </option>
+        <option v-for="(item, index) in purposeSelections" :key="index" :value="item.id">
+            @{{item.description}} (@{{item.name}})
+        </option>
+    </select>
 </div>
 
 
@@ -24,7 +31,6 @@
             @{{ item }}
         </option>
     </select>
-    {{-- <input type="text" :disabled="isShow" class="form-control" placeholder="Payment Type" v-model="form.paymentType"> --}}
 </div>
 
 
@@ -36,6 +42,13 @@
 
 
 <div class="form-group">
-    <label for="swiftCode">Swift Code</label>
-    <input type="text" :disabled="isShow" class="form-control" placeholder="Swift Code" v-model="form.swiftCode">
+    <label for="paymentType">Bank</label>
+    <select class="form-control select2" :disabled="isShow" v-model="form.bankId">
+        <option selected="selected" disabled :value="null">
+            -Select Bank-
+        </option>
+        <option v-for="(item, index) in bankSelections" :key="index" :value="item.id">
+            @{{item.name}} - @{{item.code}} - @{{item.branchCode}}
+        </option>
+    </select>
 </div>

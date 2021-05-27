@@ -22,6 +22,8 @@
                         <tr>
                             <th>Name</th>
                             <th>Date</th>
+                            <th>Status</th>
+                            <th class="text-right">Total</th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
@@ -29,6 +31,11 @@
                         <tr v-for="item in items" v-if="!isLoading">
                             <td>@{{item.batchName}}</td>
                             <td>@{{item.date}}</td>
+                            <td>
+                                <span v-if="!item.generated" class="badge badge-info">Not Yet Generated</span>
+                                <span v-else class="badge badge-success">Generated</span>
+                            </td>
+                            <td class="text-right">@{{item.total | numeric}}</td>
                             <td class="text-center">
                                 <div class="btn-group">
                                     <a :href="item.showUrl"><button type="button" class="btn btn-default"><i

@@ -24,17 +24,17 @@
                             <th>Purpose</th>
                             <th>Payment Type</th>
                             <th>Account Number</th>
-                            <th>Swift Code</th>
+                            <th>Bank</th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="item in items" v-if="!isLoading">
                             <td>@{{item.name}}</td>
-                            <td>@{{item.purpose}}</td>
+                            <td>@{{item.purpose.name}}</td>
                             <td>@{{item.paymentType}}</td>
                             <td>@{{item.accountNumber}}</td>
-                            <td>@{{item.swiftCode}}</td>
+                            <td>@{{item.bank.name}}</td>
                             <td class="text-center">
                                 <div class="btn-group">
                                     <a :href="item.showUrl"><button type="button" class="btn btn-default"><i

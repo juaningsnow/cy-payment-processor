@@ -11,9 +11,31 @@ class Supplier extends Model
 
     protected $table = 'suppliers';
 
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class);
+    }
+
+    public function purpose()
+    {
+        return $this->belongsTo(Purpose::class);
+    }
+
     public function invoiceBatchDetails()
     {
         return $this->hasMany(InvoiceBatchDetail::class);
+    }
+
+    public function getBank()
+    {
+        return $this->bank;
+    }
+
+    public function setBank(Bank $value)
+    {
+        $this->bank()->associate($value);
+        $this->bank_id = $value->id;
+        return $this;
     }
 
     public function hasInvoiceBatchDetails()
@@ -42,9 +64,10 @@ class Supplier extends Model
         return $this->purpose;
     }
 
-    public function setPurpose($value)
+    public function setPurpose(Purpose $value)
     {
-        $this->purpose = $value;
+        $this->purpose()->associate($value);
+        $this->purpose_id = $value->id;
         return $this;
     }
 
@@ -67,17 +90,6 @@ class Supplier extends Model
     public function setAccountNumber($value)
     {
         $this->account_number = $value;
-        return $this;
-    }
-
-    public function getSwiftCode()
-    {
-        return $this->swift_code;
-    }
-
-    public function setSwiftCode($value)
-    {
-        $this->swift_code = $value;
         return $this;
     }
 }

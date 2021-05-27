@@ -59,13 +59,9 @@ new Vue({
 
     computed: {
         totalAmount() {
-            if (this.form.invoiceBatchDetails.length > 0) {
-                return this.form.invoiceBatchDetails.data.reduce((prev, curr) => {
-                    return prev + curr.amount;
-                }, 0.00);
-            } else {
-                return 0;
-            }
+            return this.form.invoiceBatchDetails.data.reduce((prev, curr) => {
+                return prev + curr.amount;
+            }, 0.00);
         },
         initializationComplete() {
             return this.dataInitialized && this.suppliersInitialized;

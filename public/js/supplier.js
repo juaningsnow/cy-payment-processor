@@ -18219,12 +18219,16 @@ new vue__WEBPACK_IMPORTED_MODULE_4__.default({
     form: new _components_Form__WEBPACK_IMPORTED_MODULE_0__.Form({
       id: null,
       name: "",
-      purpose: "",
+      purposeId: "",
       paymentType: "",
       accountNumber: "",
-      swiftCode: ""
+      bankId: ""
     }),
     dataInitialized: true,
+    purposeSelections: [],
+    purposeInitialized: false,
+    bankSelections: [],
+    banksInitialized: false,
     paymentTypes: ['FAST', 'GIRO']
   },
   watch: {
@@ -18234,7 +18238,7 @@ new vue__WEBPACK_IMPORTED_MODULE_4__.default({
   },
   computed: {
     initializationComplete: function initializationComplete() {
-      return this.dataInitialized;
+      return this.dataInitialized && this.purposeInitialized && this.banksInitialized;
     }
   },
   methods: {
@@ -18273,16 +18277,26 @@ new vue__WEBPACK_IMPORTED_MODULE_4__.default({
   created: function created() {
     var _this3 = this;
 
-    if (id != null) {
-      this.dataInitialized = false;
-      this.isEdit = true;
-      this.form.get("/api/suppliers/" + id).then(function (response) {
-        _this3.loadData(response.data);
+    this.form.get("/api/banks?limit=".concat(Number.MAX_SAFE_INTEGER)).then(function (banksResponse) {
+      _this3.bankSelections = banksResponse.data;
+      _this3.banksInitialized = true;
 
-        _this3.dataInitialized = true;
+      _this3.form.get("/api/purposes?limit=".concat(Number.MAX_SAFE_INTEGER)).then(function (response) {
+        _this3.purposeSelections = response.data;
+        _this3.purposeInitialized = true;
+
+        if (id != null) {
+          _this3.dataInitialized = false;
+          _this3.isEdit = true;
+
+          _this3.form.get("/api/suppliers/" + id).then(function (response) {
+            _this3.loadData(response.data);
+
+            _this3.dataInitialized = true;
+          });
+        }
       });
-    }
-
+    });
     this.isShow = typeof isShow !== "undefined" ? isShow : false;
   }
 });

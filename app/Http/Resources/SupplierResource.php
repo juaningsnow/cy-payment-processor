@@ -18,12 +18,14 @@ class SupplierResource extends JsonResource
             'id' => $this->getId(),
             'name' => $this->getName(),
             'text' => $this->getName(),
-            'purpose' => $this->getPurpose(),
+            'purposeId' => $this->purpose_id,
+            'purpose' => new PurposeResource($this->whenLoaded('purpose')),
             'paymentType' => $this->getPaymentType(),
             'accountNumber' => $this->getAccountNumber(),
-            'swiftCode' => $this->getSwiftCode(),
-            'showUrl' => "/suppliers/{$this->getId()}",
-            'editUrl' => "/suppliers/{$this->getId()}/edit"
+            'bankId' => $this->bank_id,
+            'bank' => new BankResource($this->whenLoaded('bank')),
+            'showUrl' => route('supplier_show', $this->id),
+            'editUrl' => route('supplier_edit', $this->id),
        ];
     }
 }

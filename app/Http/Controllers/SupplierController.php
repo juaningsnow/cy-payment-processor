@@ -22,7 +22,7 @@ class SupplierController extends Controller
             'filterable' => $this->availableFilters,
             'sorter' => 'name',
             'sortAscending' => true,
-            'baseUrl' => '/api/suppliers',
+            'baseUrl' => '/api/suppliers?include=purpose,bank',
             'exportBaseUrl' => '/suppliers'
         ];
         return view('suppliers.index', ['title' => 'Suppliers', 'indexVariables' => $indexVariables]);

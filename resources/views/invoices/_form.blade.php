@@ -25,13 +25,13 @@
                 <th>Date</th>
                 <th>Invoice Number</th>
                 <th>Amount</th>
-                <th>Actions</th>
+                <th v-if="!isShow">Actions</th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="(detail,index) in form.invoiceBatchDetails.data" is="invoice-batch-detail" :key="detail.id"
                 :supplier-selections="supplierSelections" :detail="detail" :is-show="isShow" :index="index"
-                @remove="form.invoiceBatchDetail.data.splice(index,1)"></tr>
+                @remove="form.invoiceBatchDetails.data.splice(index,1)"></tr>
         </tbody>
         <tfoot>
             <tr>

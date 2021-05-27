@@ -80,4 +80,15 @@ class InvoiceBatch extends BaseModel
         $this->total = $value;
         return $this;
     }
+
+    public function isGenerated()
+    {
+        return $this->generated;
+    }
+
+    public function setGenerated($value)
+    {
+        $this->generated = $value;
+        return $this;
+    }
 }

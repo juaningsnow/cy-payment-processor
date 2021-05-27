@@ -34,6 +34,10 @@ class InvoiceBatchController extends Controller
 
     public function edit($id)
     {
+        $batch = InvoiceBatch::find($id);
+        if ($batch->isGenerated()) {
+            return redirect()->route('invoice-batches_show', $id);
+        }
         return view('invoices.edit', ['title' => "Invoice Batch Edit", 'id' => $id]);
     }
 

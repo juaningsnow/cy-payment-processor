@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\SupplierResource;
 use App\Http\Resources\SupplierResourceCollection;
+use App\Models\Bank;
+use App\Models\Purpose;
 use App\Models\Supplier;
 use BaseCode\Common\Controllers\ResourceApiController;
 use BaseCode\Common\Exceptions\GeneralApiException;
@@ -32,24 +34,28 @@ class SupplierApiController extends ResourceApiController
 
     public function store(Request $request)
     {
+        $bank = Bank::find($request->input('bankId'));
+        $purpose = Purpose::find($request->input('purposeId'));
         $supplier = new Supplier;
         $supplier->setName($request->input('name'));
-        $supplier->setPurpose($request->input('purpose'));
+        $supplier->setPurpose($purpose);
         $supplier->setPaymentType($request->input('paymentType'));
         $supplier->setAccountNumber($request->input('accountNumber'));
-        $supplier->setSwiftCode($request->input('swiftCode'));
+        $supplier->setBank($bank);
         $supplier->save();
         return $this->getResource($supplier);
     }
 
     public function update($id, Request $request)
     {
+        $bank = Bank::find($request->input('bankId'));
+        $purpose = Purpose::find($request->input('purposeId'));
         $supplier = Supplier::find($id);
         $supplier->setName($request->input('name'));
-        $supplier->setPurpose($request->input('purpose'));
+        $supplier->setPurpose($purpose);
         $supplier->setPaymentType($request->input('paymentType'));
         $supplier->setAccountNumber($request->input('accountNumber'));
-        $supplier->setSwiftCode($request->input('swiftCode'));
+        $supplier->setBank($bank);
         $supplier->save();
         return $this->getResource($supplier);
     }

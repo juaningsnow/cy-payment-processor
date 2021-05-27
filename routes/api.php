@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\BankApiController;
 use App\Http\Controllers\InvoiceBatchApiController;
 use App\Http\Controllers\InvoiceBatchDetailApiController;
+use App\Http\Controllers\PurposeApiController;
 use App\Http\Controllers\SummaryApiController;
 use App\Http\Controllers\SupplierApiController;
 use Illuminate\Http\Request;
@@ -35,6 +37,14 @@ Route::prefix('suppliers')->group(function () {
     Route::post('/', [SupplierApiController::class, 'store']);
     Route::patch('{id}', [SupplierApiController::class, 'update']);
     Route::delete('{id}', [SupplierApiController::class, 'destroy']);
+});
+
+Route::prefix('banks')->group(function () {
+    Route::get('/', [BankApiController::class, 'index']);
+});
+
+Route::prefix('purposes')->group(function () {
+    Route::get('/', [PurposeApiController::class, 'index']);
 });
 
 
