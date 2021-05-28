@@ -48,7 +48,7 @@
             -Select Bank-
         </option>
         <option v-for="(item, index) in bankSelections" :key="index" :value="item.id">
-            @{{item.name}} - @{{item.code}} - @{{item.branchCode}}
+            @{{item.name}} (@{{item.swift}})
         </option>
     </select>
 </div>

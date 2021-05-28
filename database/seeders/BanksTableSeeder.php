@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Imports\BanksImport;
 use App\Models\Bank;
 use Illuminate\Database\Seeder;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BanksTableSeeder extends Seeder
 {
@@ -14,26 +16,6 @@ class BanksTableSeeder extends Seeder
      */
     public function run()
     {
-        $banks = [
-            [
-                'name' => 'UOB',
-                'code' => '7375',
-                'branch_code' => '030'
-            ],
-            [
-                'name' => 'DBS',
-                'code' => '7171',
-                'branch_code' => '005'
-            ],
-            [
-                'name' => 'OCBC',
-                'code' => '7339',
-                'branch_code' => '550'
-            ],
-        ];
-
-        foreach ($banks as $bank) {
-            Bank::create($bank);
-        }
+        Excel::import(new BanksImport, 'banklist.xlsx');
     }
 }

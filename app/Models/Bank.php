@@ -10,6 +10,6 @@ class Bank extends Model
     use HasFactory;
     
     protected $fillable = [
-        'name', 'code', 'branch_code'
+        'name', 'code', 'swift'
     ];
 }

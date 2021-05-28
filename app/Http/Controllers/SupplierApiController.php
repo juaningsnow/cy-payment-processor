@@ -19,6 +19,7 @@ class SupplierApiController extends ResourceApiController
 
     public function __construct(Supplier $supplier)
     {
+        $this->middleware('auth:api');
         parent::__construct($supplier);
     }
 

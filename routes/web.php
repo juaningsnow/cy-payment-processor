@@ -30,6 +30,8 @@ Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('dashboard');
 
+Route::get('/manage/xero', [\App\Http\Controllers\XeroController::class, 'index'])->name('xero.auth.success');
+
 
 Route::prefix('suppliers')->group(function () {
     Route::get('/', [SupplierController::class, 'index'])->name('suppliers');
@@ -38,6 +40,7 @@ Route::prefix('suppliers')->group(function () {
     Route::get('/{id}/edit', [SupplierController::class, 'edit'])->name('supplier_edit');
 });
 
+
 Route::prefix('invoice-batches')->group(function () {
     Route::get('/', [InvoiceBatchController::class, 'index'])->name('invoice-batches');
     Route::get('/create', [InvoiceBatchController::class, 'create'])->name('invoice-batches_create');
@@ -45,8 +48,8 @@ Route::prefix('invoice-batches')->group(function () {
     Route::get('/{id}/edit', [InvoiceBatchController::class, 'edit'])->name('invoice-batches_edit');
 });
 
-Route::prefix('summary')->group(function () {
-    Route::get('/', [SummaryController::class, 'create'])->name('summary-create');
-    Route::get('/excel/{dateFrom}/{dateTo}', [SummaryController::class, 'exportExcel']);
-    Route::get('/csv/{dateFrom}/{dateTo}', [SummaryController::class, 'exportCsv']);
-});
+// Route::prefix('summary')->group(function () {
+//     Route::get('/', [SummaryController::class, 'create'])->name('summary-create');
+//     Route::get('/excel/{dateFrom}/{dateTo}', [SummaryController::class, 'exportExcel']);
+//     Route::get('/csv/{dateFrom}/{dateTo}', [SummaryController::class, 'exportCsv']);
+// });

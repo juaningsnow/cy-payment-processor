@@ -18,7 +18,7 @@ class BankResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'code' => $this->code,
-            'branchCode' => $this->branch_code,
+            'swift' => $this->swift,
        ];
     }
 }

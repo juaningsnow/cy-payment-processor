@@ -17,11 +17,8 @@ class CreateInvoiceBatchDetailsTable extends Migration
             $table->id();
             $table->bigInteger('invoice_batch_id')->unsigned();
             $table->foreign('invoice_batch_id')->references('id')->on('invoice_batches')->onDelete('cascade');
-            $table->bigInteger('supplier_id')->unsigned();
-            $table->foreign('supplier_id')->references('id')->on('suppliers');
-            $table->date('date');
-            $table->string('invoice_number')->unique();
-            $table->decimal('amount', 15, 2);
+            $table->bigInteger('invoice_id')->unsigned();
+            $table->foreign('invoice_id')->references('id')->on('invoices');
             $table->timestamps();
         });
     }
