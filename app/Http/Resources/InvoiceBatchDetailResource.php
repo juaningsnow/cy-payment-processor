@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Invoice;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class InvoiceBatchDetailResource extends JsonResource
@@ -15,14 +16,11 @@ class InvoiceBatchDetailResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->getId(),
+            'id' => $this->id,
             'invoiceBatchId' => $this->getInvoiceBatchId(),
-            'supplierId' => $this->getSupplierId(),
-            'date' => $this->getDate(),
-            'invoiceNumber' => $this->getInvoiceNumber(),
-            'amount' => $this->getAmount(),
             'invoiceBatch' => new InvoiceBatchResource($this->whenLoaded('invoiceBatch')),
-            'supplier' => new SupplierResource($this->whenLoaded('supplier')),
+            'invoiceId' => $this->invoice_id,
+            'invoice' => new InvoiceResource($this->whenLoaded('invoice')),
         ];
     }
 }

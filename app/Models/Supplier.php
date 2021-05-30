@@ -11,6 +11,16 @@ class Supplier extends Model
 
     protected $table = 'suppliers';
 
+    protected $fillable = [
+        'name',
+        'payment_type',
+        'email',
+        'xero_contact_id',
+        'bank_id',
+        'purpose_id',
+        'account_number'
+    ];
+
     public function bank()
     {
         return $this->belongsTo(Bank::class);
@@ -21,10 +31,11 @@ class Supplier extends Model
         return $this->belongsTo(Purpose::class);
     }
 
-    public function invoiceBatchDetails()
+    public function invoices()
     {
-        return $this->hasMany(InvoiceBatchDetail::class);
+        return $this->hasMany(Invoice::class);
     }
+
 
     public function getBank()
     {
@@ -38,9 +49,9 @@ class Supplier extends Model
         return $this;
     }
 
-    public function hasInvoiceBatchDetails()
+    public function hasInvoices()
     {
-        return $this->invoiceBatchDetails()->exists();
+        return $this->invoices()->exists();
     }
 
     public function getId()
@@ -51,6 +62,17 @@ class Supplier extends Model
     public function getName()
     {
         return $this->name;
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    public function setEmail($value)
+    {
+        $this->email = $value;
+        return $this;
     }
 
     public function setName($value)

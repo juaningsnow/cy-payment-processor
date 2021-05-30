@@ -18,6 +18,7 @@ class SupplierResource extends JsonResource
             'id' => $this->getId(),
             'name' => $this->getName(),
             'text' => $this->getName(),
+            'email' => $this->email,
             'purposeId' => $this->purpose_id,
             'purpose' => new PurposeResource($this->whenLoaded('purpose')),
             'paymentType' => $this->getPaymentType(),

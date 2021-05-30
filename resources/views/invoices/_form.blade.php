@@ -6,8 +6,8 @@
 <div class="row">
     <div class="col-6">
         <div class="form-group">
-            <label for="batchName">Batch Name</label>
-            <input type="text" :disabled="isShow" class="form-control" placeholder="Name" v-model="form.batchName">
+            <label for="invoiceNumber">Invoice Number</label>
+            <input type="text" :disabled="isShow" class="form-control" placeholder="Name" v-model="form.invoiceNumber">
         </div>
     </div>
     <div class="col-6">
@@ -18,32 +18,31 @@
     </div>
 </div>
 <div class="row">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Supplier</th>
-                <th>Date</th>
-                <th>Invoice Number</th>
-                <th>Amount</th>
-                <th v-if="!isShow">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="(detail,index) in form.invoiceBatchDetails.data" is="invoice-batch-detail" :key="detail.id"
-                :supplier-selections="supplierSelections" :detail="detail" :is-show="isShow" :index="index"
-                @remove="form.invoiceBatchDetails.data.splice(index,1)"></tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3" class="text-right">Total</td>
-                <td class="text-right">@{{form.total | numeric}}</td>
-                <td></td>
-            </tr>
-            <tr v-if="!isShow">
-                <td colspan="5">
-                    <button type="button" class="btn btn-success btn-sm" @click="addDetail">Add Detail</button>
-                </td>
-            </tr>
-        </tfoot>
-    </table>
+    <div class="col-6">
+        <div class="form-group">
+            <label for="supplierId">Supplier</label>
+            <select class="form-control select2" v-model="form.supplierId" style="width: 100%" :disabled="isShow">
+                <option selected="selected" disabled :value="null">
+                    -Select Supplier-
+                </option>
+                <option v-for="(item, index) in supplierSelections" :key="index" :value="item.id">
+                    @{{ item.text }}
+                </option>
+            </select>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="form-group">
+            <label for="amount">Amount</label>
+            <input type="number" :disabled="isShow" class="form-control" placeholder="Name" v-model="form.amount">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div class="form-group">
+            <label for="description">Remarks</label>
+            <input type="text" :disabled="isShow" class="form-control" placeholder="Name" v-model="form.description">
+        </div>
+    </div>
 </div>

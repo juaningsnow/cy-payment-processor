@@ -2,6 +2,7 @@
 
 namespace BaseCode\Auth\Requests;
 
+use App\Models\Bank;
 use BaseCode\Auth\Contracts\Roles;
 use BaseCode\Auth\Models\Role;
 use Illuminate\Foundation\Http\FormRequest;
@@ -38,12 +39,9 @@ class UserRequest extends FormRequest
         return $this->input('username');
     }
 
-    public function getRoles()
+    public function getBank()
     {
-        if (!$this->has('roleIds')) {
-            return null;
-        }
-        return Role::whereIn('id', $this->input('roleIds'))->get()->all();
+        return Bank::find($this->input('bankId'));
     }
 
     public function getPassword()

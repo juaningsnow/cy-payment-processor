@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Bank;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -17,7 +18,9 @@ class UsersTableSeeder extends Seeder
         User::create([
             'name' => 'admin',
             'username' => 'admin',
-            'email' => 'admin@praxxys.ph',
+            'email' => 'admin@cy-bm.sg',
+            'bank_id' => Bank::where('swift', 'OCBCSGSGXXX')->first()->id,
+            'account_number' => '687586784001',
             'password' => bcrypt('admin'),
         ]);
     }

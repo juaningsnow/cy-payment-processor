@@ -2,6 +2,7 @@
 
 namespace BaseCode\Auth\Models;
 
+use App\Models\Bank;
 use BaseCode\Common\Traits\HasTimestamps;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -14,7 +15,6 @@ use Illuminate\Support\Str;
 class User extends Authenticatable
 {
     use Notifiable;
-    use HasRoles;
     use HasTimestamps;
 
     protected $guard_name = 'web';
@@ -28,6 +28,11 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class);
+    }
 
     protected $guarded = [];
 

@@ -12,10 +12,18 @@
         </a>
     </li>
     <li class="nav-item">
-        <a href="{{route('invoice-batches')}}" class="nav-link">
+        <a href="{{route('invoices')}}" class="nav-link">
             <i class="fas fa-list"></i>
             <p>
                 Invoices
+            </p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="{{route('invoice-batches')}}" class="nav-link">
+            <i class="fas fa-list"></i>
+            <p>
+                Invoice Batches
             </p>
         </a>
     </li>

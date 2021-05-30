@@ -188,7 +188,7 @@ export default {
             this.pagination = response.data.meta;
             if (this.toLastPage && !this.loadedLastPage) {
                 this.loadedLastPage = true;
-                this.page = this.pagination.total_pages;
+                this.page = this.pagination.last_page;
                 this.load(this.assembledUrl);
             }
             if (this.noItems) this.page = 1;
@@ -229,6 +229,10 @@ export default {
             page = Math.min(page, this.pagination.total_pages);
             console.log("Loading page", page);
             this.page = page;
+            this.load(this.assembledUrl);
+        },
+
+        reloadIndex() {
             this.load(this.assembledUrl);
         },
     },
@@ -294,7 +298,7 @@ export default {
         paginationStatus() {
             if (this.isLoading) {
                 return "";
-            } else if (!this.meta.from) {
+            } else if (!this.meta) {
                 return "No Records Yet";
             } else {
                 return (

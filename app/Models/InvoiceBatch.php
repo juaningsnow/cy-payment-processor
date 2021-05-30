@@ -14,6 +14,15 @@ class InvoiceBatch extends BaseModel
 
     protected $dates = ['date'];
 
+    protected static function booted()
+    {
+        static::created(function ($model) {
+            $config = Config::first();
+            $config->batch_counter++;
+            $config->save();
+        });
+    }
+
     protected $invoiceBatchDetailsToSet = null;
 
     public function invoiceBatchDetails()
@@ -39,7 +48,7 @@ class InvoiceBatch extends BaseModel
     private function computeTotal()
     {
         return $this->getInvoiceBatchDetails()->sum(function ($detail) {
-            return $detail->getAmount();
+            return $detail->getInvoice()->getAmount();
         });
     }
 

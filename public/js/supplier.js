@@ -18219,6 +18219,7 @@ new vue__WEBPACK_IMPORTED_MODULE_4__.default({
     form: new _components_Form__WEBPACK_IMPORTED_MODULE_0__.Form({
       id: null,
       name: "",
+      email: "",
       purposeId: "",
       paymentType: "",
       accountNumber: "",

@@ -9,6 +9,11 @@
 </div>
 
 <div class="form-group">
+    <label for="email">Email</label>
+    <input type="text" :disabled="isShow" class="form-control" placeholder="Email" v-model="form.email">
+</div>
+
+<div class="form-group">
     <label for="paymentType">Purpose</label>
     <select class="form-control select2" :disabled="isShow" v-model="form.purposeId">
         <option selected="selected" disabled :value="null">

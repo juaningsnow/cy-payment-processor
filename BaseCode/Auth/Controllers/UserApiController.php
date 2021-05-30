@@ -21,7 +21,6 @@ class UserApiController extends ResourceApiController
     public function __construct(User $user)
     {
         parent::__construct($user);
-        $this->middleware('permission:client_delete_sttngs user')->only(['destroy','destroyMultiple']);
     }
 
     protected function getResource($item)
@@ -32,6 +31,13 @@ class UserApiController extends ResourceApiController
     protected function getResourceCollection($items)
     {
         return new UserResourceCollection($items);
+    }
+
+    public function loggedIn(Request $request)
+    {
+        $userId = auth()->user()->id;
+        $this->filter($request)->sort($request)->include($request);
+        return $this->getResource($this->query->find($userId));
     }
     
     public function updateSettings($id, Request $request)
@@ -66,7 +72,8 @@ class UserApiController extends ResourceApiController
                 User::find($id),
                 $request->getName(),
                 $request->getEmail(),
-                $request->getRoles()
+                $request->getUsername(),
+                $request->getBank()
             );
         });
 
@@ -79,7 +86,9 @@ class UserApiController extends ResourceApiController
             return UserRecordService::update(
                 User::find($id),
                 $request->getName(),
-                $request->getEmail()
+                $request->getEmail(),
+                $request->getUsername(),
+                $request->getBank()
             );
         });
 

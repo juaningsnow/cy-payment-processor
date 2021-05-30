@@ -18,8 +18,10 @@ class CreateInvoicesTable extends Migration
             $table->bigInteger('supplier_id')->unsigned();
             $table->foreign('supplier_id')->references('id')->on('suppliers');
             $table->date('date');
-            $table->string('invoice_number')->unique();
+            $table->string('invoice_number');
             $table->decimal('amount', 15, 2);
+            $table->string('xero_invoice_id')->nullable();
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

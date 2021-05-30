@@ -30,7 +30,7 @@ class User extends Authenticatable
         'password',
         'uen_number',
         'bank_name',
-        'bank_account_number'
+        'account_number'
     ];
 
     /**
@@ -44,6 +44,11 @@ class User extends Authenticatable
         // 'two_factor_recovery_codes',
         // 'two_factor_secret',
     ];
+
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class);
+    }
 
     /**
      * The attributes that should be cast to native types.

@@ -4,8 +4,6 @@ import SaveButton from "./components/SaveButton";
 import DeleteButton from "./components/DeleteButton";
 import VueSweetalert2 from "vue-sweetalert2";
 import Datepicker from 'vuejs-datepicker';
-import moment from 'moment';
-import InvoiceBatchDetail from './components/InvoiceBatchDetail';
 Vue.use(VueSweetalert2);
 
 Vue.config.devtools = true;
@@ -27,21 +25,18 @@ new Vue({
     components: {
         SaveButton,
         DeleteButton,
-        Datepicker,
-        InvoiceBatchDetail
+        Datepicker
     },
 
     data: {
         form: new Form({
-            id: null,
-            batchName: "",
-            date: moment(),
-            total: 0,
-            invoiceBatchDetails: {
-                data: []
-            }
+            id: "",
+            supplierId: null,
+            date: null,
+            invoiceNumber: "",
+            amount: 0.0,
+            description: "",
         }),
-        counter: -1,
         supplierSelections: [],
         suppliersInitialized: false,
         dataInitialized: true,
@@ -58,47 +53,19 @@ new Vue({
     },
 
     computed: {
-        totalAmount() {
-            return this.form.invoiceBatchDetails.data.reduce((prev, curr) => {
-                return prev + curr.amount;
-            }, 0.00);
-        },
         initializationComplete() {
             return this.dataInitialized && this.suppliersInitialized;
         },
     },
 
     methods: {
-
-        addDetail() {
-            this.form.invoiceBatchDetails.data.push({
-                id: --this.counter,
-                supplierId: null,
-                date: moment().toString(),
-                invoiceNumber: "",
-                amount: 0.00
-            });
-        },
-
-        store() {
-            this.form.post("/api/invoice-batches").then(response => {
-                this.$swal({
-                    title: "Invoice Batch created!",
-                    text: "Invoice Batch was saved.",
-                    type: "success"
-                }).then(() => window.location = "/invoice-batches");
-            }).catch(error => {
-                console.log(error);
-            });
-        },
-
         update() {
-            this.form.patch("/api/invoice-batches/" + this.form.id).then(response => {
+            this.form.patch("/api/invoices/" + this.form.id).then(response => {
                 this.$swal({
-                    title: "Invoice Batch updated!",
+                    title: "Invoice updated!",
                     text: "Changes saved to database.",
                     type: "success"
-                }).then(() => (window.location = "/invoice-batches/" + id));
+                }).then(() => (window.location = "/invoices/" + id));
             });
         },
         loadData(data) {
@@ -113,7 +80,7 @@ new Vue({
             this.isEdit = true;
             this.form
                 .get(
-                    "/api/invoice-batches/" + id + "?include=invoiceBatchDetails"
+                    "/api/invoices/" + id + "?include=supplier"
                 ).then(response => {
                     this.loadData(response.data);
                     this.dataInitialized = true;

@@ -13,7 +13,7 @@ class UpdateUser extends UserRequest
      */
     public function authorize()
     {
-        return $this->user()->can('client_update_sttngs user');
+        return true;
     }
 
     public function rules()
@@ -23,9 +23,10 @@ class UpdateUser extends UserRequest
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users')->ignore($this->route('userId'), 'id')
+                Rule::unique('users')->ignore($this->route('id'), 'id')
             ],
-            'roleIds' => 'required',
+            'username' => 'required',
+            'bankId' => 'required'
         ];
     }
 

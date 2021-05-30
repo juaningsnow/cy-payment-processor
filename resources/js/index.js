@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Index from "./components/Index.vue";
 import { Form } from "./components/Form";
+import VueSweetalert2 from "vue-sweetalert2";
+Vue.use(VueSweetalert2);
 Vue.filter("numeric", function (value, decimals = 2) {
     if (isNaN(Number(value))) {
         return value;
@@ -48,11 +50,16 @@ new Vue({
         },
 
         destroy(url, redirectUrl) {
-            console.log(url, redirectUrl);
             this.form.deleteWithConfirmation(url).then(response => {
                 this.form.successModal('Item has been removed').then(() =>
                     window.location = redirectUrl
                 );
+            }).catch(error => {
+                this.$swal({
+                    title: "Warning!",
+                    text: error.message,
+                    type: "warning"
+                })
             });
         },
     }

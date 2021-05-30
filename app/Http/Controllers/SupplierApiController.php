@@ -35,11 +35,20 @@ class SupplierApiController extends ResourceApiController
 
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+            'purposeId' => 'required',
+            'paymentType' => 'required',
+            'accountNumber' => 'required',
+            'email' => 'required|email',
+            'bankId' => 'required'
+        ]);
         $bank = Bank::find($request->input('bankId'));
         $purpose = Purpose::find($request->input('purposeId'));
         $supplier = new Supplier;
         $supplier->setName($request->input('name'));
         $supplier->setPurpose($purpose);
+        $supplier->setEmail($request->input('email'));
         $supplier->setPaymentType($request->input('paymentType'));
         $supplier->setAccountNumber($request->input('accountNumber'));
         $supplier->setBank($bank);
@@ -49,11 +58,20 @@ class SupplierApiController extends ResourceApiController
 
     public function update($id, Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+            'purposeId' => 'required',
+            'paymentType' => 'required',
+            'accountNumber' => 'required',
+            'email' => 'required|email',
+            'bankId' => 'required'
+        ]);
         $bank = Bank::find($request->input('bankId'));
         $purpose = Purpose::find($request->input('purposeId'));
         $supplier = Supplier::find($id);
         $supplier->setName($request->input('name'));
         $supplier->setPurpose($purpose);
+        $supplier->setEmail($request->input('email'));
         $supplier->setPaymentType($request->input('paymentType'));
         $supplier->setAccountNumber($request->input('accountNumber'));
         $supplier->setBank($bank);
@@ -64,8 +82,8 @@ class SupplierApiController extends ResourceApiController
     public function destroy($id)
     {
         $supplier = Supplier::find($id);
-        if ($supplier->hasInvoiceBatchDetails()) {
-            throw new GeneralApiException("Supplier is already used in an Invoice Entry");
+        if ($supplier->hasInvoices()) {
+            throw new GeneralApiException("Cannot delete Supplier that has Invoice entries");
         }
         $supplier->delete();
         return response('success', 200);

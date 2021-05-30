@@ -30,6 +30,7 @@ new Vue({
         form: new Form({
             id: null,
             name: "",
+            email: "",
             purposeId: "",
             paymentType: "",
             accountNumber: "",

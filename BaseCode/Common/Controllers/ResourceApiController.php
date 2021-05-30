@@ -19,6 +19,7 @@ abstract class ResourceApiController extends Controller
 
     public function __construct(Model $model)
     {
+        $this->middleware('auth:api');
         $this->query = $model->newQuery();
     }
 

@@ -2,6 +2,7 @@
 
 namespace BaseCode\Auth\Services;
 
+use App\Models\Bank;
 use BaseCode\Auth\Models\User;
 
 class UserRecordService
@@ -28,17 +29,15 @@ class UserRecordService
         User $user,
         $name,
         $email,
-        array $roles = null
+        $username,
+        Bank $bank
     ) {
         $tempUser = clone $user;
         $tempUser->setName($name);
         $tempUser->setEmail($email);
-        $tempUser->setUsername($email);
-        if ($roles !== null) {
-            $tempUser->setRoles($roles);
-        }
+        $tempUser->setUsername($username);
+        $tempUser->bank()->associate($bank);
         $tempUser->save();
-        $tempUser->syncRoles($tempUser->getRoles());
         return $tempUser;
     }
 

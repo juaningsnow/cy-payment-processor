@@ -20,9 +20,21 @@ class InvoiceBatchDetail extends Model
         return $this->belongsTo(InvoiceBatch::class);
     }
 
-    public function supplier()
+    public function invoice()
     {
-        return $this->belongsTo(Supplier::class);
+        return $this->belongsTo(Invoice::class);
+    }
+
+    public function getInvoice()
+    {
+        return $this->invoice;
+    }
+    
+    public function setInvoice(Invoice $value)
+    {
+        $this->invoice()->associate($value);
+        $this->invoice_id = $value->id;
+        return $this;
     }
 
     public function getInvoiceBatch()
@@ -42,70 +54,12 @@ class InvoiceBatchDetail extends Model
         return $this;
     }
 
-    public function getSupplier()
+    public function scopeSupplierId($query, $supplierId)
     {
-        return $this->supplier;
-    }
-
-    public function getSupplierId()
-    {
-        return $this->supplier_id;
-    }
-
-    public function setSupplier(Supplier $value)
-    {
-        $this->supplier()->associate($value);
-        $this->supplier_id = $value->getId();
-        return $this;
-    }
-
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    public function setDate(DateTime $value)
-    {
-        $this->date = $value;
-        return $this;
-    }
-
-    public function getInvoiceNumber()
-    {
-        return $this->invoice_number;
-    }
-
-    public function setInvoiceNumber($value)
-    {
-        $this->invoice_number = $value;
-        return $this;
-    }
-
-    public function getAmount()
-    {
-        return (float) $this->amount;
-    }
-
-    public function setAmount($value)
-    {
-        $this->amount = $value;
-        return $this;
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function scopeDateFrom($query, $date)
-    {
-        $date = new Carbon($date);
-        return $query->where('date', '>=', $date->startOfDay()->copy()->toDateString());
-    }
-
-    public function scopeDateTo($query,$date)
-    {
-        $date = new Carbon($date);
-        return $query->where('date', '<=', $date->endOfDay()->copy()->toDateString());
+        return $query->whereHas('invoice', function($invoice) use ($supplierId){
+            return $invoice->whereHas('supplier', function($supplier) use ($supplierId){
+                return $supplier->whereId($supplierId);
+            });
+        });
     }
 }

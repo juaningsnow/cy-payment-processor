@@ -6,7 +6,9 @@ use App\Http\Requests\InvoiceBatchRequest;
 use App\Http\Resources\InvoiceBatchResource;
 use App\Http\Resources\InvoiceBatchResourceCollection;
 use App\Models\InvoiceBatch;
+use App\Utils\BatchNumberGenerator;
 use BaseCode\Common\Controllers\ResourceApiController;
+use BaseCode\Common\Exceptions\GeneralApiException;
 use DateTime;
 use Illuminate\Http\Request;
 
@@ -34,7 +36,8 @@ class InvoiceBatchApiController extends ResourceApiController
     public function store(InvoiceBatchRequest $request)
     {
         $invoiceBatch = new InvoiceBatch();
-        $invoiceBatch->setBatchName($request->getBatchName());
+        $batchNumber = BatchNumberGenerator::generate();
+        $invoiceBatch->setBatchName($batchNumber);
         $invoiceBatch->setDate($request->getDate());
         $invoiceBatch->setInvoiceBatchDetails($request->getInvoiceBatchDetails());
         $invoiceBatch->save();
@@ -45,7 +48,6 @@ class InvoiceBatchApiController extends ResourceApiController
     public function update($id, InvoiceBatchRequest $request)
     {
         $invoiceBatch = InvoiceBatch::find($id);
-        $invoiceBatch->setBatchName($request->getBatchName());
         $invoiceBatch->setDate($request->getDate());
         $invoiceBatch->setInvoiceBatchDetails($request->getInvoiceBatchDetails());
         $invoiceBatch->save();
@@ -56,6 +58,9 @@ class InvoiceBatchApiController extends ResourceApiController
     public function destroy($id)
     {
         $invoiceBatch = InvoiceBatch::find($id);
+        if ($invoiceBatch->isGenerated()) {
+            throw new GeneralApiException("Cannot Delete Batch that has been generated.");
+        }
         $invoiceBatch->delete();
         return response('success', 200);
     }

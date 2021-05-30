@@ -33,7 +33,7 @@
                             <td>@{{item.name}}</td>
                             <td>@{{item.purpose ? item.purpose.name : '--'}}</td>
                             <td>@{{item.paymentType}}</td>
-                            <td>@{{item.accountNumber}}</td>
+                            <td>@{{item.accountNumber ? item.accountNumber : '--'}}</td>
                             <td>@{{item.bank ? item.bank.name : '--'}}</td>
                             <td class="text-center">
                                 <div class="btn-group">

@@ -2,6 +2,7 @@
 
 namespace BaseCode\Auth\Resources;
 
+use App\Http\Resources\BankResource;
 use BaseCode\Auth\Resources\RoleResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,16 +17,13 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->getId(),
-            'name' => $this->getName(),
-            'email' => $this->getEmail(),
-            'username' => $this->getUsername(),
-            'settings' => $this->getSettings(),
-            'updatedAt' => $this->getUpdatedAt(),
-            'roles' => new RoleResourceCollection($this->whenLoaded('roles')),
-            'links' => [
-                'self' => 'users/' . $this->getId(),
-            ]
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'username' => $this->username,
+            'accountNumber' => $this->account_number,
+            'bankId' => $this->bank_id,
+            'bank' => new BankResource($this->whenLoaded('bank')),
         ];
     }
 }

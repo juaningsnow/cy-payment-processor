@@ -12,7 +12,7 @@
                 </div>
                 <div v-else>
                     <div class="card-header">
-                        <a v-if="!form.isGenerated" href="{{route('invoice-batches_edit', $id)}}">
+                        <a v-if="!form.isGenerated" href="{{route('invoice_edit', $id)}}">
                             <button type="button" class="btn btn-info"><i class="fas fa-edit"></i></button></a>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">

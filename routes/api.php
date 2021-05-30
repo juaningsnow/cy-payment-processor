@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\BankApiController;
+use App\Http\Controllers\InvoiceApiController;
 use App\Http\Controllers\InvoiceBatchApiController;
 use App\Http\Controllers\InvoiceBatchDetailApiController;
 use App\Http\Controllers\PurposeApiController;
 use App\Http\Controllers\SummaryApiController;
 use App\Http\Controllers\SupplierApiController;
+use BaseCode\Auth\Controllers\UserApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,12 +33,27 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     Route::delete('{id}', [ProductApiController::class, 'destroy']);
 // });
 
+Route::prefix('users')->group(function () {
+    Route::get('/', [UserApiController::class, 'index']);
+    Route::get('/logged-in', [UserApiController::class, 'loggedIn']);
+    Route::get('{id}', [UserApiController::class, 'show']);
+    Route::patch('{id}', [UserApiController::class, 'update']);
+});
+
 Route::prefix('suppliers')->group(function () {
     Route::get('/', [SupplierApiController::class, 'index']);
     Route::get('{id}', [SupplierApiController::class, 'show']);
     Route::post('/', [SupplierApiController::class, 'store']);
     Route::patch('{id}', [SupplierApiController::class, 'update']);
     Route::delete('{id}', [SupplierApiController::class, 'destroy']);
+});
+
+Route::prefix('invoices')->group(function () {
+    Route::get('/', [InvoiceApiController::class, 'index']);
+    Route::get('{id}', [InvoiceApiController::class, 'show']);
+    Route::post('/', [InvoiceApiController::class, 'storeMultipleInvoice']);
+    Route::patch('{id}', [InvoiceApiController::class, 'update']);
+    Route::delete('{id}', [InvoiceApiController::class, 'destroy']);
 });
 
 Route::prefix('banks')->group(function () {

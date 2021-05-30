@@ -19,6 +19,9 @@ class CreateUsersTable extends Migration
             $table->string('username');
             $table->string('email')->unique();
             $table->string('password');
+            $table->bigInteger('bank_id')->unsigned()->nullable();
+            $table->foreign('bank_id')->references('id')->on('banks');
+            $table->string('account_number');
             $table->rememberToken();
             $table->timestamps();
         });
