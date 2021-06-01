@@ -27,4 +27,12 @@
             </p>
         </a>
     </li>
+    <li class="nav-item">
+        <a href="{{route('invoice-histories')}}" class="nav-link">
+            <i class="fas fa-list"></i>
+            <p>
+                Invoice History
+            </p>
+        </a>
+    </li>
 </ul>

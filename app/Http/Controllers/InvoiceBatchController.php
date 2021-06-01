@@ -55,6 +55,7 @@ class InvoiceBatchController extends Controller
         $currentDateTime = Carbon::now();
         $myName = "{$batch->batch_name}{$currentDateTime->format('dmYHis')}.txt";
         $headers = ['Content-type'=>'text/plain', 'test'=>'YoYo', 'Content-Disposition'=>sprintf('attachment; filename="%s"', $myName),'Content-Length'=>strlen($fileText)];
+        
         return Response::make($fileText, 200, $headers);
     }
 }

@@ -33,9 +33,30 @@ class Invoice extends Model
         return $query->whereDoesntHave('invoiceBatchDetail');
     }
 
+    public function scopeHasInvoiceBatchDetailOrPaid($query)
+    {
+        return $query->whereHas('invoicebatchDetail')->orWhere('paid', true);
+    }
+
+    public function scopePaid($query, $value)
+    {
+        return $query->where('paid', $value);
+    }
+
     public function getDescription()
     {
         return $this->description;
+    }
+
+    public function getPaid()
+    {
+        return (boolean)$this->paid;
+    }
+
+    public function setPaid($value)
+    {
+        $this->paid = $value;
+        return $this;
     }
 
     public function setDescription($value)
@@ -97,6 +118,20 @@ class Invoice extends Model
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getStatus()
+    {
+        if ($this->hasInvoiceBatchDetail()) {
+            if ($this->invoiceBatchDetail->getInvoiceBatch()->isGenerated()) {
+                return "Generated and Paid";
+            } else {
+                return "Batched";
+            }
+        }
+        if ($this->getPaid()) {
+            return "Paid";
+        }
     }
 
     public function scopeDateFrom($query, $date)

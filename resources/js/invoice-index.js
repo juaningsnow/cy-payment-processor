@@ -22,7 +22,9 @@ new Vue({
     el: "#index",
     components: { Index, InvoiceModal, BatchModal },
     data: {
-        form: new Form(),
+        form: new Form({
+            selected: [],
+        }),
         filterable: filterable,
         baseUrl: baseUrl,
         exportBaseUrl: typeof exportBaseUrl !== "undefined" ? exportBaseUrl : '',
@@ -69,6 +71,31 @@ new Vue({
                 })
             }
             this.allSelected = !this.allSelected;
+        },
+
+        markAsPaid() {
+            this.form.selected = this.selected;
+            this.$swal({
+                title: "Mark Invoices as Paid",
+                text: "You will not be able to revert this.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: 'Yes.',
+                confirmButtonColor: '#f86c6b',
+            }).then(response => {
+                if (response.value) {
+                    this.form.post(`/api/invoices/pay`).then(response => {
+                        this.$swal({
+                            title: "Invoices Updated!",
+                            text: "Invoices has been marked as paid",
+                            type: "success",
+                        }).then(() => {
+                            this.reloadData();
+                            this.close();
+                        });
+                    })
+                }
+            });
         },
 
         addOrRemoveToSelected(item) {

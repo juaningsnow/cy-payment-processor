@@ -42,7 +42,7 @@
     <div class="col-6">
         <div class="form-group">
             <label for="description">Remarks</label>
-            <input type="text" :disabled="isShow" class="form-control" placeholder="Name" v-model="form.description">
+            <input type="text" :disabled="isShow" class="form-control" placeholder="Remarks" v-model="form.description">
         </div>
     </div>
 </div>

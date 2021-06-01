@@ -8,9 +8,10 @@ class BatchNumberGenerator
 {
     public static function generate()
     {
+        $date = now()->format('ymd');
         $config = Config::first();
         $number = $config->batch_counter;
-        $paddedNumber = str_pad($number, 7, '0', STR_PAD_LEFT);
-        return sprintf('%s%s', 'BN', $paddedNumber);
+        $paddedNumber = str_pad($number, 3, '0', STR_PAD_LEFT);
+        return sprintf('%s%s-%s', 'OCBC', $date, $paddedNumber);
     }
 }

@@ -52,6 +52,7 @@ Route::prefix('invoices')->group(function () {
     Route::get('/', [InvoiceApiController::class, 'index']);
     Route::get('{id}', [InvoiceApiController::class, 'show']);
     Route::post('/', [InvoiceApiController::class, 'storeMultipleInvoice']);
+    Route::post('/pay', [InvoiceApiController::class, 'markAsPaid']);
     Route::patch('{id}', [InvoiceApiController::class, 'update']);
     Route::delete('{id}', [InvoiceApiController::class, 'destroy']);
 });

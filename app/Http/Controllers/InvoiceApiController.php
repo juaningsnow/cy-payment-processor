@@ -35,10 +35,21 @@ class InvoiceApiController extends ResourceApiController
 
     public function storeMultipleInvoice(Request $request)
     {
-        $invoices = $this->getInvoices($request);
+        $invoices = $this->getInvoicesFromForm($request);
         foreach ($invoices as $invoice) {
             $invoice->save();
         };
+        return $this->getResourceCollection(collect($invoices));
+    }
+
+    public function markAsPaid(Request $request)
+    {
+        $invoices = $this->getInvoices($request);
+        foreach ($invoices as $invoice) {
+            $invoice->setPaid(true);
+            $invoice->save();
+        }
+        
         return $this->getResourceCollection(collect($invoices));
     }
 
@@ -63,6 +74,14 @@ class InvoiceApiController extends ResourceApiController
     }
 
     private function getInvoices(Request $request)
+    {
+        return array_map(function ($item) {
+            $detail = Invoice::find($item['id']);
+            return $detail;
+        }, $request->input('selected'));
+    }
+
+    private function getInvoicesFromForm(Request $request)
     {
         return array_map(function ($item) {
             if (isset($item['id']) || $item['id'] < 0) {

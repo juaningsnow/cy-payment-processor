@@ -38,7 +38,7 @@ class InvoiceBatchTextFileGenerator
     private static function makeTransactionDetailLine($detail)
     {
         $prefix = "INV";
-        $description = "Repayment to {$detail->invoice->supplier->name} [{$detail->invoice->invoice_number}] Amt: {$detail->invoice->amount}";
+        $description = "[{$detail->invoice->invoice_number}] Amt: {$detail->invoice->amount}";
         $desc = substr(static::rightPaddingGenerator($description, " ", 97), 0, 97);
         $finalOutput = substr($prefix.$desc, 0, 100);
         return $finalOutput;
@@ -51,7 +51,7 @@ class InvoiceBatchTextFileGenerator
         $supplierName = substr(static::rightPaddingGenerator($group->supplier->name, " ", 140), 0, 140);
         $filler1 = substr(static::rightPaddingGenerator(" ", " ", 3), 0, 3);
         $amount = substr(static::rightPaddingGenerator($group->total * 100, " ", 17), 0, 17);
-        $pymntD = substr(static::rightPaddingGenerator($group->remarks, " ", 35), 0, 35);
+        $pymntD = substr(static::rightPaddingGenerator($group->batch_name, " ", 35), 0, 35);
         $purpose = substr(static::rightPaddingGenerator($group->supplier->purpose->name, " ", 4), 0, 4);
         $filler2 = substr(static::rightPaddingGenerator(" ", " ", 315), 0, 315);
         $e = "E";
@@ -87,7 +87,7 @@ class InvoiceBatchTextFileGenerator
                 'supplier' => $supplier,
                 'total' => $totalAmount,
                 'details' => $batchDetails,
-                'remarks' => "Payment to {$supplier->name} batch {$batch->batch_name}."
+                'batch_name' => $batch->batch_name
             ];
         }
         return $data;
@@ -95,20 +95,20 @@ class InvoiceBatchTextFileGenerator
 
     private static function generateHeadingLine(InvoiceBatch $batch, User $user)
     {
-        $transactionTypeCode = "10";
-        $filler1 = static::rightPaddingGenerator(" ", " ", 11);
-        $originatingBankCode = substr($user->bank->swift, 0, 11);
-        $accountNumber = static::rightPaddingGenerator($user->account_number, " ", 34);
-        $filler2 = static::rightPaddingGenerator(" ", " ", 147);
-        $clearing = "FAST";
-        $referenceNumber = static::rightPaddingGenerator($batch->batch_name, " ", 16);
-        $date = $batch->date->format('dmY');
+        $transactionTypeCode = "10";                                                        //transaction code 2  characters
+        $filler1 = static::rightPaddingGenerator(" ", " ", 11);                             //space filler 11 characters
+        $originatingBankCode = substr($user->bank->swift, 0, 11);                           //originating bank code(swift) 11 characters
+        $accountNumber = static::rightPaddingGenerator($user->account_number, " ", 34);     //account number 34 characters
+        $filler2 = static::rightPaddingGenerator(" ", " ", 147);                            // 147 space filler
+        $clearing = "FAST";                                                                 //Clearing 4 characters(FAST OR GIRO)
+        $referenceNumber = static::rightPaddingGenerator($batch->batch_name, " ", 16);      // References Number(Batch #) 16 characters
+        $date = $batch->date->format('dmY');                                                //Date formatted as (ddmmyyyy) 8 characters
         $combinedHeadingLine =
             substr($transactionTypeCode, 0, 2).
             substr($filler1, 0, 11).
             substr($originatingBankCode, 0, 11).
             substr($accountNumber, 0, 34).
-            substr($filler2, 0, 145).
+            substr($filler2, 0, 147).
             substr($clearing, 0, 4).
             substr($referenceNumber, 0, 16).
             substr($date, 0, 8);

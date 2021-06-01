@@ -20,6 +20,7 @@ class CreateInvoicesTable extends Migration
             $table->date('date');
             $table->string('invoice_number');
             $table->decimal('amount', 15, 2);
+            $table->boolean('paid')->default(false);
             $table->string('xero_invoice_id')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();

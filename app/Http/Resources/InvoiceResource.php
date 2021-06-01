@@ -21,6 +21,7 @@ class InvoiceResource extends JsonResource
             'invoiceNumber' => $this->getInvoiceNumber(),
             'amount' => $this->getAmount(),
             'description' => $this->getDescription(),
+            'status' => $this->getStatus(),
             'supplier' => new SupplierResource($this->whenLoaded('supplier')),
             'showUrl' => route('invoice_show', $this->id),
             'editUrl' => route('invoice_edit', $this->id),

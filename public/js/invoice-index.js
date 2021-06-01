@@ -46612,7 +46612,9 @@ new vue__WEBPACK_IMPORTED_MODULE_5__.default({
     BatchModal: _components_BatchModal_vue__WEBPACK_IMPORTED_MODULE_3__.default
   },
   data: {
-    form: new _components_Form__WEBPACK_IMPORTED_MODULE_1__.Form(),
+    form: new _components_Form__WEBPACK_IMPORTED_MODULE_1__.Form({
+      selected: []
+    }),
     filterable: filterable,
     baseUrl: baseUrl,
     exportBaseUrl: typeof exportBaseUrl !== "undefined" ? exportBaseUrl : '',
@@ -46660,6 +46662,33 @@ new vue__WEBPACK_IMPORTED_MODULE_5__.default({
 
       this.allSelected = !this.allSelected;
     },
+    markAsPaid: function markAsPaid() {
+      var _this2 = this;
+
+      this.form.selected = this.selected;
+      this.$swal({
+        title: "Mark Invoices as Paid",
+        text: "You will not be able to revert this.",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Yes.',
+        confirmButtonColor: '#f86c6b'
+      }).then(function (response) {
+        if (response.value) {
+          _this2.form.post("/api/invoices/pay").then(function (response) {
+            _this2.$swal({
+              title: "Invoices Updated!",
+              text: "Invoices has been marked as paid",
+              type: "success"
+            }).then(function () {
+              _this2.reloadData();
+
+              _this2.close();
+            });
+          });
+        }
+      });
+    },
     addOrRemoveToSelected: function addOrRemoveToSelected(item) {
       var exists = this.selected.find(function (select) {
         return select.id == item.id;
@@ -46690,11 +46719,11 @@ new vue__WEBPACK_IMPORTED_MODULE_5__.default({
       };
     },
     destroy: function destroy(url, redirectUrl) {
-      var _this2 = this;
+      var _this3 = this;
 
       console.log(url, redirectUrl);
       this.form.deleteWithConfirmation(url).then(function (response) {
-        _this2.form.successModal('Item has been removed').then(function () {
+        _this3.form.successModal('Item has been removed').then(function () {
           return window.location = redirectUrl;
         });
       });

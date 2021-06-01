@@ -53,6 +53,10 @@ Route::prefix('invoices')->group(function () {
     Route::get('/{id}/edit', [InvoiceController::class, 'edit'])->name('invoice_edit');
 });
 
+Route::prefix('invoice-histories')->group(function () {
+    Route::get('/', [InvoiceController::class, 'index2'])->name('invoice-histories');
+});
+
 // Route::prefix('summary')->group(function () {
 //     Route::get('/', [SummaryController::class, 'create'])->name('summary-create');
 //     Route::get('/excel/{dateFrom}/{dateTo}', [SummaryController::class, 'exportExcel']);
