@@ -54,7 +54,14 @@ class InvoiceBatchController extends Controller
         $fileText = InvoiceBatchTextFileGenerator::generate($batch, auth()->user());
         $currentDateTime = Carbon::now();
         $myName = "{$batch->batch_name}{$currentDateTime->format('dmYHis')}.txt";
-        $headers = ['Content-type'=>'text/plain', 'test'=>'YoYo', 'Content-Disposition'=>sprintf('attachment; filename="%s"', $myName),'Content-Length'=>strlen($fileText)];
+        $headers = [
+            'Content-type'=>'text/plain',
+            'Content-Disposition'=>sprintf('attachment; filename="%s"', $myName),
+            'Content-Transfer-Encoding' => 'binary',
+            'Content-Description' => 'File Transfer',
+            'Content-Transfer-Encoding' => 'binary',
+            'Cache-Control' => 'must-revalidate',
+        ];
         
         return Response::make($fileText, 200, $headers);
     }

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 @include('layouts.section-header')
-<div id="index">
+<div id="index" v-cloak>
     <div class="card">
         <div class="card-header">
             <button type="button" @click="showInvoiceModal = true" class="btn btn-success btn-sm"><i class="fa fa-plus"

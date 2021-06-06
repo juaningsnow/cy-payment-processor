@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 @include('layouts.section-header')
-<div id="index">
+<div id="index" v-cloak>
     <div class="card">
         <div class="card-header">
             <button type="button" v-if="selected.length > 0" @click="showBatchModal = true"

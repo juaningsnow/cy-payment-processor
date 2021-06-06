@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 @include('layouts.section-header')
-<div id="invoice-batch">
+<div id="invoice-batch" v-cloak>
     <div class="row">
         <div class="col-12">
             <div class="card">

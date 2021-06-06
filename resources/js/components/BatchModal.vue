@@ -194,7 +194,10 @@ export default {
                     text: "Invoice Batch has beend saved to database",
                     type: "success",
                 }).then(() => {
-                    this.$emit("reload-data");
+                    let showUrl = new URL(
+                        `${window.location.origin}/invoice-batches/${response.data.id}`
+                    );
+                    window.location = showUrl;
                     this.close();
                 });
             });

@@ -20,6 +20,7 @@ class CreateInvoiceBatchesTable extends Migration
             $table->decimal('total', 15, 2);
             $table->boolean('generated')->default(false);
             $table->string('xero_batch_payment_id')->nullable();
+            $table->boolean('cancelled')->default(false);
             $table->timestamps();
         });
     }

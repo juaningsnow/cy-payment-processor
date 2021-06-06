@@ -12,3 +12,6 @@
 @import '~admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css';
 @import '~admin-lte/dist/css/adminlte.min.css';
 @import '~admin-lte/plugins/select2/css/select2.css';
+
+
+[v-cloak] { display:none !important; }

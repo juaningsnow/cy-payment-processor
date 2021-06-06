@@ -2058,7 +2058,8 @@ __webpack_require__.r(__webpack_exports__);
           text: "Invoice Batch has beend saved to database",
           type: "success"
         }).then(function () {
-          _this5.$emit("reload-data");
+          var showUrl = new URL("".concat(window.location.origin, "/invoice-batches/").concat(response.data.id));
+          window.location = showUrl;
 
           _this5.close();
         });
