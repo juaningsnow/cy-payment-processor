@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use BaseCode\Common\Exceptions\GeneralApiException;
+use BaseCode\Common\Traits\HasMany;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -16,6 +18,7 @@ class User extends Authenticatable
     use HasFactory;
     // use HasProfilePhoto;
     use Notifiable;
+    use HasMany;
     // use TwoFactorAuthenticatable;
 
     /**
@@ -28,9 +31,7 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
-        'uen_number',
-        'bank_name',
-        'account_number'
+        'is_admin'
     ];
 
     /**
@@ -45,11 +46,40 @@ class User extends Authenticatable
         // 'two_factor_secret',
     ];
 
-    public function bank()
+    public function company()
     {
-        return $this->belongsTo(Bank::class);
+        return $this->belongsTo(Company::class);
     }
 
+    public function getBank()
+    {
+        if(!$this->hasBanks()){
+            throw new GeneralApiException("User has no Bank");
+        }
+        return $this->banks()->where('default', true)->first();
+    }
+
+    public function hasBanks()
+    {
+        return $this->banks()->exists();
+    }
+
+    public function banks()
+    {
+        return $this->belongsToMany(Bank::class, 'user_banks')
+            ->withPivot(['bank_id', 'user_id', 'account_number', 'default'])
+            ->withTimestamps();
+    }
+
+    public function userBanks()
+    {
+        return $this->hasMany(UserBank::class);
+    }
+
+    public function isAdmin()
+    {
+        return (bool) $this->is_admin;
+    }
     /**
      * The attributes that should be cast to native types.
      *

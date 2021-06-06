@@ -23,6 +23,33 @@ class InvoiceBatch extends BaseModel
         });
     }
 
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class, 'supplier_id');
+    }
+
+    public function hasSupplier()
+    {
+        return $this->supplier()->exists();
+    }
+
+    public function getSupplierId()
+    {
+        return $this->supplier_id;
+    }
+
+    public function getSupplier()
+    {
+        return $this->supplier;
+    }
+
+    public function setSupplier(Supplier $value)
+    {
+        $this->supplier()->associate($value);
+        $this->supplier_id = $value->getId();
+        return $this;
+    }
+
     protected $invoiceBatchDetailsToSet = null;
 
     public function invoiceBatchDetails()
@@ -99,5 +126,34 @@ class InvoiceBatch extends BaseModel
     {
         $this->generated = $value;
         return $this;
+    }
+
+    public function getCancelled()
+    {
+        return $this->cancelled;
+    }
+
+    public function setCancelled($value)
+    {
+        $this->cancelled = $value;
+        return $this;
+    }
+
+    private function computeStatus()
+    {
+        if ($this->getCancelled()) {
+            return "Cancelled";
+        }
+        if ($this->isGenerated()) {
+            return "Generated";
+        }
+        return "Not Yet Generated";
+    }
+
+    public function getStatus()
+    {
+        $this->status = $this->computeStatus();
+        $this->save();
+        return $this->status;
     }
 }

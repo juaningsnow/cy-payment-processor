@@ -1,12 +1,13 @@
 {
     "/js/app.js": "/js/app.js?id=36af6ac1674bc40b6736",
-    "/js/index.js": "/js/index.js?id=7e9c51ea472307c17973",
-    "/js/invoice-index.js": "/js/invoice-index.js?id=1285311c43b942301494",
-    "/js/supplier.js": "/js/supplier.js?id=a57e0170ab71d718f826",
-    "/js/invoice-batch.js": "/js/invoice-batch.js?id=5f4f9bc3e20e60bf4259",
-    "/js/invoice.js": "/js/invoice.js?id=e5f81f8493d2c73576b6",
-    "/js/dashboard.js": "/js/dashboard.js?id=92358c13f9e8a21f42d9",
-    "/js/summary.js": "/js/summary.js?id=fd8d2d58ad01c12469b4",
+    "/js/index.js": "/js/index.js?id=7b87f5750f4ef903e14e",
+    "/js/invoice-index.js": "/js/invoice-index.js?id=95ef0c2be4177f0bed0d",
+    "/js/supplier.js": "/js/supplier.js?id=17900f32efa83fa3ee21",
+    "/js/invoice-batch.js": "/js/invoice-batch.js?id=00aad264a8a241015f96",
+    "/js/invoice.js": "/js/invoice.js?id=db9219f3423694c0b223",
+    "/js/dashboard.js": "/js/dashboard.js?id=8b78a310e23ad2b98e5b",
+    "/js/company.js": "/js/company.js?id=a9dd79ba89df496c5965",
+    "/js/user.js": "/js/user.js?id=7c2bbecaa31527e14e30",
     "/css/app.css": "/css/app.css?id=be488ea4b63c1393649b",
     "/js/select2.js": "/js/select2.js?id=c2afdeda30583c460d6d"
 }

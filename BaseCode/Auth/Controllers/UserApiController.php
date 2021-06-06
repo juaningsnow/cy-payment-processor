@@ -2,6 +2,9 @@
 
 namespace BaseCode\Auth\Controllers;
 
+use App\Http\Resources\UserBankResource;
+use App\Models\Bank;
+use App\Models\UserBank;
 use BaseCode\Auth\Models\User;
 use BaseCode\Auth\Requests\StoreUser;
 use BaseCode\Auth\Requests\UpdateUser;
@@ -105,6 +108,42 @@ class UserApiController extends ResourceApiController
         });
 
         return $this->getResource($user);
+    }
+
+    public function addBank($id, Request $request)
+    {
+        $user = \DB::transaction(function () use ($id, $request) {
+            return UserRecordService::addBank(
+                User::find($id),
+                Bank::find($request->input('bankId')),
+                $request->input('accountNumber')
+            );
+        });
+
+        return $this->getResource($user);
+    }
+
+    public function removeBank($id,$bankId, Request $request)
+    {
+        $user = \DB::transaction(function () use ($id, $bankId) {
+            return UserRecordService::removeBank(
+                User::find($id),
+                Bank::find($bankId),
+            );
+        });
+
+        return $this->getResource($user);
+    }
+
+    public function makeDefault($id,$bankId, Request $request)
+    {
+        $userBank = \DB::transaction(function () use ($id, $bankId) {
+            return UserRecordService::makeDefault(
+                UserBank::where('user_id', $id)->where('bank_id', $bankId)->first()
+            );
+        });
+
+        return new UserBankResource($userBank);
     }
 
     public function destroy($id)

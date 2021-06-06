@@ -7,18 +7,40 @@ use App\Models\InvoiceBatchDetail;
 use App\Models\Supplier;
 use App\Models\User;
 
+use function PHPSTORM_META\map;
+
 class InvoiceBatchTextFileGenerator
 {
     public static function generate(InvoiceBatch $batch, User $user)
     {
         $heading = static::generateHeadingLine($batch, $user);
-        $lines = static::generateLineDetails($batch, $user);
+        $lines = $batch->hasSupplier() ? static::generateLineDetailsForSingleSupplier($batch) : static::generateLineDetails($batch);
         $combined = array_merge([$heading], $lines);
         $finalOutput = implode("\n", $combined);
         return $finalOutput;
     }
 
-    private static function generateLineDetails(InvoiceBatch $batch, User $user)
+    private static function generateLineDetailsForSingleSupplier(InvoiceBatch $batch)
+    {
+        $lines = [];
+
+        $batchDetails = $batch->getInvoiceBatchDetails();
+        $group = (object) [
+            'supplier' => $batch->getSupplier(),
+            'total' => $batch->getTotal(),
+            'details' => $batchDetails,
+            'batch_name' => $batch->batch_name
+       ];
+
+        $lines[] = static::makeTransactionLine($group);
+        foreach ($group->details as $detail) {
+            $lines[] = static::makeTransactionDetailLine($detail);
+        }
+
+        return $lines;
+    }
+
+    private static function generateLineDetails(InvoiceBatch $batch)
     {
         $lines = [];
         $supplierIds = $batch->getInvoiceBatchDetails()->map(function ($detail) {
@@ -33,6 +55,26 @@ class InvoiceBatchTextFileGenerator
             }
         }
         return $lines;
+    }
+
+    private static function groupBySupplierWithTotal($supplierIds, $batchId)
+    {
+        $batch = InvoiceBatch::find($batchId);
+        $data = [];
+        foreach ($supplierIds as $id) {
+            $batchDetails = InvoiceBatchDetail::supplierId($id)->where('invoice_batch_id', $batchId)->get();
+            $totalAmount = $batchDetails->sum(function ($detail) {
+                return $detail->invoice->amount;
+            });
+            $supplier = Supplier::find($id);
+            $data[] = (object)[
+                'supplier' => $supplier,
+                'total' => $totalAmount,
+                'details' => $batchDetails,
+                'batch_name' => $batch->batch_name
+            ];
+        }
+        return $data;
     }
 
     private static function makeTransactionDetailLine($detail)
@@ -72,32 +114,11 @@ class InvoiceBatchTextFileGenerator
         return substr($combination, 0, 1000);
     }
 
-
-    private static function groupBySupplierWithTotal($supplierIds, $batchId)
-    {
-        $batch = InvoiceBatch::find($batchId);
-        $data = [];
-        foreach ($supplierIds as $id) {
-            $batchDetails = InvoiceBatchDetail::supplierId($id)->where('invoice_batch_id', $batchId)->get();
-            $totalAmount = $batchDetails->sum(function ($detail) {
-                return $detail->invoice->amount;
-            });
-            $supplier = Supplier::find($id);
-            $data[] = (object)[
-                'supplier' => $supplier,
-                'total' => $totalAmount,
-                'details' => $batchDetails,
-                'batch_name' => $batch->batch_name
-            ];
-        }
-        return $data;
-    }
-
     private static function generateHeadingLine(InvoiceBatch $batch, User $user)
     {
         $transactionTypeCode = "10";                                                        //transaction code 2  characters
         $filler1 = static::rightPaddingGenerator(" ", " ", 11);                             //space filler 11 characters
-        $originatingBankCode = substr($user->bank->swift, 0, 11);                           //originating bank code(swift) 11 characters
+        $originatingBankCode = substr($user->getBank()->swift, 0, 11);                           //originating bank code(swift) 11 characters
         $accountNumber = static::rightPaddingGenerator($user->account_number, " ", 34);     //account number 34 characters
         $filler2 = static::rightPaddingGenerator(" ", " ", 147);                            // 147 space filler
         $clearing = "FAST";                                                                 //Clearing 4 characters(FAST OR GIRO)

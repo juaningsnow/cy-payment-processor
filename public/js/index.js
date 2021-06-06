@@ -2999,7 +2999,7 @@ var Form = /*#__PURE__*/function () {
         text: "You will not be able to revert this.",
         type: "warning",
         showCancelButton: true,
-        confirmButtonText: 'Yes, delete this.',
+        confirmButtonText: 'Yes',
         confirmButtonColor: '#f86c6b'
       });
     }

@@ -3,6 +3,7 @@
 namespace BaseCode\Auth\Models;
 
 use App\Models\Bank;
+use App\Models\UserBank;
 use BaseCode\Common\Traits\HasTimestamps;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -42,6 +43,23 @@ class User extends Authenticatable
         'settings' => 'array'
     ];
 
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function banks()
+    {
+        return $this->belongsToMany(Bank::class, 'user_banks')
+            ->withPivot(['bank_id', 'user_id', 'account_number', 'default'])
+            ->withTimestamps();
+    }
+
+    public function userBanks()
+    {
+        return $this->hasMany(UserBank::class);
+    }
+
     public function setSettings(array $values)
     {
         $this->settings = array_merge(
@@ -58,7 +76,7 @@ class User extends Authenticatable
     
     public function isAdmin()
     {
-        return $this->hasRole('Admin');
+        return (bool) $this->is_admin;
     }
 
     public function getRoles()

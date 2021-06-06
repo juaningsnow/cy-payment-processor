@@ -1945,6 +1945,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -1980,15 +2003,19 @@ __webpack_require__.r(__webpack_exports__);
         batchName: null,
         date: moment__WEBPACK_IMPORTED_MODULE_4___default()(),
         total: 0,
+        supplierId: null,
         invoiceBatchDetails: {
           data: []
         }
       }),
+      nullValue: null,
       dataInitialized: true,
       counter: -1,
       supplierIdToUpdate: null,
       invoiceBatchDetailIndexForSupplierUpdate: null,
-      showSupplierModal: false
+      showSupplierModal: false,
+      supplierSelections: [],
+      suppliersInitialized: false
     };
   },
   created: function created() {
@@ -1996,7 +2023,11 @@ __webpack_require__.r(__webpack_exports__);
 
     this.dataInitialized = false;
     this.setDetails().then(function () {
-      _this.dataInitialized = true;
+      _this.form.get("/api/suppliers").then(function (response) {
+        _this.supplierSelections = response.data;
+        _this.suppliersInitialized = true;
+        _this.dataInitialized = true;
+      });
     });
   },
   methods: {
@@ -2087,7 +2118,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     initializationComplete: function initializationComplete() {
-      return this.dataInitialized;
+      return this.dataInitialized && this.suppliersInitialized;
     },
     totalAmount: function totalAmount() {
       return this.form.invoiceBatchDetails.data.reduce(function (prev, curr) {
@@ -4016,7 +4047,7 @@ var Form = /*#__PURE__*/function () {
         text: "You will not be able to revert this.",
         type: "warning",
         showCancelButton: true,
-        confirmButtonText: 'Yes, delete this.',
+        confirmButtonText: 'Yes',
         confirmButtonColor: '#f86c6b'
       });
     }
@@ -29701,6 +29732,81 @@ var render = function() {
                   )
                 ])
               ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-6" }, [
+                  _c("label", { attrs: { for: "supplier" } }, [
+                    _vm._v("Charge all to")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.form.supplierId,
+                          expression: "form.supplierId"
+                        }
+                      ],
+                      staticClass: "form-control select2",
+                      staticStyle: { width: "100%" },
+                      attrs: { disabled: _vm.isShow },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.form,
+                            "supplierId",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "option",
+                        {
+                          attrs: { selected: "selected", disabled: "" },
+                          domProps: { value: _vm.nullValue }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        -Select Supplier-\n                    "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _vm._l(_vm.supplierSelections, function(item, index) {
+                        return _c(
+                          "option",
+                          { key: index, domProps: { value: item.id } },
+                          [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(item.text) +
+                                "\n                    "
+                            )
+                          ]
+                        )
+                      })
+                    ],
+                    2
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("br"),
               _vm._v(" "),
               _c(
                 "table",

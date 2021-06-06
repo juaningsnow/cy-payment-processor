@@ -7,7 +7,7 @@ class UserRoutes
 {
     public static function api()
     {
-        Route::prefix('users')->group(function () {
+        Route::prefix('user-management')->group(function () {
             Route::get('/', '\BaseCode\Auth\Controllers\UserApiController@index');
             Route::get('/export', '\BaseCode\Auth\Controllers\UserApiController@export');
             Route::get('{userId}', '\BaseCode\Auth\Controllers\UserApiController@show');

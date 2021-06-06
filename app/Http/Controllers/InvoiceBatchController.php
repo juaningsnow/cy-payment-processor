@@ -5,18 +5,30 @@ namespace App\Http\Controllers;
 use App\Models\Config;
 use App\Models\InvoiceBatch;
 use App\Utils\InvoiceBatchTextFileGenerator;
+use App\Utils\StatusList;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Response;
 
 class InvoiceBatchController extends Controller
 {
     private $availableFilters = [
-        ['id' => 'batch_name', 'text' => 'name']
+        ['id' => 'batch_name', 'text' => 'Batch #'],
+        ['id' => 'date', 'text' => "Date", 'type' => "Date"],
+        ['id' => 'status', 'text' => "Status", "type" => "Select", "options" => StatusList::INVOICE_BATCH_STATUS_LIST]
+    ];
+
+    private $invoiceFilters = [
+        ['id' => 'invoice_number', 'text' => 'Number']
     ];
 
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+    public function create()
+    {
+        return view('invoice-batches.create', ['title' => "Batch Create", 'id' => null]);
     }
 
     public function index()
@@ -42,8 +54,15 @@ class InvoiceBatchController extends Controller
 
     public function show($id)
     {
+        $indexVariables = [
+            'filterable' => $this->invoiceFilters,
+            'sorter' => 'id',
+            'sortAscending' => true,
+            'baseUrl' => '/api/invoices?no_invoice_batch_detail=1&paid=0&include=supplier',
+            'exportBaseUrl' => '/invoices'
+        ];
         $invoice = InvoiceBatch::find($id);
-        return view('invoice-batches.show', ['title' => $invoice ? $invoice->getBatchName() : "--", 'id' => $id]);
+        return view('invoice-batches.show', ['title' => $invoice ? $invoice->getBatchName() : "--", 'id' => $id, 'indexVariables' => $indexVariables]);
     }
 
     public function downloadTextFile($id)

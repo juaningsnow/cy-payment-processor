@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Invoice;
 use App\Models\InvoiceBatchDetail;
+use BaseCode\Common\Exceptions\GeneralApiException;
 use DateTime;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -47,5 +48,19 @@ class InvoiceBatchRequest extends FormRequest
             $detail->setInvoice($invoice);
             return $detail;
         }, $this->input('invoiceBatchDetails.data'));
+    }
+
+    public function addInvoiceBatchDetails()
+    {
+        return array_map(function ($item) {
+            if (isset($item['id']) || $item['id'] < 0) {
+                $detail = new InvoiceBatchDetail();
+            } else {
+                $detail = InvoiceBatchDetail::find($item['id']);
+            }
+            $invoice = Invoice::find($item['id']);
+            $detail->setInvoice($invoice);
+            return $detail;
+        }, $this->input('selected'));
     }
 }

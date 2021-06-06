@@ -18,24 +18,56 @@ class Invoice extends Model
         return $this->belongsTo(Supplier::class);
     }
 
-    public function invoiceBatchDetail()
+    public function invoiceBatchDetails()
     {
-        return $this->hasOne(InvoiceBatchDetail::class, 'invoice_id');
+        return $this->hasMany(InvoiceBatchDetail::class, 'invoice_id');
     }
 
-    public function hasInvoiceBatchDetail()
+    public function hasOneNonCancelledInvoiceBatchDetail()
     {
-        return $this->invoiceBatchDetail()->exists();
+        foreach ($this->invoiceBatchDetails as $detail) {
+            if (!$detail->invoiceBatch->getCancelled()) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public function scopeNoInvoiceBatchDetail($query, $value)
+    public function hasInvoiceBatchDetails()
     {
-        return $query->whereDoesntHave('invoiceBatchDetail');
+        return $this->invoiceBatchDetails()->exists();
+    }
+
+    public function hasCancelledInvoiceBatchDetail()
+    {
+        if ($this->hasInvoiceBatchDetails()) {
+            $count = $this->invoiceBatchDetails()->whereHas('invoiceBatch', function ($invoiceBatch) {
+                return $invoiceBatch->where('cancelled', true);
+            })->count();
+            if ($count > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function scopeNoInvoiceBatchDetail($query, $value = null)
+    {
+        return $query->whereDoesntHave('invoiceBatchDetails');
+    }
+
+    public function scopeNoInvoiceBatchDetailOrCancelled($query, $value = null)
+    {
+        return $query->noInvoiceBatchDetail()->orWhereDoesntHave('invoiceBatchDetails', function ($invoiceBatchDetails) {
+            return $invoiceBatchDetails->whereHas('invoiceBatch', function ($invoiceBatch) {
+                return $invoiceBatch->where('cancelled', false);
+            });
+        });
     }
 
     public function scopeHasInvoiceBatchDetailOrPaid($query)
     {
-        return $query->whereHas('invoicebatchDetail')->orWhere('paid', true);
+        return $query->whereHas('invoiceBatchDetails')->orWhere('paid', true);
     }
 
     public function scopePaid($query, $value)
@@ -120,18 +152,33 @@ class Invoice extends Model
         return $this->id;
     }
 
-    public function getStatus()
+    public function getInvoiceBatchDetail()
     {
-        if ($this->hasInvoiceBatchDetail()) {
-            if ($this->invoiceBatchDetail->getInvoiceBatch()->isGenerated()) {
-                return "Generated and Paid";
-            } else {
-                return "Batched";
+        return $this->invoiceBatchDetails()->orderBy('id', 'desc')->first();
+    }
+
+    private function computeStatus()
+    {
+        if ($this->hasInvoiceBatchDetails()) {
+            if ($this->getInvoiceBatchDetail()->getInvoiceBatch()->getCancelled()) {
+                return "Batch Cancelled";
             }
+            if ($this->getInvoiceBatchDetail()->getInvoiceBatch()->isGenerated() &&
+                    !$this->getInvoiceBatchDetail()->getInvoiceBatch()->getCancelled()) {
+                return "Generated and Paid";
+            }
+            return "Batched";
         }
         if ($this->getPaid()) {
             return "Paid";
         }
+    }
+
+    public function getStatus()
+    {
+        $this->status = $this->computeStatus();
+        $this->save();
+        return $this->status;
     }
 
     public function scopeDateFrom($query, $date)
@@ -144,5 +191,19 @@ class Invoice extends Model
     {
         $date = new Carbon($date);
         return $query->where('date', '<=', $date->endOfDay()->copy()->toDateString());
+    }
+
+    public function scopeSupplierName($query, $value)
+    {
+        return $query->whereHas('supplier', function ($supplier) use ($value) {
+            return $supplier->where('name', 'like', $value);
+        });
+    }
+
+    public function scopeOrderBySupplierName($query, $direction = "DESC")
+    {
+        return $query->join('suppliers', 'suppliers.id', 'invoices.supplier_id')
+            ->select('suppliers.name as supplier_name', 'invoices.*')
+            ->orderBy('supplier_name', $direction);
     }
 }

@@ -133,7 +133,7 @@ export class Form {
             text: "You will not be able to revert this.",
             type: "warning",
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete this.',
+            confirmButtonText: 'Yes',
             confirmButtonColor: '#f86c6b',
         });
     }
@@ -155,8 +155,7 @@ export class Form {
         });
     }
 
-    errorGenericModal(title, text)
-    {
+    errorGenericModal(title, text) {
         return swal({
             title: title,
             text: text,
@@ -192,17 +191,17 @@ export class Form {
     submitImage(url, formData) {
         return new Promise((resolve, reject) => {
             axios["post"](url, formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data"
-                    },
-                    onUploadProgress: function(progressEvent) {
-                        this.uploadPercentage = parseInt(
-                            Math.round(
-                                (progressEvent.loaded * 100) / progressEvent.total
-                            )
-                        );
-                    }.bind(this)
-                })
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                },
+                onUploadProgress: function (progressEvent) {
+                    this.uploadPercentage = parseInt(
+                        Math.round(
+                            (progressEvent.loaded * 100) / progressEvent.total
+                        )
+                    );
+                }.bind(this)
+            })
                 .then(response => {
                     this.onSuccess(response.data);
                     resolve(response.data);

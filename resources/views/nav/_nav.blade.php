@@ -35,4 +35,22 @@
             </p>
         </a>
     </li>
+    <li class="nav-item">
+        <a href="{{route('companies')}}" class="nav-link">
+            <i class="fas fa-list"></i>
+            <p>
+                Companies
+            </p>
+        </a>
+    </li>
+    @if(auth()->user()->isAdmin())
+    <li class="nav-item">
+        <a href="{{route('users')}}" class="nav-link">
+            <i class="fas fa-users"></i>
+            <p>
+                Users
+            </p>
+        </a>
+    </li>
+    @endif
 </ul>

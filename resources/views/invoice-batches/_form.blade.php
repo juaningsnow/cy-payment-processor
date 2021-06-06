@@ -19,6 +19,19 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-6">
+        <label for="supplier">Charge all to</label>
+        <select class="form-control select2" v-model="form.supplierId" style="width: 100%" :disabled="isShow">
+            <option selected="selected" disabled :value="nullValue">
+                -Select Supplier-
+            </option>
+            <option v-for="(item, index) in supplierSelections" :key="index" :value="item.id">
+                @{{ item.text }}
+            </option>
+        </select>
+    </div>
+</div>
 <table class="table">
     <thead>
         <tr>

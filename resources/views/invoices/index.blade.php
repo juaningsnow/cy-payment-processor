@@ -29,14 +29,30 @@
                         <tr>
                             <td @click="selectAll" class="text-center">
                                 <div class="form-check">
-                                    <input class="form-check-input" @click="selectAll" v-model="allSelected"
-                                        type="checkbox" id="flexCheckChecked">
+                                    <input class="form-check-input" v-model="allSelected" type="checkbox"
+                                        id="flexCheckChecked">
                                 </div>
                             </td>
-                            <th>Invoice Number</th>
-                            <th>Supplier</th>
-                            <th>Date</th>
-                            <th class="text-right">Amount</th>
+                            <th>
+                                <a v-on:click="setSorter('invoice_number')">
+                                    Invoice Number <i class="fa" :class="getSortIcon('invoice_number')"></i>
+                                </a>
+                            </th>
+                            <th>
+                                <a v-on:click="setSorter('supplier_name')">
+                                    Supplier <i class="fa" :class="getSortIcon('supplier_name')"></i>
+                                </a>
+                            </th>
+                            <th>
+                                <a v-on:click="setSorter('date')">
+                                    Date <i class="fa" :class="getSortIcon('date')"></i>
+                                </a>
+                            </th>
+                            <th class="text-right">
+                                <a v-on:click="setSorter('amount')">
+                                    Amount <i class="fa" :class="getSortIcon('name')"></i>
+                                </a>
+                            </th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>

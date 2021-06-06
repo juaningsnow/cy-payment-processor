@@ -8,7 +8,11 @@ use Illuminate\Http\Request;
 class SupplierController extends Controller
 {
     private $availableFilters = [
-        ['id' => 'name', 'text' => 'name']
+        ['id' => 'name', 'text' => 'Name'],
+        ['id' => 'purpose_code', 'text' => "Purpose"],
+        ['id' => 'payment_type', 'text' => 'Payment Type'],
+        ['id' => 'account_number', 'text' => "Account Number"],
+        ['id' => 'bank_name', 'text' => "Bank"]
     ];
 
     public function __construct()

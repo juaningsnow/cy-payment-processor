@@ -19,7 +19,9 @@ mix.copy('node_modules/admin-lte/plugins/select2/js/select2.full.js', 'public/js
     .js(`resources/js/invoice-batch.js`, "public/js")
     .js(`resources/js/invoice.js`, "public/js")
     .js(`resources/js/dashboard.js`, "public/js")
-    .js(`resources/js/summary.js`, "public/js")
+    .js(`resources/js/company.js`, "public/js")
+    .js(`resources/js/user.js`, "public/js")
+    // .js(`resources/js/summary.js`, "public/js")
     .sass('resources/sass/app.scss', 'public/css')
     .vue()
     .version();

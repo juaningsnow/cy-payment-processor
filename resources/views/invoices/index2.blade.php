@@ -21,11 +21,31 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Invoice Number</th>
-                            <th>Supplier</th>
-                            <th>Date</th>
-                            <th class="text-center">Status</th>
-                            <th class="text-right">Amount</th>
+                            <th>
+                                <a v-on:click="setSorter('invoice_number')">
+                                    Invoice Number <i class="fa" :class="getSortIcon('invoice_number')"></i>
+                                </a>
+                            </th>
+                            <th>
+                                <a v-on:click="setSorter('supplier_name')">
+                                    Supplier <i class="fa" :class="getSortIcon('supplier_name')"></i>
+                                </a>
+                            </th>
+                            <th>
+                                <a v-on:click="setSorter('date')">
+                                    Date <i class="fa" :class="getSortIcon('date')"></i>
+                                </a>
+                            </th>
+                            <th class="text-center">
+                                <a v-on:click="setSorter('status')">
+                                    Status <i class="fa" :class="getSortIcon('status')"></i>
+                                </a>
+                            </th>
+                            <th class="text-right">
+                                <a v-on:click="setSorter('amount')">
+                                    Amount <i class="fa" :class="getSortIcon('name')"></i>
+                                </a>
+                            </th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
@@ -39,6 +59,8 @@
                                 <span v-if="item.status == `Generated and Paid`"
                                     class="badge badge-success">@{{item.status}}</span>
                                 <span v-if="item.status == `Batched`" class="badge badge-info">@{{item.status}}</span>
+                                <span v-if="item.status == `Batch Cancelled`"
+                                    class="badge badge-danger">@{{item.status}}</span>
                             </td>
                             <td class="text-right">@{{item.amount | numeric}}</td>
                             <td class="text-center">

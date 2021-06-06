@@ -56,6 +56,29 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-6">
+                    <label for="supplier">Charge all to</label>
+                    <select
+                        class="form-control select2"
+                        v-model="form.supplierId"
+                        style="width: 100%"
+                        :disabled="isShow"
+                    >
+                        <option selected="selected" disabled :value="nullValue">
+                            -Select Supplier-
+                        </option>
+                        <option
+                            v-for="(item, index) in supplierSelections"
+                            :key="index"
+                            :value="item.id"
+                        >
+                            {{ item.text }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <br />
             <table class="table">
                 <thead>
                     <tr>
@@ -125,20 +148,29 @@ export default {
                 batchName: null,
                 date: moment(),
                 total: 0,
+                supplierId: null,
                 invoiceBatchDetails: { data: [] },
             }),
+            nullValue: null,
             dataInitialized: true,
             counter: -1,
             supplierIdToUpdate: null,
             invoiceBatchDetailIndexForSupplierUpdate: null,
             showSupplierModal: false,
+
+            supplierSelections: [],
+            suppliersInitialized: false,
         };
     },
 
     created() {
         this.dataInitialized = false;
         this.setDetails().then(() => {
-            this.dataInitialized = true;
+            this.form.get(`/api/suppliers`).then((response) => {
+                this.supplierSelections = response.data;
+                this.suppliersInitialized = true;
+                this.dataInitialized = true;
+            });
         });
     },
 
@@ -228,7 +260,7 @@ export default {
 
     computed: {
         initializationComplete() {
-            return this.dataInitialized;
+            return this.dataInitialized && this.suppliersInitialized;
         },
         totalAmount() {
             return this.form.invoiceBatchDetails.data.reduce((prev, curr) => {

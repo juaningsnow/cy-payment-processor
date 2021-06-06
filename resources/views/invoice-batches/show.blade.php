@@ -14,8 +14,17 @@
                     <div class="card-header">
                         <a v-if="!form.generated" href="{{route('invoice-batches_edit', $id)}}">
                             <button type="button" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button></a>
+                        <button v-if="!form.generated" type="button" @click="showInvoiceListModal = true"
+                            class="btn btn-success btn-sm">
+                            <i class="fas fa-plus"></i> Add Invoice
+                        </button>
+                        <button type="button" class="btn btn-info btn-sm" @click="copy">
+                            <i class="fas fa-copy"></i>
+                        </button>
                         <div class="card-tools">
                             <div class="btn-group">
+                                <button type="button" v-if="!form.cancelled && form.generated" title="Cancel"
+                                    @click="cancel" class="btn btn-danger">Cancel</button>
                                 <button type="button" title="Export Text File" @click="exportTextFile"
                                     class="btn btn-success">Generate</button>
                             </div>
@@ -28,6 +37,11 @@
                         <div class="card-body">
                             @include('invoice-batches._form')
                         </div>
+                        <invoice-list-modal v-if="showInvoiceListModal" @close="showInvoiceListModal = false"
+                            :base-url="baseUrl" :export-base-url="exportBaseUrl" :filters="filters"
+                            :filterable="filterable" :sort-ascending="sortAscending" :to-last-page="toLastPage"
+                            :invoice-batch-id="form.id" @reload-data="load">
+                        </invoice-list-modal>
                     </form>
                 </div>
             </div>
@@ -40,6 +54,11 @@
     var id = {!! json_encode($id) !!};
     var isShow = true;
     var isEdit = false;
+    var indexVariables = {!! json_encode($indexVariables) !!};
+    var baseUrl = indexVariables.baseUrl;
+    var exportBaseUrl = indexVariables.exportBaseUrl;
+    var filterable = indexVariables.filterable;
+    var sorter = indexVariables.sorter;
 </script>
 <script src="{{ mix('js/invoice-batch.js') }}"></script>
 @endpush

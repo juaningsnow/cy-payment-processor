@@ -11,7 +11,7 @@ class StoreUser extends UserRequest
      */
     public function authorize()
     {
-        return $this->user()->can('client_create_sttngs user');
+        return true;
     }
 
     /**

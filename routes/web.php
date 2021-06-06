@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceBatchController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,9 +40,24 @@ Route::prefix('suppliers')->group(function () {
     Route::get('/{id}/edit', [SupplierController::class, 'edit'])->name('supplier_edit');
 });
 
+Route::prefix('user-management')->group(function () {
+    Route::get('/', [UserController::class, 'index'])->name('users');
+    Route::get('/create', [UserController::class, 'create'])->name('user_create');
+    Route::get('/{id}', [UserController::class, 'show'])->name('user_show');
+    Route::get('/{id}/edit', [UserController::class, 'edit'])->name('user_edit');
+});
+
+Route::prefix('companies')->group(function () {
+    Route::get('/', [CompanyController::class, 'index'])->name('companies');
+    Route::get('/create', [CompanyController::class, 'create'])->name('company_create');
+    Route::get('/{id}', [CompanyController::class, 'show'])->name('company_show');
+    Route::get('/{id}/edit', [CompanyController::class, 'edit'])->name('company_edit');
+});
+
 
 Route::prefix('invoice-batches')->group(function () {
     Route::get('/', [InvoiceBatchController::class, 'index'])->name('invoice-batches');
+    Route::get('/create', [InvoiceBatchController::class, 'create'])->name('invoice_create');
     Route::get('/{id}/generate', [InvoiceBatchController::class, 'downloadTextFile'])->name('invoice-batches_generate');
     Route::get('/{id}', [InvoiceBatchController::class, 'show'])->name('invoice-batches_show');
     Route::get('/{id}/edit', [InvoiceBatchController::class, 'edit'])->name('invoice-batches_edit');

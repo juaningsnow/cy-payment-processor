@@ -17,10 +17,26 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Batch #</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th class="text-right">Total</th>
+                            <th>
+                                <a v-on:click="setSorter('batch_name')">
+                                    Batch # <i class="fa" :class="getSortIcon('batch_name')"></i>
+                                </a>
+                            </th>
+                            <th>
+                                <a v-on:click="setSorter('date')">
+                                    Date <i class="fa" :class="getSortIcon('date')"></i>
+                                </a>
+                            </th>
+                            <th>
+                                <a v-on:click="setSorter('status')">
+                                    Status <i class="fa" :class="getSortIcon('status')"></i>
+                                </a>
+                            </th>
+                            <th class="text-right">
+                                <a v-on:click="setSorter('total')">
+                                    Total <i class="fa" :class="getSortIcon('total')"></i>
+                                </a>
+                            </th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
@@ -29,8 +45,10 @@
                             <td>@{{item.batchName}}</td>
                             <td>@{{item.date}}</td>
                             <td>
-                                <span v-if="!item.generated" class="badge badge-info">Not Yet Generated</span>
-                                <span v-else class="badge badge-success">Generated</span>
+                                <span v-if="item.status == `Not Yet Generated`" class="badge badge-info">Not Yet
+                                    Generated</span>
+                                <span v-if="item.status == `Generated`" class="badge badge-success">Generated</span>
+                                <span v-if="item.status == `Cancelled`" class="badge badge-danger">Cancelled</span>
                             </td>
                             <td class="text-right">@{{item.total | numeric}}</td>
                             <td class="text-center">

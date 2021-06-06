@@ -20,11 +20,33 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Purpose</th>
-                            <th>Payment Type</th>
-                            <th>Account Number</th>
-                            <th>Bank</th>
+                            <th>
+                                <a v-on:click="setSorter('name')">
+                                    Name <i class="fa" :class="getSortIcon('name')"></i>
+                                </a>
+                            </th>
+                            <th>
+                                <a v-on:click="setSorter('purpose_code')">
+                                    Purpose <i class="fa" :class="getSortIcon('purpose_code')"></i>
+                                </a>
+
+                            </th>
+                            <th>
+                                <a v-on:click="setSorter('payment_type')">
+                                    Payment Type <i class="fa" :class="getSortIcon('payment_type')"></i>
+                                </a>
+
+                            </th>
+                            <th>
+                                <a v-on:click="setSorter('account_number')">
+                                    Account Number <i class="fa" :class="getSortIcon('account_number')"></i>
+                                </a>
+                            </th>
+                            <th>
+                                <a v-on:click="setSorter('bank_name')">
+                                    Bank <i class="fa" :class="getSortIcon('bank_name')"></i>
+                                </a>
+                            </th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>

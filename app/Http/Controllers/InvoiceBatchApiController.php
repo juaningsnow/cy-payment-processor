@@ -6,6 +6,7 @@ use App\Http\Requests\InvoiceBatchRequest;
 use App\Http\Resources\InvoiceBatchResource;
 use App\Http\Resources\InvoiceBatchResourceCollection;
 use App\Models\InvoiceBatch;
+use App\Models\Supplier;
 use App\Utils\BatchNumberGenerator;
 use BaseCode\Common\Controllers\ResourceApiController;
 use BaseCode\Common\Exceptions\GeneralApiException;
@@ -36,6 +37,9 @@ class InvoiceBatchApiController extends ResourceApiController
     public function store(InvoiceBatchRequest $request)
     {
         $invoiceBatch = new InvoiceBatch();
+        if ($request->input('supplierId')) {
+            $invoiceBatch->setSupplier(Supplier::find($request->input('supplierId')));
+        }
         $batchNumber = BatchNumberGenerator::generate();
         $invoiceBatch->setBatchName($batchNumber);
         $invoiceBatch->setDate($request->getDate());
@@ -48,10 +52,33 @@ class InvoiceBatchApiController extends ResourceApiController
     public function update($id, InvoiceBatchRequest $request)
     {
         $invoiceBatch = InvoiceBatch::find($id);
+        if ($request->input('supplierId')) {
+            $invoiceBatch->setSupplier(Supplier::find($request->input('supplierId')));
+        }
         $invoiceBatch->setDate($request->getDate());
         $invoiceBatch->setInvoiceBatchDetails($request->getInvoiceBatchDetails());
         $invoiceBatch->save();
         $invoiceBatch->invoiceBatchDetails()->sync($invoiceBatch->getInvoiceBatchDetails());
+        return $this->getResource($invoiceBatch);
+    }
+
+    public function addInvoices($id, InvoiceBatchRequest $request)
+    {
+        $newInvoices = $request->addInvoiceBatchDetails();
+        $invoiceBatch = InvoiceBatch::find($id);
+        $updatedInvoices = array_merge($invoiceBatch->getInvoiceBatchDetails()->all(), $newInvoices);
+        $invoiceBatch->setDate($request->getDate());
+        $invoiceBatch->setInvoiceBatchDetails($updatedInvoices);
+        $invoiceBatch->save();
+        $invoiceBatch->invoiceBatchDetails()->sync($invoiceBatch->getInvoiceBatchDetails());
+        return $this->getResource($invoiceBatch);
+    }
+
+    public function cancel($id)
+    {
+        $invoiceBatch = InvoiceBatch::find($id);
+        $invoiceBatch->setCancelled(true);
+        $invoiceBatch->save();
         return $this->getResource($invoiceBatch);
     }
 

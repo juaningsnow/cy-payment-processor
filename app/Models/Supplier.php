@@ -114,4 +114,32 @@ class Supplier extends Model
         $this->account_number = $value;
         return $this;
     }
+
+    public function scopePurposeCode($query, $value)
+    {
+        return $query->whereHas('purpose', function ($purpose) use ($value) {
+            return $purpose->where('name', 'like', $value);
+        });
+    }
+
+    public function scopeOrderByPurposeCode($query, $direction = 'DESC')
+    {
+        return $query->join('purposes', 'purposes.id', 'suppliers.purpose_id')
+            ->select('purposes.name as purpose_name', 'suppliers.*')
+            ->orderBy('purpose_name', $direction);
+    }
+
+    public function scopeBankName($query, $value)
+    {
+        return $query->whereHas('bank', function ($bank) use ($value) {
+            return $bank->where('name', 'like', $value);
+        });
+    }
+
+    public function scopeOrderByBankName($query, $direction = 'DESC')
+    {
+        return $query->join('banks', 'banks.id', 'suppliers.bank_id')
+            ->select('banks.name as bank_name', 'suppliers.*')
+            ->orderBy('bank_name', $direction);
+    }
 }
