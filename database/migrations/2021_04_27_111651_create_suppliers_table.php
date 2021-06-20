@@ -24,6 +24,7 @@ class CreateSuppliersTable extends Migration
             $table->foreign('bank_id')->references('id')->on('banks');
             $table->bigInteger('purpose_id')->unsigned()->nullable();
             $table->foreign('purpose_id')->references('id')->on('purposes');
+            $table->foreignId('company_id');
             $table->timestamps();
         });
     }

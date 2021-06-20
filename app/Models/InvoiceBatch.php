@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Utils\HasCompanyFilter;
 use BaseCode\Common\Models\BaseModel;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class InvoiceBatch extends BaseModel
 {
     use HasFactory;
+    use HasCompanyFilter;
 
     protected $table = 'invoice_batches';
 
@@ -136,6 +138,17 @@ class InvoiceBatch extends BaseModel
     public function setCancelled($value)
     {
         $this->cancelled = $value;
+        return $this;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setName($value)
+    {
+        $this->name = $value;
         return $this;
     }
 

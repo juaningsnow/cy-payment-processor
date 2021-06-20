@@ -13,12 +13,12 @@ class StatusList
     ];
 
 
-    const BATCH_CANCELLED = 'Batch Cancelled';
+    const UNPAID = 'Unpaid';
     const GENERATED_AND_PAID = 'Generated and Paid';
     const BATCHED = 'Batched';
     const PAID = 'Paid';
 
     const INVOICE_STATUS_LIST = [
-        self::BATCH_CANCELLED, self::GENERATED, self::BATCHED, self::PAID
+        self::UNPAID, self::GENERATED, self::BATCHED, self::PAID
     ];
 }

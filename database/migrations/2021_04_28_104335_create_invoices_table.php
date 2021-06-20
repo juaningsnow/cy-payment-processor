@@ -24,6 +24,8 @@ class CreateInvoicesTable extends Migration
             $table->string('xero_invoice_id')->nullable();
             $table->text('description')->nullable();
             $table->string('status')->nullable();
+            $table->string('paid_by')->nullable();
+            $table->foreignId('company_id');
             $table->timestamps();
         });
     }

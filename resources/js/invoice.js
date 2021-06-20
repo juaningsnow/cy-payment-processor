@@ -4,6 +4,13 @@ import SaveButton from "./components/SaveButton";
 import DeleteButton from "./components/DeleteButton";
 import VueSweetalert2 from "vue-sweetalert2";
 import Datepicker from 'vuejs-datepicker';
+import vueFilePond, { setOptions } from "vue-filepond";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+
+const FilePond = vueFilePond(
+    FilePondPluginImagePreview
+);
+
 Vue.use(VueSweetalert2);
 
 Vue.config.devtools = true;
@@ -25,7 +32,8 @@ new Vue({
     components: {
         SaveButton,
         DeleteButton,
-        Datepicker
+        Datepicker,
+        FilePond,
     },
 
     data: {
@@ -37,6 +45,8 @@ new Vue({
             amount: 0.0,
             description: "",
         }),
+        csrfToken: $('input[name="_token"]').val(),
+        myFiles: [],
         supplierSelections: [],
         suppliersInitialized: false,
         dataInitialized: true,
@@ -59,6 +69,11 @@ new Vue({
     },
 
     methods: {
+        handleFilePondInit: function () {
+            console.log("FilePond has initialized");
+
+            // FilePond instance methods are available on `this.$refs.pond`
+        },
         update() {
             this.form.patch("/api/invoices/" + this.form.id).then(response => {
                 this.$swal({
@@ -70,21 +85,36 @@ new Vue({
         },
         loadData(data) {
             this.form = new Form(data);
-        }
+        },
+        reloadData(id) {
+            this.dataInitialized = false;
+            this.form
+                .get(
+                    "/api/invoices/" + id + "?include=supplier,media"
+                ).then(response => {
+                    this.loadData(response.data);
+                    this.dataInitialized = true;
+                });
+        },
+
+        removeFile(id) {
+            this.form.patch(`/api/invoices/remove-attachment/${id}`).then(response => {
+                this.$swal({
+                    title: "File Deleted!",
+                    text: "Changes saved to database.",
+                    type: "success"
+                }).then(() => {
+                    this.reloadData(this.form.id);
+                });
+            });
+        },
     },
 
     created() {
 
         if (id != null) {
-            this.dataInitialized = false;
             this.isEdit = true;
-            this.form
-                .get(
-                    "/api/invoices/" + id + "?include=supplier"
-                ).then(response => {
-                    this.loadData(response.data);
-                    this.dataInitialized = true;
-                });
+            this.reloadData(id);
         }
         this.form.get(`/api/suppliers?limit=${Number.MAX_SAFE_INTEGER}`).then(response => {
             this.supplierSelections = response.data;

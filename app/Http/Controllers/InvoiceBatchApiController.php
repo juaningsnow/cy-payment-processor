@@ -8,6 +8,7 @@ use App\Http\Resources\InvoiceBatchResourceCollection;
 use App\Models\InvoiceBatch;
 use App\Models\Supplier;
 use App\Utils\BatchNumberGenerator;
+use App\Utils\CompanyIndexFilter;
 use BaseCode\Common\Controllers\ResourceApiController;
 use BaseCode\Common\Exceptions\GeneralApiException;
 use DateTime;
@@ -15,6 +16,8 @@ use Illuminate\Http\Request;
 
 class InvoiceBatchApiController extends ResourceApiController
 {
+    use CompanyIndexFilter;
+    
     const EXPORT_FILE_NAME = 'invoiceBatchs.xlsx';
 
     protected $invoiceBatch;
@@ -44,6 +47,7 @@ class InvoiceBatchApiController extends ResourceApiController
         $invoiceBatch->setBatchName($batchNumber);
         $invoiceBatch->setDate($request->getDate());
         $invoiceBatch->setInvoiceBatchDetails($request->getInvoiceBatchDetails());
+        $invoiceBatch->setCompany($request->user()->company);
         $invoiceBatch->save();
         $invoiceBatch->invoiceBatchDetails()->sync($invoiceBatch->getInvoiceBatchDetails());
         return $this->getResource($invoiceBatch);

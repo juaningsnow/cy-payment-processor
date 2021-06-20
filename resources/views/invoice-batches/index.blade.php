@@ -28,6 +28,11 @@
                                 </a>
                             </th>
                             <th>
+                                <a v-on:click="setSorter('name')">
+                                    Name <i class="fa" :class="getSortIcon('name')"></i>
+                                </a>
+                            </th>
+                            <th>
                                 <a v-on:click="setSorter('status')">
                                     Status <i class="fa" :class="getSortIcon('status')"></i>
                                 </a>
@@ -44,6 +49,7 @@
                         <tr v-for="item in items" v-if="!isLoading">
                             <td>@{{item.batchName}}</td>
                             <td>@{{item.date}}</td>
+                            <td>@{{item.name}}</td>
                             <td>
                                 <span v-if="item.status == `Not Yet Generated`" class="badge badge-info">Not Yet
                                     Generated</span>

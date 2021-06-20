@@ -8,10 +8,13 @@
 // @import '~bootstrap/scss/bootstrap';
 
 
-@import '~admin-lte/plugins/fontawesome-free/css/all.min.css';
-@import '~admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css';
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+// @import '~admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css';
 @import '~admin-lte/dist/css/adminlte.min.css';
-@import '~admin-lte/plugins/select2/css/select2.css';
+@import '~admin-lte/node_modules/select2/dist/css/select2.min.css';
+
+@import '~filepond/dist/filepond.min.css';
+@import '~filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
 
 
 [v-cloak] { display:none !important; }

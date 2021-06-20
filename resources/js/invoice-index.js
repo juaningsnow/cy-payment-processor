@@ -24,6 +24,7 @@ new Vue({
     data: {
         form: new Form({
             selected: [],
+            paidBy: null,
         }),
         filterable: filterable,
         baseUrl: baseUrl,
@@ -76,25 +77,43 @@ new Vue({
         markAsPaid() {
             this.form.selected = this.selected;
             this.$swal({
-                title: "Mark Invoices as Paid",
-                text: "You will not be able to revert this.",
-                type: "warning",
+                title: "Paid By",
+                input: 'radio',
+                inputOptions: {
+                    'Paid By Cash': 'Cash',
+                    'Paid By Bank': 'Bank',
+                    'Paid By Owner': 'Owner',
+                },
+                type: "info",
+                inputValidator: function (result) {
+                    return new Promise(function (resolve, reject) {
+                        if (result) {
+                            resolve();
+                        } else {
+                            reject('You need to select something!');
+                        }
+                    });
+                },
                 showCancelButton: true,
-                confirmButtonText: 'Yes.',
-                confirmButtonColor: '#f86c6b',
             }).then(response => {
-                if (response.value) {
-                    this.form.post(`/api/invoices/pay`).then(response => {
-                        this.$swal({
-                            title: "Invoices Updated!",
-                            text: "Invoices has been marked as paid",
-                            type: "success",
-                        }).then(() => {
-                            this.reloadData();
-                            this.close();
-                        });
-                    })
-                }
+                console.log(response);
+                this.form.paidBy = response.value;
+                this.form.post(`/api/invoices/pay`).then(response => {
+                    this.$swal({
+                        title: "Invoices Updated!",
+                        text: "Invoices has been marked as paid",
+                        type: "success",
+                    }).then(() => {
+                        this.reloadData();
+                        this.close();
+                    });
+                })
+            }).catch(error => {
+                this.$swal({
+                    title: "Error",
+                    text: error,
+                    type: "error",
+                });
             });
         },
 

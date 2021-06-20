@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\DownloadMediaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceBatchController;
 use App\Http\Controllers\InvoiceController;
@@ -38,6 +39,10 @@ Route::prefix('suppliers')->group(function () {
     Route::get('/create', [SupplierController::class, 'create'])->name('supplier_create');
     Route::get('/{id}', [SupplierController::class, 'show'])->name('supplier_show');
     Route::get('/{id}/edit', [SupplierController::class, 'edit'])->name('supplier_edit');
+});
+
+Route::prefix('media')->group(function () {
+    Route::get('/{id}', [DownloadMediaController::class, 'show'])->name('media_download');
 });
 
 Route::prefix('user-management')->group(function () {

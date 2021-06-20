@@ -10,4 +10,9 @@ class Company extends Model
     use HasFactory;
 
     protected $fillable = ['name'];
+
+    public function getId()
+    {
+        return $this->id;
+    }
 }

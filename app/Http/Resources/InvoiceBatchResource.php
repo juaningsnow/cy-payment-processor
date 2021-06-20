@@ -25,6 +25,7 @@ class InvoiceBatchResource extends JsonResource
             'status' => $this->getStatus(),
             'cancelled' => $this->getCancelled(),
             'supplierId' => $this->getSupplierId(),
+            'name' => $this->getName(),
             'supplier' => new SupplierResource($this->whenLoaded('supplier')),
             'invoiceBatchDetails' => new InvoiceBatchDetailResourceCollection($this->whenLoaded('invoiceBatchDetails')),
             'showUrl' => "/invoice-batches/{$this->getId()}",

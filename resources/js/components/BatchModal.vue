@@ -58,7 +58,17 @@
 
             <div class="row">
                 <div class="col-6">
-                    <label for="supplier">Charge all to</label>
+                    <label for="name">Name</label>
+                    <input
+                        id="name"
+                        type="text"
+                        class="form-control"
+                        v-model="form.name"
+                        placeholder="Enter Name"
+                    />
+                </div>
+                <div class="col-6">
+                    <label for="supplier">Pay to</label>
                     <select
                         class="form-control select2"
                         v-model="form.supplierId"
@@ -148,6 +158,7 @@ export default {
                 batchName: null,
                 date: moment(),
                 total: 0,
+                name: null,
                 supplierId: null,
                 invoiceBatchDetails: { data: [] },
             }),

@@ -11,7 +11,7 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.copy('node_modules/admin-lte/plugins/select2/js/select2.full.js', 'public/js/select2.js')
+mix.copy('node_modules/admin-lte/node_modules/select2/dist/js/select2.full.js', 'public/js/select2.js')
     .js('resources/js/app.js', 'public/js')
     .js(`resources/js/index.js`, "public/js")
     .js(`resources/js/invoice-index.js`, "public/js")

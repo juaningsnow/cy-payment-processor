@@ -23,6 +23,43 @@
                     <form>
                         <div class="card-body">
                             @include('invoices._form')
+                            <div class="row">
+                                <table class="table table-simple">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2">Attachments</th>
+                                        </tr>
+                                        <tr>
+                                            <th>FileName</th>
+                                            <th class="text-right">Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="item in form.media.data">
+                                            <td>
+                                                <a :href="item.downloadUrl">
+                                                    @{{item.fileName}}
+                                                </a>
+                                            </td>
+                                            <td class="text-right">
+                                                <button type="button" @click="removeFile(item.id)"
+                                                    class="btn btn-danger btn-sm"><i
+                                                        class="fas fa-times"></i></button></a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <file-pond name="file" ref="pond" label-idle="Drop files here..."
+                                v-bind:allow-multiple="true" :server="{
+                                    url:  `/api/invoices/${form.id}/attachment`,
+                                    process: {
+                                      headers: {
+                                        'X-CSRF-TOKEN': csrfToken
+                                      }
+                                    }
+                                  }" v-bind:files="myFiles" v-on:init="handleFilePondInit"
+                                @processfile="reloadData(form.id)" />
                         </div>
                     </form>
                 </div>

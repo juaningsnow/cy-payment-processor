@@ -55,12 +55,11 @@
                             <td>@{{item.supplier.name}}</td>
                             <td>@{{item.date}}</td>
                             <td class="text-center">
-                                <span v-if="item.status == `Paid`" class="badge badge-success">@{{item.status}}</span>
                                 <span v-if="item.status == `Generated and Paid`"
                                     class="badge badge-success">@{{item.status}}</span>
                                 <span v-if="item.status == `Batched`" class="badge badge-info">@{{item.status}}</span>
-                                <span v-if="item.status == `Batch Cancelled`"
-                                    class="badge badge-danger">@{{item.status}}</span>
+                                <span v-if="item.status == `Unpaid`" class="badge badge-danger">@{{item.status}}</span>
+                                <span v-else class="badge badge-success">@{{item.status}}</span>
                             </td>
                             <td class="text-right">@{{item.amount | numeric}}</td>
                             <td class="text-center">

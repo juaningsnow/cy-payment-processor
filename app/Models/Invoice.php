@@ -2,14 +2,20 @@
 
 namespace App\Models;
 
+use App\Utils\HasCompanyFilter;
+use App\Utils\StatusList;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Invoice extends Model
+class Invoice extends Model implements HasMedia
 {
     use HasFactory;
+    use HasCompanyFilter;
+    use InteractsWithMedia;
 
     protected $table = 'invoices';
 
@@ -91,6 +97,17 @@ class Invoice extends Model
         return $this;
     }
 
+    public function setPaidBy($value)
+    {
+        $this->paid_by = $value;
+        return $this;
+    }
+
+    public function getPaidBy()
+    {
+        return $this->paid_by;
+    }
+
     public function setDescription($value)
     {
         $this->description = $value;
@@ -161,16 +178,16 @@ class Invoice extends Model
     {
         if ($this->hasInvoiceBatchDetails()) {
             if ($this->getInvoiceBatchDetail()->getInvoiceBatch()->getCancelled()) {
-                return "Batch Cancelled";
+                return StatusList::UNPAID;
             }
             if ($this->getInvoiceBatchDetail()->getInvoiceBatch()->isGenerated() &&
                     !$this->getInvoiceBatchDetail()->getInvoiceBatch()->getCancelled()) {
-                return "Generated and Paid";
+                return StatusList::GENERATED_AND_PAID;
             }
-            return "Batched";
+            return StatusList::BATCHED;
         }
         if ($this->getPaid()) {
-            return "Paid";
+            return $this->getPaidBy();
         }
     }
 

@@ -27,13 +27,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Route::prefix('products')->group(function () {
-//     Route::get('/', [ProductApiController::class, 'index']);
-//     Route::get('{id}', [ProductApiController::class, 'show']);
-//     Route::post('/', [ProductApiController::class, 'store']);
-//     Route::delete('{id}', [ProductApiController::class, 'destroy']);
-// });
-
 Route::prefix('user-management')->group(function () {
     Route::get('/', [ControllersUserApiController::class, 'index']);
     Route::get('/logged-in', [ControllersUserApiController::class, 'loggedIn']);
@@ -67,6 +60,8 @@ Route::prefix('invoices')->group(function () {
     Route::get('{id}', [InvoiceApiController::class, 'show']);
     Route::post('/', [InvoiceApiController::class, 'storeMultipleInvoice']);
     Route::post('/pay', [InvoiceApiController::class, 'markAsPaid']);
+    Route::post('{id}/attachment', [InvoiceApiController::class, 'addAttachment']);
+    Route::patch('remove-attachment/{id}', [InvoiceApiController::class, 'removeAttachment']);
     Route::patch('{id}', [InvoiceApiController::class, 'update']);
     Route::delete('{id}', [InvoiceApiController::class, 'destroy']);
 });

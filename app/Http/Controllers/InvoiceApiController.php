@@ -6,13 +6,17 @@ use App\Http\Resources\InvoiceResource;
 use App\Http\Resources\InvoiceResourceCollection;
 use App\Models\Invoice;
 use App\Models\Supplier;
+use App\Utils\CompanyIndexFilter;
 use BaseCode\Common\Controllers\ResourceApiController;
 use BaseCode\Common\Exceptions\GeneralApiException;
 use DateTime;
 use Illuminate\Http\Request;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class InvoiceApiController extends ResourceApiController
 {
+    use CompanyIndexFilter;
+    
     const EXPORT_FILE_NAME = 'invoices.xlsx';
 
     protected $invoice;
@@ -42,11 +46,27 @@ class InvoiceApiController extends ResourceApiController
         return $this->getResourceCollection(collect($invoices));
     }
 
+    public function addAttachment($id, Request $request)
+    {
+        $invoice = Invoice::find($id);
+        $invoice->addMediaFromRequest('file')->toMediaCollection();
+        return $this->getResource($invoice);
+    }
+
+    public function removeAttachment($id)
+    {
+        $media = Media::find($id);
+        $media->delete();
+        return response('success', 200);
+    }
+
     public function markAsPaid(Request $request)
     {
         $invoices = $this->getInvoices($request);
+        $paidBy = $request->input('paidBy');
         foreach ($invoices as $invoice) {
             $invoice->setPaid(true);
+            $invoice->setPaidBy($paidBy);
             $invoice->save();
         }
         
@@ -83,7 +103,7 @@ class InvoiceApiController extends ResourceApiController
 
     private function getInvoicesFromForm(Request $request)
     {
-        return array_map(function ($item) {
+        return array_map(function ($item) use ($request) {
             if (isset($item['id']) || $item['id'] < 0) {
                 $detail = new Invoice();
             } else {
@@ -95,6 +115,7 @@ class InvoiceApiController extends ResourceApiController
             $detail->setInvoiceNumber($item['invoiceNumber']);
             $detail->setAmount($item['amount']);
             $detail->setDescription($item['description']);
+            $detail->setCompany($request->user()->company);
             return $detail;
         }, $request->input('invoices.data'));
     }

@@ -39,6 +39,7 @@ new Vue({
             supplierId: null,
             batchName: null,
             date: moment(),
+            name: null,
             invoiceBatchDetails: { data: [] },
         }),
         nullValue: null,

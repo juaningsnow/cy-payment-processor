@@ -45320,6 +45320,7 @@ new vue__WEBPACK_IMPORTED_MODULE_8__.default({
       supplierId: null,
       batchName: null,
       date: moment__WEBPACK_IMPORTED_MODULE_7___default()(),
+      name: null,
       invoiceBatchDetails: {
         data: []
       }

@@ -18,12 +18,14 @@ class CreateInvoiceBatchesTable extends Migration
             $table->bigInteger('supplier_id')->unsigned()->nullable();
             $table->foreign('supplier_id')->references('id')->on('suppliers');
             $table->string('batch_name')->unique();
+            $table->string("name")->nullable();
             $table->date('date');
             $table->decimal('total', 15, 2);
             $table->boolean('generated')->default(false);
             $table->string('xero_batch_payment_id')->nullable();
             $table->boolean('cancelled')->default(false);
             $table->string('status')->nullable();
+            $table->foreignId('company_id');
             $table->timestamps();
         });
     }

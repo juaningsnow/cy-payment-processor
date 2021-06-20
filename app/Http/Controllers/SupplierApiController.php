@@ -7,12 +7,15 @@ use App\Http\Resources\SupplierResourceCollection;
 use App\Models\Bank;
 use App\Models\Purpose;
 use App\Models\Supplier;
+use App\Utils\CompanyIndexFilter;
 use BaseCode\Common\Controllers\ResourceApiController;
 use BaseCode\Common\Exceptions\GeneralApiException;
 use Illuminate\Http\Request;
 
 class SupplierApiController extends ResourceApiController
 {
+    use CompanyIndexFilter;
+    
     const EXPORT_FILE_NAME = 'suppliers.xlsx';
 
     protected $suppliers;
@@ -52,6 +55,7 @@ class SupplierApiController extends ResourceApiController
         $supplier->setPaymentType($request->input('paymentType'));
         $supplier->setAccountNumber($request->input('accountNumber'));
         $supplier->setBank($bank);
+        $supplier->setCompany($request->user()->company);
         $supplier->save();
         return $this->getResource($supplier);
     }

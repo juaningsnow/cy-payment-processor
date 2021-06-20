@@ -26,6 +26,9 @@
     "dependencies": {
         "admin-lte": "^3.1.0",
         "babel-preset-es2015": "^6.24.1",
+        "filepond": "^4.28.2",
+        "filepond-plugin-file-validate-type": "^1.2.6",
+        "filepond-plugin-image-preview": "^4.6.6",
         "luxon": "^1.26.0",
         "moment": "^2.29.1",
         "select2": "^4.1.0-rc.0",
@@ -34,6 +37,7 @@
         "vue": "^2.6.12",
         "vue-datepicker": "^1.3.0",
         "vue-datetime": "*",
+        "vue-filepond": "^6.0.0",
         "vue-form-wizard": "^0.8.4",
         "vue-moment": "^4.1.0",
         "vue-sweetalert2": "^1.2.4",

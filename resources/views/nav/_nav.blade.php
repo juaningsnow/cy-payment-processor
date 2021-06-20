@@ -35,6 +35,7 @@
             </p>
         </a>
     </li>
+    @if(auth()->user()->isAdmin())
     <li class="nav-item">
         <a href="{{route('companies')}}" class="nav-link">
             <i class="fas fa-list"></i>
@@ -43,6 +44,8 @@
             </p>
         </a>
     </li>
+    @endif
+
     @if(auth()->user()->isAdmin())
     <li class="nav-item">
         <a href="{{route('users')}}" class="nav-link">

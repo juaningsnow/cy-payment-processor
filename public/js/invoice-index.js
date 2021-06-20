@@ -1968,6 +1968,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2003,6 +2013,7 @@ __webpack_require__.r(__webpack_exports__);
         batchName: null,
         date: moment__WEBPACK_IMPORTED_MODULE_4___default()(),
         total: 0,
+        name: null,
         supplierId: null,
         invoiceBatchDetails: {
           data: []
@@ -29735,8 +29746,38 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "row" }, [
                 _c("div", { staticClass: "col-6" }, [
+                  _c("label", { attrs: { for: "name" } }, [_vm._v("Name")]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.name,
+                        expression: "form.name"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      id: "name",
+                      type: "text",
+                      placeholder: "Enter Name"
+                    },
+                    domProps: { value: _vm.form.name },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "name", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-6" }, [
                   _c("label", { attrs: { for: "supplier" } }, [
-                    _vm._v("Charge all to")
+                    _vm._v("Pay to")
                   ]),
                   _vm._v(" "),
                   _c(
@@ -46720,7 +46761,8 @@ new vue__WEBPACK_IMPORTED_MODULE_5__.default({
   },
   data: {
     form: new _components_Form__WEBPACK_IMPORTED_MODULE_1__.Form({
-      selected: []
+      selected: [],
+      paidBy: null
     }),
     filterable: filterable,
     baseUrl: baseUrl,
@@ -46774,26 +46816,45 @@ new vue__WEBPACK_IMPORTED_MODULE_5__.default({
 
       this.form.selected = this.selected;
       this.$swal({
-        title: "Mark Invoices as Paid",
-        text: "You will not be able to revert this.",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonText: 'Yes.',
-        confirmButtonColor: '#f86c6b'
-      }).then(function (response) {
-        if (response.value) {
-          _this2.form.post("/api/invoices/pay").then(function (response) {
-            _this2.$swal({
-              title: "Invoices Updated!",
-              text: "Invoices has been marked as paid",
-              type: "success"
-            }).then(function () {
-              _this2.reloadData();
-
-              _this2.close();
-            });
+        title: "Paid By",
+        input: 'radio',
+        inputOptions: {
+          'Paid By Cash': 'Cash',
+          'Paid By Bank': 'Bank',
+          'Paid By Owner': 'Owner'
+        },
+        type: "info",
+        inputValidator: function inputValidator(result) {
+          return new Promise(function (resolve, reject) {
+            if (result) {
+              resolve();
+            } else {
+              reject('You need to select something!');
+            }
           });
-        }
+        },
+        showCancelButton: true
+      }).then(function (response) {
+        console.log(response);
+        _this2.form.paidBy = response.value;
+
+        _this2.form.post("/api/invoices/pay").then(function (response) {
+          _this2.$swal({
+            title: "Invoices Updated!",
+            text: "Invoices has been marked as paid",
+            type: "success"
+          }).then(function () {
+            _this2.reloadData();
+
+            _this2.close();
+          });
+        });
+      })["catch"](function (error) {
+        _this2.$swal({
+          title: "Error",
+          text: error,
+          type: "error"
+        });
       });
     },
     addOrRemoveToSelected: function addOrRemoveToSelected(item) {
