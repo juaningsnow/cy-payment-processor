@@ -26,14 +26,12 @@ class XeroInterpreter
             'Authorization' => "Bearer ".base64_encode($this->config->client_id.":".$code)
         ];
         $body = [
-            'form_params' => http_build_query([
                 'grant_type' => 'authorization_code',
                 'code' => $code,
                 'redirect_uri' => $this->config->redirect_url
-            ])
         ];
         try {
-            $response = Http::withHeaders($headers)->withBody($body, 'application/x-www-form-urlencoded')->post($this->tokenUrl);
+            $response = Http::withHeaders($headers)->asForm()->post($this->tokenUrl, $body);
             dd($response, $response->getBody()->getContents());
         } catch (Exception $e) {
             dd($e);
