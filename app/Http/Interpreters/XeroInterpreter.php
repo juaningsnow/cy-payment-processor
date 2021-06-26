@@ -22,8 +22,7 @@ class XeroInterpreter
     public function exchangeToken($code)
     {
         $headers = [
-            // 'Content-Type' => 'application/x-www-form-urlencoded',
-            'Authorization' => "Bearer ".base64_encode($this->config->client_id.":".$code)
+            'Authorization' => "Basic ".base64_encode($this->config->client_id.':'.$code)
         ];
         $body = [
                 'grant_type' => 'authorization_code',
