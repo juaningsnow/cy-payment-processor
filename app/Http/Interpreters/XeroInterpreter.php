@@ -21,9 +21,22 @@ class XeroInterpreter
 
     public function exchangeToken($code)
     {
-        // try {
-        //     $response = 
-        // }
+        $headers = [
+            // 'Content-Type' => 'application/x-www-form-urlencoded',
+            'Authorization' => "Bearer ".base64_encode($this->config->client_id.":".$code)
+        ];
+        $body = [
+            'grant_type' => 'authorization_code',
+            'code' => $code,
+            'redirect_uri' => $this->config->redirect_url
+        ];
+        try {
+            $response = Http::withHeaders($headers)->withBody($body, 'application/x-www-form-urlencoded')->post($this->tokenUrl);
+            dd($response, $response->getBody()->getContents());
+        } catch (Exception $e) {
+            dd($e);
+            return false;
+        }
     }
 
     public function checkIfTokenIsValid()
@@ -67,5 +80,4 @@ class XeroInterpreter
             'Authorization' => "Bearer {$this->config->access_token}",
         ];
     }
-
 }
