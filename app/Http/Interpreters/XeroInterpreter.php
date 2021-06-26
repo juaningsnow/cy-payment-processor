@@ -3,6 +3,8 @@
 namespace App\Http\Interpreters;
 
 use App\Models\Config;
+use App\Models\Supplier;
+use BaseCode\Common\Exceptions\GeneralApiException;
 use Exception;
 use Illuminate\Support\Facades\Http;
 
@@ -11,11 +13,30 @@ class XeroInterpreter
     private $tokenUrl = 'https://identity.xero.com/connect/token';
     private $authorizationUrl = 'https://login.xero.com/identity/connect/authorize';
     private $connectionCheckUrl = 'https://api.xero.com/connections';
+    private $baseUrl = 'https://api.xero.com/api.xro/2.0';
     private $config;
 
     public function __construct()
     {
         $this->config = Config::first();
+    }
+
+    public function createContact(Supplier $supplier)
+    {
+        $body = [
+            'Name' => $supplier->name,
+            'EmailAddress' => $supplier->email,
+            'BankAccountDetails' => $supplier->account_number
+        ];
+
+        try {
+            $response = Http::withHeaders($this->getDefaultHeaders())->withBody(
+                json_encode($body),
+                'application/json'
+            )->post($this->baseUrl.'/Contacts');
+        } catch (Exception $e) {
+            throw new GeneralApiException($e);
+        }
     }
 
     public function refreshToken()
@@ -74,7 +95,6 @@ class XeroInterpreter
             $response = Http::withHeaders(
                 $this->getDefaultHeaders()
             )->get($this->connectionCheckUrl);
-            dd($response->getBody()->getContents());
             if ($response->getStatusCode() == 200) {
                 $data = json_decode($response->getBody()->getContents());
                 $config = Config::first();

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Interpreters\XeroInterpreter;
 use Illuminate\Console\Command;
 
 class RefreshXeroToken extends Command
@@ -11,14 +12,14 @@ class RefreshXeroToken extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'xero:refresh-token';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Refresh Xero Token';
 
     /**
      * Create a new command instance.
@@ -37,6 +38,10 @@ class RefreshXeroToken extends Command
      */
     public function handle()
     {
-        return 0;
+        if (app()->make(XeroInterpreter::class)->refreshToken()) {
+            echo 'Success';
+        } else {
+            echo 'Failed';
+        }
     }
 }
