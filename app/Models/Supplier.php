@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Interpreters\XeroInterpreter;
 use App\Utils\HasCompanyFilter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +11,14 @@ class Supplier extends Model
 {
     use HasFactory;
     use HasCompanyFilter;
+    
+    protected static function booted()
+    {
+        $xeroInterpreter = resolve(XeroInterpreter::class);
+        static::created(function ($model) use ($xeroInterpreter) {
+            $xeroInterpreter->createContact($model);
+        });
+    }
 
     protected $table = 'suppliers';
 

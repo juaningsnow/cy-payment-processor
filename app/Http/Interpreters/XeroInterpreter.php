@@ -30,7 +30,7 @@ class XeroInterpreter
         ];
 
         try {
-            $response = Http::withHeaders($this->getDefaultHeaders())->withBody(
+            Http::withHeaders($this->getDefaultHeaders())->withBody(
                 json_encode($body),
                 'application/json'
             )->post($this->baseUrl.'/Contacts');
