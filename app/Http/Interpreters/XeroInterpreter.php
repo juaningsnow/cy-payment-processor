@@ -25,11 +25,11 @@ class XeroInterpreter
         $headers = [
             'Authorization' => "Basic ".base64_encode($this->config->client_id.':'.$code)
         ];
-        $body = http_build_query([
+        $body = [
                 'grant_type' => 'authorization_code',
                 'code' => $code,
                 'redirect_uri' => $this->config->redirect_url
-        ]);
+        ];
         try {
             $response = Http::withHeaders($headers)->asForm()->post($this->tokenUrl, $body);
             dd($response, $response->getBody()->getContents());
