@@ -30,7 +30,6 @@ class XeroInterpreter
                 'code' => $code,
                 'redirect_uri' => $this->config->redirect_url
         ];
-        dd(Http::withHeaders($headers)->asForm());
         try {
             $response = Http::withHeaders($headers)->asForm()->post($this->tokenUrl, $body);
             dd($response, $response->getBody()->getContents());
