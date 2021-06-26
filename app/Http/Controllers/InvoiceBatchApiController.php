@@ -48,6 +48,7 @@ class InvoiceBatchApiController extends ResourceApiController
         $invoiceBatch->setDate($request->getDate());
         $invoiceBatch->setInvoiceBatchDetails($request->getInvoiceBatchDetails());
         $invoiceBatch->setCompany($request->user()->company);
+        $invoiceBatch->setName($request->input('name'));
         $invoiceBatch->save();
         $invoiceBatch->invoiceBatchDetails()->sync($invoiceBatch->getInvoiceBatchDetails());
         return $this->getResource($invoiceBatch);
@@ -61,6 +62,7 @@ class InvoiceBatchApiController extends ResourceApiController
         }
         $invoiceBatch->setDate($request->getDate());
         $invoiceBatch->setInvoiceBatchDetails($request->getInvoiceBatchDetails());
+        $invoiceBatch->setName($request->input('name'));
         $invoiceBatch->save();
         $invoiceBatch->invoiceBatchDetails()->sync($invoiceBatch->getInvoiceBatchDetails());
         return $this->getResource($invoiceBatch);

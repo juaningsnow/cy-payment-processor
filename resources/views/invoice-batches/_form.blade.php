@@ -20,21 +20,26 @@
     </div>
 </div>
 <div class="row">
-    <div class="form-group">
-        <label for="name">Name</label>
-        <input id="name" type="text" class="form-control" v-model="form.name" :disabled="isShow"
-            placeholder="Enter Name" />
+
+    <div class="col-6">
+        <div class="form-group">
+            <label for="name">Batch Name</label>
+            <input id="name" type="text" class="form-control" v-model="form.name" :disabled="isShow"
+                placeholder="Enter Name" />
+        </div>
     </div>
     <div class="col-6">
-        <label for="supplier">Pay to</label>
-        <select class="form-control select2" v-model="form.supplierId" style="width: 100%" :disabled="isShow">
-            <option selected="selected" disabled :value="nullValue">
-                -Select Supplier-
-            </option>
-            <option v-for="(item, index) in supplierSelections" :key="index" :value="item.id">
-                @{{ item.text }}
-            </option>
-        </select>
+        <div class="form-group">
+            <label for="supplier">Redirect payment to</label>
+            <select class="form-control select2" v-model="form.supplierId" style="width: 100%" :disabled="isShow">
+                <option selected="selected" disabled :value="nullValue">
+                    -Select Supplier-
+                </option>
+                <option v-for="(item, index) in supplierSelections" :key="index" :value="item.id">
+                    @{{ item.text }}
+                </option>
+            </select>
+        </div>
     </div>
 </div>
 <table class="table">

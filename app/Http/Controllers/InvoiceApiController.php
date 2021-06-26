@@ -46,6 +46,18 @@ class InvoiceApiController extends ResourceApiController
         return $this->getResourceCollection(collect($invoices));
     }
 
+    public function destroyMultiple(Request $request)
+    {
+        $invoices = array_map(function ($item) {
+            $invoice = Invoice::find($item['id']);
+            return $invoice;
+        }, $request->input('selected'));
+        foreach ($invoices as $invoice) {
+            $invoice->delete();
+        }
+        return response('success', 200);
+    }
+
     public function addAttachment($id, Request $request)
     {
         $invoice = Invoice::find($id);
@@ -69,7 +81,6 @@ class InvoiceApiController extends ResourceApiController
             $invoice->setPaidBy($paidBy);
             $invoice->save();
         }
-        
         return $this->getResourceCollection(collect($invoices));
     }
 
@@ -77,11 +88,14 @@ class InvoiceApiController extends ResourceApiController
     {
         $invoice = Invoice::find($id);
         $invoice->delete();
-        return $this->getResource($invoice);
+        return response('success', 200);
     }
 
     public function update($id, Request $request)
     {
+        if ($this->checkIfExists($request->input('invoiceNumber'), $request->input('supplierId'), $id)) {
+            throw new GeneralApiException("Invoice: {$request->input('invoiceNumber')} already exists!");
+        }
         $invoice = Invoice::find($id);
         $supplier = Supplier::find($request->input('supplierId'));
         $invoice->setSupplier($supplier);
@@ -106,8 +120,14 @@ class InvoiceApiController extends ResourceApiController
         return array_map(function ($item) use ($request) {
             if (isset($item['id']) || $item['id'] < 0) {
                 $detail = new Invoice();
+                if ($this->checkIfExists($item['invoiceNumber'], $item['supplierId'])) {
+                    throw new GeneralApiException("Invoice: {$item['invoiceNumber']} already exists!");
+                }
             } else {
                 $detail = Invoice::find($item['id']);
+                if ($this->checkIfExists($item['invoiceNumber'], $item['supplierId'], $item['id'])) {
+                    throw new GeneralApiException("Invoice: {$item['invoiceNumber']} already exis1ts!");
+                }
             }
             $supplier = Supplier::find($item['supplierId']);
             $detail->setSupplier($supplier);
@@ -118,5 +138,14 @@ class InvoiceApiController extends ResourceApiController
             $detail->setCompany($request->user()->company);
             return $detail;
         }, $request->input('invoices.data'));
+    }
+
+    private function checkIfExists($invoiceNumber, $supplierId, $invoiceId = null)
+    {
+        $count = Invoice::where('invoice_number', $invoiceNumber)->where('supplier_id', $supplierId)->count();
+        if ($invoiceId) {
+            return $count > 1 ? true : false;
+        }
+        return $count > 0 ? true : false;
     }
 }

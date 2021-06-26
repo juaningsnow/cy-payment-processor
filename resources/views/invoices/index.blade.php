@@ -14,6 +14,9 @@
             <button type="button" v-if="selected.length > 0" @click="markAsPaid" class="btn btn-success btn-sm">
                 Mark as Paid
             </button>
+            <button type="button" v-if="selected.length > 0" @click="deleteAll" class="btn btn-danger btn-sm">
+                Delete Selected
+            </button>
             <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                     <i class="fas fa-minus"></i>

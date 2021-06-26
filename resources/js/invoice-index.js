@@ -146,11 +146,23 @@ new Vue({
         },
 
         destroy(url, redirectUrl) {
-            console.log(url, redirectUrl);
             this.form.deleteWithConfirmation(url).then(response => {
                 this.form.successModal('Item has been removed').then(() =>
                     window.location = redirectUrl
                 );
+            });
+        },
+
+        deleteAll() {
+            this.form.selected = this.selected;
+            this.form.confirm().then(response => {
+                if (response.value) {
+                    this.form.post(`/api/invoices/destroy-multiple`).then(response => {
+                        this.form.successModal('Items has been removed').then(() =>
+                            window.location = `/invoices`
+                        );
+                    })
+                }
             });
         },
     }

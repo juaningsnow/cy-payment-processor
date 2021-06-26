@@ -61,6 +61,7 @@ Route::prefix('invoices')->group(function () {
     Route::post('/', [InvoiceApiController::class, 'storeMultipleInvoice']);
     Route::post('/pay', [InvoiceApiController::class, 'markAsPaid']);
     Route::post('{id}/attachment', [InvoiceApiController::class, 'addAttachment']);
+    Route::post('destroy-multiple', [InvoiceApiController::class, 'destroyMultiple']);
     Route::patch('remove-attachment/{id}', [InvoiceApiController::class, 'removeAttachment']);
     Route::patch('{id}', [InvoiceApiController::class, 'update']);
     Route::delete('{id}', [InvoiceApiController::class, 'destroy']);

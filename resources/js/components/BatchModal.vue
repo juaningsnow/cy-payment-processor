@@ -68,7 +68,7 @@
                     />
                 </div>
                 <div class="col-6">
-                    <label for="supplier">Pay to</label>
+                    <label for="supplier">Redirect payment to</label>
                     <select
                         class="form-control select2"
                         v-model="form.supplierId"

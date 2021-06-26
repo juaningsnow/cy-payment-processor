@@ -150,7 +150,7 @@ export default {
                     this.$swal({
                         title: "Error",
                         text: error.message,
-                        type: "danger",
+                        type: "error",
                     });
                 });
         },

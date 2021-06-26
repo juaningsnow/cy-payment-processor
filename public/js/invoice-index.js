@@ -3123,7 +3123,7 @@ __webpack_require__.r(__webpack_exports__);
         _this2.$swal({
           title: "Error",
           text: error.message,
-          type: "danger"
+          type: "error"
         });
       });
     },
@@ -29777,7 +29777,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "col-6" }, [
                   _c("label", { attrs: { for: "supplier" } }, [
-                    _vm._v("Pay to")
+                    _vm._v("Redirect payment to")
                   ]),
                   _vm._v(" "),
                   _c(
@@ -46889,11 +46889,24 @@ new vue__WEBPACK_IMPORTED_MODULE_5__.default({
     destroy: function destroy(url, redirectUrl) {
       var _this3 = this;
 
-      console.log(url, redirectUrl);
       this.form.deleteWithConfirmation(url).then(function (response) {
         _this3.form.successModal('Item has been removed').then(function () {
           return window.location = redirectUrl;
         });
+      });
+    },
+    deleteAll: function deleteAll() {
+      var _this4 = this;
+
+      this.form.selected = this.selected;
+      this.form.confirm().then(function (response) {
+        if (response.value) {
+          _this4.form.post("/api/invoices/destroy-multiple").then(function (response) {
+            _this4.form.successModal('Items has been removed').then(function () {
+              return window.location = "/invoices";
+            });
+          });
+        }
       });
     }
   }
