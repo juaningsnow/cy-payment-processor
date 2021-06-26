@@ -8,6 +8,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\XeroController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,6 +34,9 @@ Auth::routes();
 
 
 Route::get('/', [HomeController::class, 'index'])->name('dashboard');
+
+Route::get('/xero', [XeroController::class, 'status'])->name('xero_status');
+Route::get('/callback', [XeroController::class, 'callback'])->name('xero_callback');
 
 Route::prefix('suppliers')->group(function () {
     Route::get('/', [SupplierController::class, 'index'])->name('suppliers');

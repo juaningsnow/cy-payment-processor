@@ -22,6 +22,7 @@ class CreateConfigsTable extends Migration
             $table->string('refresh_token')->nullable();
             $table->string('xero_tenant_id')->nullable();
             $table->string('redirect_url')->nullable();
+            $table->text('scope')->nullable();
             $table->timestamps();
         });
     }

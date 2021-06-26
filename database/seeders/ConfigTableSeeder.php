@@ -17,12 +17,13 @@ class ConfigTableSeeder extends Seeder
         //
         Config::create([
             'batch_counter' => 1,
-            'client_id' => '13B6CD79B9D54DD688B9B0103F644E1A',
-            'client_secret' => 'aeBM25VKlvERvz_T1e8CCcVuNFVVErbXXa6uCTbpM5FbB2_v',
+            'client_id' => 'FE98A33133504C6580ECBC18D2CC9135',
+            'client_secret' => 'mQ22Y2ecnSed_KpB23nUp-tOkN8iHRy66AlC7iX0i5tXUKfD',
             'access_token' => null,
             'refresh_token' => null,
             'xero_tenant_id' => null,
-            'redirect_url' => null,
+            'redirect_url' => 'https://payments.cy-bm.sg/callback',
+            'scope' => 'openid email profile offline_access accounting.settings accounting.transactions accounting.contacts accounting.attachments'
         ]);
     }
 }
