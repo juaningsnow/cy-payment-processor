@@ -2,41 +2,24 @@
 
 namespace App\Http\Interpreters;
 
+use App\Http\Interpreters\Traits\ContactsTrait;
 use App\Models\Config;
-use App\Models\Supplier;
-use BaseCode\Common\Exceptions\GeneralApiException;
 use Exception;
 use Illuminate\Support\Facades\Http;
 
 class XeroInterpreter
 {
-    private $tokenUrl = 'https://identity.xero.com/connect/token';
-    private $authorizationUrl = 'https://login.xero.com/identity/connect/authorize';
-    private $connectionCheckUrl = 'https://api.xero.com/connections';
-    private $baseUrl = 'https://api.xero.com/api.xro/2.0';
-    private $config;
+    use ContactsTrait;
+    
+    protected $tokenUrl = 'https://identity.xero.com/connect/token';
+    protected $authorizationUrl = 'https://login.xero.com/identity/connect/authorize';
+    protected $connectionCheckUrl = 'https://api.xero.com/connections';
+    protected $baseUrl = 'https://api.xero.com/api.xro/2.0';
+    protected $config;
 
     public function __construct()
     {
         $this->config = Config::first();
-    }
-
-    public function createContact(Supplier $supplier)
-    {
-        $body = [
-            'Name' => $supplier->name,
-            'EmailAddress' => $supplier->email,
-            'BankAccountDetails' => $supplier->account_number
-        ];
-
-        try {
-            Http::withHeaders($this->getDefaultHeaders())->withBody(
-                json_encode($body),
-                'application/json'
-            )->post($this->baseUrl.'/Contacts');
-        } catch (Exception $e) {
-            throw new GeneralApiException($e);
-        }
     }
 
     public function refreshToken()
@@ -76,7 +59,7 @@ class XeroInterpreter
         try {
             $response = Http::withHeaders($headers)->asForm()->post($this->tokenUrl, $body);
             $data = json_decode($response->getBody()->getContents());
-            $config = Config::first();
+            $config = clone $this->config;
             $config->access_token = $data->access_token;
             $config->refresh_token = $data->refresh_token;
             $config->save();
@@ -94,7 +77,7 @@ class XeroInterpreter
         }
         try {
             $response = Http::withHeaders(
-                $this->getDefaultHeaders()
+                $this->getGeneralDefaultHeaders()
             )->get($this->connectionCheckUrl);
             if ($response->getStatusCode() == 200) {
                 $data = json_decode($response->getBody()->getContents());
@@ -123,12 +106,19 @@ class XeroInterpreter
         return $this->authorizationUrl.'?'.$params;
     }
 
-    public function getDefaultHeaders()
+    public function getGeneralDefaultHeaders()
     {
         return [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
             'Authorization' => "Bearer {$this->config->access_token}",
         ];
+    }
+
+    public function getTenantDefaultHeaders()
+    {
+        return array_merge($this->getGeneralDefaultHeaders(), [
+            'Xero-tenant-id' => $this->config->xero_tenant_id
+        ]);
     }
 }

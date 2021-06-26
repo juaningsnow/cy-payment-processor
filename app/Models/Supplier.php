@@ -15,8 +15,17 @@ class Supplier extends Model
     protected static function booted()
     {
         $xeroInterpreter = resolve(XeroInterpreter::class);
+
         static::created(function ($model) use ($xeroInterpreter) {
             $xeroInterpreter->createContact($model);
+        });
+
+        static::updated(function($model) use ($xeroInterpreter){
+            $xeroInterpreter->updateContact($model);
+        });
+
+        static::deleting(function($model) use ($xeroInterpreter){
+            $xeroInterpreter->archiveContact($model);
         });
     }
 
