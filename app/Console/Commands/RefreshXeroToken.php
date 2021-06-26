@@ -38,7 +38,6 @@ class RefreshXeroToken extends Command
      */
     public function handle()
     {
-        dd(app()->make(XeroInterpreter::class)->refreshToken());
         if (app()->make(XeroInterpreter::class)->refreshToken()) {
             echo 'Success';
         } else {
