@@ -52,6 +52,7 @@ class XeroInterpreter
         try {
             $response = Http::withHeaders($headers)->asForm()->post($this->tokenUrl, $body);
             $data = json_decode($response->getBody()->getContents());
+            dd($data);
             $config = Config::first();
             $config->access_token = $data->access_token;
             $config->refresh_token = $data->refresh_token;
