@@ -25,6 +25,7 @@ class XeroInterpreter
         $headers = [
             'Authorization' => "Basic ".base64_encode($this->config->client_id.':'.$code)
         ];
+        dd($headers);
         $body = http_build_query([
                 'grant_type' => 'authorization_code',
                 'code' => $code,
