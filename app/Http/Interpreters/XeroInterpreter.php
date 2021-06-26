@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Http;
 class XeroInterpreter
 {
     private $tokenUrl = 'https://identity.xero.com/connect/token';
-    private $scope = 'offline_access accounting.transactions openid profile email accounting.contacts accounting.settings';
     private $authorizationUrl = 'https://login.xero.com/identity/connect/authorize';
     private $connectionCheckUrl = 'https://api.xero.com/connections';
     private $config;
@@ -75,11 +74,12 @@ class XeroInterpreter
             $response = Http::withHeaders(
                 $this->getDefaultHeaders()
             )->get($this->connectionCheckUrl);
-            $data = json_decode($response->getBody()->getContents())[0];
-            $config = Config::first();
-            $config->xero_tenant_id = $data->tenantId;
-            $config->save();
+            dd($response->getBody()->getContents());
             if ($response->getStatusCode() == 200) {
+                $data = json_decode($response->getBody()->getContents());
+                $config = Config::first();
+                $config->xero_tenant_id = $data[0]->tenantId;
+                $config->save();
                 return true;
             }
         } catch (Exception $e) {
