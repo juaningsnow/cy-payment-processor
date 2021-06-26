@@ -23,7 +23,7 @@
             <span>Disconnected</span>
         </div>
         <div class="row">
-            <a href="{{$authUrl}}">Click Here to Connect</a>
+            <a target="_blank" href="{{$authUrl}}">Click Here to Connect</a>
         </div>
         @endif
 
