@@ -19,9 +19,31 @@ class XeroInterpreter
         $this->config = Config::first();
     }
 
+    public function refreshToken()
+    {
+        $headers = [
+            'Authorization' => "Basic ".base64_encode($this->config->client_id.':'.$this->config->client_secret)
+        ];
+        $body = [
+            'grant_type' => 'refresh_token',
+            'refresh_token' => $this->config->refresh_token
+        ];
+
+        try {
+            $response = Http::withHeaders($headers)->asForm()->post($this->tokenUrl, $body);
+            $data = json_decode($response->getBody()->getContents());
+            $config = Config::first();
+            $config->access_token = $data->access_token;
+            $config->refresh_token = $data->refresh_token;
+            $config->save();
+        } catch (Exception $e) {
+            return false;
+        }
+        return false;
+    }
+
     public function exchangeToken($code)
     {
-        // dd($code);
         $headers = [
             'Authorization' => "Basic ".base64_encode($this->config->client_id.':'.$this->config->client_secret)
         ];
@@ -42,10 +64,6 @@ class XeroInterpreter
             return false;
         }
         return false;
-
-        // $table->text('access_token')->nullable();
-        //     $table->text('refresh_token')->nullable();
-        //     $table->text('xero_tenant_id')->nullable();
     }
 
     public function checkIfTokenIsValid()
@@ -53,12 +71,14 @@ class XeroInterpreter
         if (!$this->config->access_token) {
             return false;
         }
-
         try {
             $response = Http::withHeaders(
                 $this->getDefaultHeaders()
             )->get($this->connectionCheckUrl);
-            dd($response->getBody()->getContents());
+            $data = json_decode($response->getBody()->getContents())[0];
+            $config = Config::first();
+            $config->xero_tenant_id = $data->tenantId;
+            $config->save();
             if ($response->getStatusCode() == 200) {
                 return true;
             }
