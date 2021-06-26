@@ -56,6 +56,7 @@ class XeroInterpreter
             $config->access_token = $data->access_token;
             $config->refresh_token = $data->refresh_token;
             $config->save();
+            return true;
         } catch (Exception $e) {
             return false;
         }
