@@ -18,7 +18,7 @@ class ConfigTableSeeder extends Seeder
         Config::create([
             'batch_counter' => 1,
             'client_id' => 'FE98A33133504C6580ECBC18D2CC9135',
-            'client_secret' => 'mQ22Y2ecnSed_KpB23nUp-tOkN8iHRy66AlC7iX0i5tXUKfD',
+            'client_secret' => '024VnS98TGQWysteQYrk4UWWZR3QpPBDuYV4-8k8AmTf9tz2',
             'access_token' => null,
             'refresh_token' => null,
             'xero_tenant_id' => null,

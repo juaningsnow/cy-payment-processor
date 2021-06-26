@@ -16,12 +16,12 @@ class CreateConfigsTable extends Migration
         Schema::create('configs', function (Blueprint $table) {
             $table->id();
             $table->integer('batch_counter');
-            $table->string('client_id')->nullable();
-            $table->string('client_secret')->nullable();
-            $table->string('access_token')->nullable();
-            $table->string('refresh_token')->nullable();
-            $table->string('xero_tenant_id')->nullable();
-            $table->string('redirect_url')->nullable();
+            $table->text('client_id')->nullable();
+            $table->text('client_secret')->nullable();
+            $table->text('access_token')->nullable();
+            $table->text('refresh_token')->nullable();
+            $table->text('xero_tenant_id')->nullable();
+            $table->text('redirect_url')->nullable();
             $table->text('scope')->nullable();
             $table->timestamps();
         });
