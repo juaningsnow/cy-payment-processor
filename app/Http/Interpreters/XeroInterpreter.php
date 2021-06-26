@@ -37,7 +37,7 @@ class XeroInterpreter
             $config->access_token = $data->access_token;
             $config->refresh_token = $data->refresh_token;
             $config->save();
-            return true;
+            return redirect()->route('xero_status');
         } catch (Exception $e) {
             return false;
         }
@@ -58,6 +58,7 @@ class XeroInterpreter
             $response = Http::withHeaders(
                 $this->getDefaultHeaders()
             )->get($this->connectionCheckUrl);
+            dd($response->getBody()->getContents());
             if ($response->getStatusCode() == 200) {
                 return true;
             }
