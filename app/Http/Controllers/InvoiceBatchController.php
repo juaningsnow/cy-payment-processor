@@ -58,7 +58,7 @@ class InvoiceBatchController extends Controller
             'filterable' => $this->invoiceFilters,
             'sorter' => 'id',
             'sortAscending' => true,
-            'baseUrl' => '/api/invoices?/api/invoices?no_invoice_batch_detail_or_cancelled=1&paid=0&include=supplier',
+            'baseUrl' => '/api/invoices?no_invoice_batch_detail_or_cancelled=1&paid=0&include=supplier',
             'exportBaseUrl' => '/invoices'
         ];
         $invoice = InvoiceBatch::find($id);
