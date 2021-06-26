@@ -32,7 +32,7 @@ class XeroInterpreter
         ];
         try {
             $response = Http::withHeaders($headers)->asForm()->post($this->tokenUrl, $body);
-            dd($response, $response->getBody()->getContents());
+            dd($response, json_decode($response->getBody()->getContents()));
         } catch (Exception $e) {
             dd($e);
             return false;
