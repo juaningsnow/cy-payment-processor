@@ -95,7 +95,10 @@ export default {
             type: Array,
             default: [],
         },
-        invoiceBatchId,
+        invoiceBatchId: {
+            type: Number,
+            default: 0,
+        },
     },
 
     computed: {

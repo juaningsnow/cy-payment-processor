@@ -2676,7 +2676,10 @@ __webpack_require__.r(__webpack_exports__);
       type: Array,
       "default": []
     },
-    invoiceBatchId: invoiceBatchId
+    invoiceBatchId: {
+      type: Number,
+      "default": 0
+    }
   },
   computed: {
     allIsSelected: function allIsSelected() {
