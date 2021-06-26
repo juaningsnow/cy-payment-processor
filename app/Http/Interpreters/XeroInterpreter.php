@@ -32,11 +32,20 @@ class XeroInterpreter
         ];
         try {
             $response = Http::withHeaders($headers)->asForm()->post($this->tokenUrl, $body);
-            dd($response, json_decode($response->getBody()->getContents()));
+            $data = json_decode($response->getBody()->getContents());
+            $config = Config::first();
+            $config->access_token = $data->access_token;
+            $config->refresh_token = $data->refresh_token;
+            $config->save();
+            return true;
         } catch (Exception $e) {
-            dd($e);
             return false;
         }
+        return false;
+
+        // $table->text('access_token')->nullable();
+        //     $table->text('refresh_token')->nullable();
+        //     $table->text('xero_tenant_id')->nullable();
     }
 
     public function checkIfTokenIsValid()
