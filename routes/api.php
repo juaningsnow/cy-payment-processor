@@ -53,6 +53,7 @@ Route::prefix('companies')->group(function () {
     Route::post('/', [CompanyApiController::class, 'store']);
     Route::patch('{id}', [CompanyApiController::class, 'update']);
     Route::patch('/attach-bank/{id}', [CompanyApiController::class, 'addBank']);
+    Route::patch('/update/{id}/{bankId}', [CompanyApiController::class, 'updateBank']);
     Route::delete('{id}', [CompanyApiController::class, 'destroy']);
 });
 

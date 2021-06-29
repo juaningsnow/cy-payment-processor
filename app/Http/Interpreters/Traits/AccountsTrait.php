@@ -3,7 +3,6 @@
 namespace App\Http\Interpreters\Traits;
 
 use App\Models\Account;
-use App\Models\Supplier;
 use BaseCode\Common\Exceptions\GeneralApiException;
 use Exception;
 use Illuminate\Support\Facades\Http;
@@ -33,5 +32,4 @@ trait AccountsTrait
             ]);
         }
     }
-    
 }

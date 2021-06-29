@@ -61,7 +61,8 @@ class CompanyApiController extends ResourceApiController
             $tempCompany = Company::find($id);
             $tempCompany->banks()->attach([
                 $request->input('bankId') => [
-                    'account_number' => $request->input("accountNumber")
+                    'account_number' => $request->input("accountNumber"),
+                    'xero_account_code' => $request->input("xeroAccountCode")
                 ]
             ]);
             return $tempCompany;
@@ -91,6 +92,19 @@ class CompanyApiController extends ResourceApiController
                 $companyBank->save();
             });
             $companyBank->default = true;
+            $companyBank->save();
+            return $companyBank;
+        });
+
+        return new CompanyBankResource($companyBank);
+    }
+
+    public function updateBank($id, $bankId, Request $request)
+    {
+        $companyBank = \DB::transaction(function () use ($id, $bankId, $request) {
+            $companyBank = CompanyBank::where('company_id', $id)->where('bank_id', $bankId)->first();
+            $companyBank->account_number = $request->input('accountNumber');
+            $companyBank->xero_account_code = $request->input('xeroAccountCode');
             $companyBank->save();
             return $companyBank;
         });

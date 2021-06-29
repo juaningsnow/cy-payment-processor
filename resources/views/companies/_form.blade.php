@@ -17,30 +17,20 @@
                 <tr>
                     <th>Bank</th>
                     <th>Account Number</th>
+                    <th>Xero Account Code</th>
                     <th>Default</th>
-                    <th>Remove</th>
+                    <th>Remove</>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="companyBank in form.companyBanks.data">
-                    <td>@{{companyBank.bank.name}}</td>
-                    <td>@{{companyBank.accountNumber}}</td>
-                    <td>
-                        <span v-if="companyBank.default" class="badge badge-info">default</span>
-                        <button v-else type="button" @click="makeDefault(companyBank)"
-                            class="btn btn-success btn-sm">Make
-                            Default</button>
-                    </td>
-                    <td>
-                        <button type="button" @click="removeBank(companyBank)" class="btn btn-danger btn-sm"><i
-                                class="fas fa-trash"></i></button>
-                    </td>
+                <tr v-for="companyBank in form.companyBanks.data" is="company-bank-row" :company-id="form.id"
+                    :company-bank="companyBank" @remove-bank="removeBank" @reload-data="load">
                 </tr>
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="4">
-                        <add-bank-modal :user-id="form.id" v-if="showBankModal" @close="showBankModal = false"
+                    <td colspan="5">
+                        <add-bank-modal :company-id="form.id" v-if="showBankModal" @close="showBankModal = false"
                             @reload-data="load">
                         </add-bank-modal>
                         <button type="button" @click="showBankModal = true" class="btn btn-success btn-sm">Add

@@ -4,6 +4,7 @@ import SaveButton from "./components/SaveButton";
 import DeleteButton from "./components/DeleteButton";
 import VueSweetalert2 from "vue-sweetalert2";
 import AddBankModal from "./components/AddBankModal.vue";
+import CompanyBankRow from "./components/CompanyBankRow.vue";
 Vue.use(VueSweetalert2);
 
 Vue.config.devtools = true;
@@ -26,6 +27,7 @@ new Vue({
         SaveButton,
         DeleteButton,
         AddBankModal,
+        CompanyBankRow,
     },
 
     data: {

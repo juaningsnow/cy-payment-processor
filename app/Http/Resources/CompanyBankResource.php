@@ -21,6 +21,7 @@ class CompanyBankResource extends JsonResource
             'bank' => new BankResource($this->whenLoaded('bank')),
             'company' => new CompanyResource($this->whenLoaded('company')),
             'accountNumber' => $this->account_number,
+            'xeroAccountCode' => $this->xero_account_code,
             'default' => (bool) $this->default,
        ];
     }

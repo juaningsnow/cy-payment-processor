@@ -22,6 +22,11 @@ class Company extends Model
         return $this->companyBanks()->where('default', true)->first()->account_number;
     }
 
+    public function getDefaultAccountCode()
+    {
+        return $this->companyBanks()->where('default', true)->first()->xero_account_code;
+    }
+
     public function hasBanks()
     {
         return $this->banks()->exists();

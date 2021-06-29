@@ -25,6 +25,7 @@ class CompaniesTableSeeder extends Seeder
         $company->banks()->attach([
             $bank->id => [
                 'account_number' => $accountNumber,
+                'xero_account_code' => '090',
                 'default' => true
             ]
         ]);

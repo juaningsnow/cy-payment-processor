@@ -1907,6 +1907,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -1914,7 +1928,7 @@ __webpack_require__.r(__webpack_exports__);
     ModalWindow: _ModalWindow__WEBPACK_IMPORTED_MODULE_0__.default
   },
   props: {
-    userId: {
+    companyId: {
       type: Number,
       "default": null
     }
@@ -1924,7 +1938,8 @@ __webpack_require__.r(__webpack_exports__);
       title: "Add Bank",
       form: new _Form__WEBPACK_IMPORTED_MODULE_1__.Form({
         bankId: null,
-        accountNumber: null
+        accountNumber: null,
+        xeroAccountCode: null
       }),
       nullValue: null,
       bankSelections: [],
@@ -1948,7 +1963,7 @@ __webpack_require__.r(__webpack_exports__);
     save: function save() {
       var _this2 = this;
 
-      this.form.patch("/api/companies/attach-bank/".concat(this.userId)).then(function (response) {
+      this.form.patch("/api/companies/attach-bank/".concat(this.companyId)).then(function (response) {
         _this2.$swal({
           title: "Bank Added!",
           text: "Bank was saved.",
@@ -1975,6 +1990,85 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     initializationComplete: function initializationComplete() {
       return this.dataInitialized && this.banksInitialized;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CompanyBankRow.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CompanyBankRow.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _UpdateBankModal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UpdateBankModal */ "./resources/js/components/UpdateBankModal.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  components: {
+    UpdateBankModal: _UpdateBankModal__WEBPACK_IMPORTED_MODULE_0__.default
+  },
+  props: ["companyId", "companyBank"],
+  data: function data() {
+    return {
+      showUpdateBankModal: false
+    };
+  },
+  mounted: function mounted() {
+    console.log("Company Bank Row Mounted...");
+  },
+  methods: {
+    removeBank: function removeBank(companyBank) {
+      this.$emit("remove-bank", companyBank);
     }
   }
 });
@@ -2135,6 +2229,173 @@ __webpack_require__.r(__webpack_exports__);
   props: ["is-busy", "is-saving"],
   mounted: function mounted() {
     console.log("Save button mounted.");
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/UpdateBankModal.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/UpdateBankModal.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _ModalWindow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ModalWindow */ "./resources/js/components/ModalWindow.vue");
+/* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Form */ "./resources/js/components/Form.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  components: {
+    ModalWindow: _ModalWindow__WEBPACK_IMPORTED_MODULE_0__.default
+  },
+  props: {
+    companyId: {
+      type: Number,
+      "default": null
+    },
+    companyBank: {
+      type: Object,
+      "default": {}
+    }
+  },
+  data: function data() {
+    return {
+      title: "Update Bank",
+      form: new _Form__WEBPACK_IMPORTED_MODULE_1__.Form({
+        bankId: this.companyBank.bankId,
+        accountNumber: this.companyBank.accountNumber,
+        xeroAccountCode: this.companyBank.xeroAccountCode
+      }),
+      nullValue: null,
+      bankSelections: [],
+      banksInitialized: false,
+      dataInitialized: true
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    this.form.get("/api/banks/user").then(function (response) {
+      _this.bankSelections = response.data;
+      _this.banksInitialized = true;
+    });
+  },
+  methods: {
+    close: function close() {
+      this.$emit("close");
+      this.form.reset();
+    },
+    save: function save() {
+      var _this2 = this;
+
+      this.form.patch("/api/companies/update/".concat(this.companyId, "/").concat(this.companyBank.bankId)).then(function (response) {
+        _this2.$swal({
+          title: "Bank was updated!",
+          text: "Bank saved.",
+          type: "success"
+        }).then(function () {
+          _this2.close();
+
+          _this2.$emit("reload-data");
+        });
+      })["catch"](function (error) {
+        _this2.$swal({
+          title: "Error",
+          text: error.message,
+          type: "danger"
+        });
+      });
+    }
+  },
+  watch: {
+    initializationComplete: function initializationComplete(val) {
+      this.form.isInitializing = !val;
+    }
+  },
+  computed: {
+    initializationComplete: function initializationComplete() {
+      return this.dataInitialized && this.banksInitialized;
+    }
   }
 });
 
@@ -5677,6 +5938,45 @@ component.options.__file = "resources/js/components/AddBankModal.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/CompanyBankRow.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/components/CompanyBankRow.vue ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _CompanyBankRow_vue_vue_type_template_id_0572ad28___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CompanyBankRow.vue?vue&type=template&id=0572ad28& */ "./resources/js/components/CompanyBankRow.vue?vue&type=template&id=0572ad28&");
+/* harmony import */ var _CompanyBankRow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CompanyBankRow.vue?vue&type=script&lang=js& */ "./resources/js/components/CompanyBankRow.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _CompanyBankRow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _CompanyBankRow_vue_vue_type_template_id_0572ad28___WEBPACK_IMPORTED_MODULE_0__.render,
+  _CompanyBankRow_vue_vue_type_template_id_0572ad28___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/CompanyBankRow.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/DeleteButton.vue":
 /*!**************************************************!*\
   !*** ./resources/js/components/DeleteButton.vue ***!
@@ -5794,6 +6094,45 @@ component.options.__file = "resources/js/components/SaveButton.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/UpdateBankModal.vue":
+/*!*****************************************************!*\
+  !*** ./resources/js/components/UpdateBankModal.vue ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _UpdateBankModal_vue_vue_type_template_id_1af0e926___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UpdateBankModal.vue?vue&type=template&id=1af0e926& */ "./resources/js/components/UpdateBankModal.vue?vue&type=template&id=1af0e926&");
+/* harmony import */ var _UpdateBankModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UpdateBankModal.vue?vue&type=script&lang=js& */ "./resources/js/components/UpdateBankModal.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _UpdateBankModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _UpdateBankModal_vue_vue_type_template_id_1af0e926___WEBPACK_IMPORTED_MODULE_0__.render,
+  _UpdateBankModal_vue_vue_type_template_id_1af0e926___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/UpdateBankModal.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/AddBankModal.vue?vue&type=script&lang=js&":
 /*!***************************************************************************!*\
   !*** ./resources/js/components/AddBankModal.vue?vue&type=script&lang=js& ***!
@@ -5807,6 +6146,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddBankModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AddBankModal.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/AddBankModal.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddBankModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
+/***/ "./resources/js/components/CompanyBankRow.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/CompanyBankRow.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CompanyBankRow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CompanyBankRow.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CompanyBankRow.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CompanyBankRow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
 
 /***/ }),
 
@@ -5858,6 +6213,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/UpdateBankModal.vue?vue&type=script&lang=js&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/components/UpdateBankModal.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UpdateBankModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./UpdateBankModal.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/UpdateBankModal.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UpdateBankModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./resources/js/components/AddBankModal.vue?vue&type=template&id=a5839bca&":
 /*!*********************************************************************************!*\
   !*** ./resources/js/components/AddBankModal.vue?vue&type=template&id=a5839bca& ***!
@@ -5871,6 +6242,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddBankModal_vue_vue_type_template_id_a5839bca___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddBankModal_vue_vue_type_template_id_a5839bca___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AddBankModal.vue?vue&type=template&id=a5839bca& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/AddBankModal.vue?vue&type=template&id=a5839bca&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/CompanyBankRow.vue?vue&type=template&id=0572ad28&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/CompanyBankRow.vue?vue&type=template&id=0572ad28& ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CompanyBankRow_vue_vue_type_template_id_0572ad28___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CompanyBankRow_vue_vue_type_template_id_0572ad28___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CompanyBankRow_vue_vue_type_template_id_0572ad28___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CompanyBankRow.vue?vue&type=template&id=0572ad28& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CompanyBankRow.vue?vue&type=template&id=0572ad28&");
 
 
 /***/ }),
@@ -5922,6 +6310,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SaveButton_vue_vue_type_template_id_3836903a___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SaveButton_vue_vue_type_template_id_3836903a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./SaveButton.vue?vue&type=template&id=3836903a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/SaveButton.vue?vue&type=template&id=3836903a&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/UpdateBankModal.vue?vue&type=template&id=1af0e926&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/UpdateBankModal.vue?vue&type=template&id=1af0e926& ***!
+  \************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UpdateBankModal_vue_vue_type_template_id_1af0e926___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UpdateBankModal_vue_vue_type_template_id_1af0e926___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UpdateBankModal_vue_vue_type_template_id_1af0e926___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./UpdateBankModal.vue?vue&type=template&id=1af0e926& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/UpdateBankModal.vue?vue&type=template&id=1af0e926&");
 
 
 /***/ }),
@@ -6057,36 +6462,80 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "accountNumber" } }, [
-                    _vm._v("Account No.")
-                  ]),
-                  _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.form.accountNumber,
-                        expression: "form.accountNumber"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      id: "accountNumber",
-                      type: "text",
-                      placeholder: "Account Number"
-                    },
-                    domProps: { value: _vm.form.accountNumber },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+                _c("div", { staticClass: "col-6" }, [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "accountNumber" } }, [
+                      _vm._v("Account No.")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.form.accountNumber,
+                          expression: "form.accountNumber"
                         }
-                        _vm.$set(_vm.form, "accountNumber", $event.target.value)
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        id: "accountNumber",
+                        type: "text",
+                        placeholder: "Account Number"
+                      },
+                      domProps: { value: _vm.form.accountNumber },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.form,
+                            "accountNumber",
+                            $event.target.value
+                          )
+                        }
                       }
-                    }
-                  })
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-6" }, [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "xeroAccountCode" } }, [
+                      _vm._v("Xero Account Code")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.form.xeroAccountCode,
+                          expression: "form.xeroAccountCode"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        id: "xeroAccountCode",
+                        type: "text",
+                        placeholder: "Account Number"
+                      },
+                      domProps: { value: _vm.form.xeroAccountCode },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.form,
+                            "xeroAccountCode",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ])
                 ])
               ])
             ],
@@ -6094,6 +6543,106 @@ var render = function() {
           )
     ]
   )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CompanyBankRow.vue?vue&type=template&id=0572ad28&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CompanyBankRow.vue?vue&type=template&id=0572ad28& ***!
+  \**************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("tr", [
+    _c("td", [_vm._v(_vm._s(_vm.companyBank.bank.name))]),
+    _vm._v(" "),
+    _c("td", [_vm._v(_vm._s(_vm.companyBank.accountNumber))]),
+    _vm._v(" "),
+    _c("td", [_vm._v(_vm._s(_vm.companyBank.xeroAccountCode))]),
+    _vm._v(" "),
+    _c("td", [
+      _vm.companyBank.default
+        ? _c("span", { staticClass: "badge badge-info" }, [_vm._v("default")])
+        : _c(
+            "button",
+            {
+              staticClass: "btn btn-success btn-sm",
+              attrs: { type: "button" },
+              on: {
+                click: function($event) {
+                  return _vm.makeDefault(_vm.companyBank)
+                }
+              }
+            },
+            [_vm._v("\n            Make Default\n        ")]
+          )
+    ]),
+    _vm._v(" "),
+    _c(
+      "td",
+      [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-info btn-sm",
+            attrs: { type: "button" },
+            on: {
+              click: function($event) {
+                _vm.showUpdateBankModal = true
+              }
+            }
+          },
+          [_vm._v("\n            Edit Bank\n        ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-danger btn-sm",
+            attrs: { type: "button" },
+            on: {
+              click: function($event) {
+                return _vm.removeBank(_vm.companyBank)
+              }
+            }
+          },
+          [_c("i", { staticClass: "fas fa-trash" })]
+        ),
+        _vm._v(" "),
+        _vm.showUpdateBankModal
+          ? _c("update-bank-modal", {
+              attrs: {
+                "company-id": _vm.companyId,
+                "company-bank": _vm.companyBank
+              },
+              on: {
+                close: function($event) {
+                  _vm.showUpdateBankModal = false
+                },
+                "reload-data": function($event) {
+                  return _vm.$emit("reload-data")
+                }
+              }
+            })
+          : _vm._e()
+      ],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -6316,6 +6865,227 @@ var render = function() {
       !_vm.isSaving
         ? _c("div", [_c("i", { staticClass: "fa fa-save" })])
         : _vm._e()
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/UpdateBankModal.vue?vue&type=template&id=1af0e926&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/UpdateBankModal.vue?vue&type=template&id=1af0e926& ***!
+  \***************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "modal-window",
+    {
+      attrs: { title: _vm.title, form: _vm.form },
+      on: { close: _vm.close, save: _vm.save }
+    },
+    [
+      !_vm.initializationComplete
+        ? _c(
+            "div",
+            {
+              staticClass: "row align-items-center",
+              staticStyle: { height: "100px" }
+            },
+            [
+              _c("div", { staticClass: "col-12 text-center h4" }, [
+                _c("i", { staticClass: "fas fa-circle-notch fa-spin" }),
+                _vm._v(" Initializing...\n        ")
+              ])
+            ]
+          )
+        : _c(
+            "div",
+            [
+              Object.keys(_vm.form.errors.errors).length
+                ? _c("div", {
+                    staticClass: "alert alert-danger",
+                    attrs: { role: "alert" }
+                  })
+                : _vm._e(),
+              _vm._v(" "),
+              _vm._l(_vm.form.errors.errors, function(error, index) {
+                return _c(
+                  "small",
+                  {
+                    key: index,
+                    staticClass: "form-text form-control-feedback"
+                  },
+                  [_vm._v(_vm._s(error[0]))]
+                )
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "bank" } }, [_vm._v("Bank")]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.form.bankId,
+                          expression: "form.bankId"
+                        }
+                      ],
+                      staticClass: "form-control select2",
+                      staticStyle: { width: "100%" },
+                      attrs: { disabled: "" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.form,
+                            "bankId",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "option",
+                        {
+                          attrs: { selected: "selected", disabled: "" },
+                          domProps: { value: _vm.nullValue }
+                        },
+                        [
+                          _vm._v(
+                            "\n                        -Select Bank-\n                    "
+                          )
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _vm._l(_vm.bankSelections, function(item, index) {
+                        return _c(
+                          "option",
+                          { key: index, domProps: { value: item.id } },
+                          [
+                            _vm._v(
+                              "\n                        " +
+                                _vm._s(item.name) +
+                                " (" +
+                                _vm._s(item.swift) +
+                                ")\n                    "
+                            )
+                          ]
+                        )
+                      })
+                    ],
+                    2
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col-6" }, [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "accountNumber" } }, [
+                      _vm._v("Account No.")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.form.accountNumber,
+                          expression: "form.accountNumber"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        id: "accountNumber",
+                        type: "text",
+                        placeholder: "Account Number"
+                      },
+                      domProps: { value: _vm.form.accountNumber },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.form,
+                            "accountNumber",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-6" }, [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "xeroAccountCode" } }, [
+                      _vm._v("Xero Account Code")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.form.xeroAccountCode,
+                          expression: "form.xeroAccountCode"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        id: "xeroAccountCode",
+                        type: "text",
+                        placeholder: "Account Number"
+                      },
+                      domProps: { value: _vm.form.xeroAccountCode },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.form,
+                            "xeroAccountCode",
+                            $event.target.value
+                          )
+                        }
+                      }
+                    })
+                  ])
+                ])
+              ])
+            ],
+            2
+          )
     ]
   )
 }
@@ -18879,21 +19649,23 @@ var __webpack_exports__ = {};
   !*** ./resources/js/company.js ***!
   \*********************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _components_Form__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/Form */ "./resources/js/components/Form.js");
 /* harmony import */ var _components_SaveButton__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/SaveButton */ "./resources/js/components/SaveButton.vue");
 /* harmony import */ var _components_DeleteButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/DeleteButton */ "./resources/js/components/DeleteButton.vue");
 /* harmony import */ var vue_sweetalert2__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-sweetalert2 */ "./node_modules/vue-sweetalert2/src/index.js");
 /* harmony import */ var _components_AddBankModal_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/AddBankModal.vue */ "./resources/js/components/AddBankModal.vue");
+/* harmony import */ var _components_CompanyBankRow_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/CompanyBankRow.vue */ "./resources/js/components/CompanyBankRow.vue");
 
 
 
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_5__.default.use(vue_sweetalert2__WEBPACK_IMPORTED_MODULE_3__.default);
-vue__WEBPACK_IMPORTED_MODULE_5__.default.config.devtools = true;
-vue__WEBPACK_IMPORTED_MODULE_5__.default.filter("numeric", function (value) {
+
+vue__WEBPACK_IMPORTED_MODULE_6__.default.use(vue_sweetalert2__WEBPACK_IMPORTED_MODULE_3__.default);
+vue__WEBPACK_IMPORTED_MODULE_6__.default.config.devtools = true;
+vue__WEBPACK_IMPORTED_MODULE_6__.default.filter("numeric", function (value) {
   var decimals = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
 
   if (isNaN(Number(value))) {
@@ -18907,12 +19679,13 @@ vue__WEBPACK_IMPORTED_MODULE_5__.default.filter("numeric", function (value) {
   });
   return formatter.format(value);
 });
-new vue__WEBPACK_IMPORTED_MODULE_5__.default({
+new vue__WEBPACK_IMPORTED_MODULE_6__.default({
   el: "#company",
   components: {
     SaveButton: _components_SaveButton__WEBPACK_IMPORTED_MODULE_1__.default,
     DeleteButton: _components_DeleteButton__WEBPACK_IMPORTED_MODULE_2__.default,
-    AddBankModal: _components_AddBankModal_vue__WEBPACK_IMPORTED_MODULE_4__.default
+    AddBankModal: _components_AddBankModal_vue__WEBPACK_IMPORTED_MODULE_4__.default,
+    CompanyBankRow: _components_CompanyBankRow_vue__WEBPACK_IMPORTED_MODULE_5__.default
   },
   data: {
     form: new _components_Form__WEBPACK_IMPORTED_MODULE_0__.Form({

@@ -28,6 +28,7 @@
                     <select
                         class="form-control select2"
                         v-model="form.bankId"
+                        disabled
                         style="width: 100%"
                     >
                         <option selected="selected" disabled :value="nullValue">
@@ -84,15 +85,19 @@ export default {
             type: Number,
             default: null,
         },
+        companyBank: {
+            type: Object,
+            default: {},
+        },
     },
 
     data() {
         return {
-            title: "Add Bank",
+            title: "Update Bank",
             form: new Form({
-                bankId: null,
-                accountNumber: null,
-                xeroAccountCode: null,
+                bankId: this.companyBank.bankId,
+                accountNumber: this.companyBank.accountNumber,
+                xeroAccountCode: this.companyBank.xeroAccountCode,
             }),
             nullValue: null,
             bankSelections: [],
@@ -115,11 +120,13 @@ export default {
         },
         save() {
             this.form
-                .patch(`/api/companies/attach-bank/${this.companyId}`)
+                .patch(
+                    `/api/companies/update/${this.companyId}/${this.companyBank.bankId}`
+                )
                 .then((response) => {
                     this.$swal({
-                        title: "Bank Added!",
-                        text: "Bank was saved.",
+                        title: "Bank was updated!",
+                        text: "Bank saved.",
                         type: "success",
                     }).then(() => {
                         this.close();
