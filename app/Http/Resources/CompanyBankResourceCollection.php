@@ -4,6 +4,6 @@ namespace App\Http\Resources;
 
 use BaseCode\Common\Resources\DataResourceCollection;
 
-class UserBankResourceCollection extends DataResourceCollection
+class CompanyBankResourceCollection extends DataResourceCollection
 {
 }

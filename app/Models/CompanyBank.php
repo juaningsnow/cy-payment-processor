@@ -5,13 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserBank extends Model
+class CompanyBank extends Model
 {
     use HasFactory;
 
-    public function user()
+    protected $table = 'company_banks';
+
+    public function company()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(Company::class, 'company_id');
     }
 
     public function bank()

@@ -51,31 +51,6 @@ class User extends Authenticatable
         return $this->belongsTo(Company::class);
     }
 
-    public function getBank()
-    {
-        if(!$this->hasBanks()){
-            throw new GeneralApiException("User has no Bank");
-        }
-        return $this->banks()->where('default', true)->first();
-    }
-
-    public function hasBanks()
-    {
-        return $this->banks()->exists();
-    }
-
-    public function banks()
-    {
-        return $this->belongsToMany(Bank::class, 'user_banks')
-            ->withPivot(['bank_id', 'user_id', 'account_number', 'default'])
-            ->withTimestamps();
-    }
-
-    public function userBanks()
-    {
-        return $this->hasMany(UserBank::class);
-    }
-
     public function isAdmin()
     {
         return (bool) $this->is_admin;

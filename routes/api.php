@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountApiController;
 use App\Http\Controllers\BankApiController;
 use App\Http\Controllers\CompanyApiController;
 use App\Http\Controllers\InvoiceApiController;
@@ -31,11 +32,8 @@ Route::prefix('user-management')->group(function () {
     Route::get('/', [ControllersUserApiController::class, 'index']);
     Route::get('/logged-in', [ControllersUserApiController::class, 'loggedIn']);
     Route::get('{id}', [ControllersUserApiController::class, 'show']);
-    Route::get('/detach-bank/{id}/{bankId}', [ControllersUserApiController::class, 'removeBank']);
-    Route::get('/make-default/{id}/{bankId}', [ControllersUserApiController::class, 'makeDefault']);
     Route::post('/', [UserApiController::class, 'store']);
     Route::patch('{id}', [UserApiController::class, 'update']);
-    Route::patch('/attach-bank/{id}', [ControllersUserApiController::class, 'addBank']);
     Route::delete('{id}', [UserApiController::class, 'destroy']);
 });
 
@@ -50,8 +48,11 @@ Route::prefix('suppliers')->group(function () {
 Route::prefix('companies')->group(function () {
     Route::get('/', [CompanyApiController::class, 'index']);
     Route::get('{id}', [CompanyApiController::class, 'show']);
+    Route::get('/detach-bank/{id}/{bankId}', [CompanyApiController::class, 'removeBank']);
+    Route::get('/make-default/{id}/{bankId}', [CompanyApiController::class, 'makeDefault']);
     Route::post('/', [CompanyApiController::class, 'store']);
     Route::patch('{id}', [CompanyApiController::class, 'update']);
+    Route::patch('/attach-bank/{id}', [CompanyApiController::class, 'addBank']);
     Route::delete('{id}', [CompanyApiController::class, 'destroy']);
 });
 
@@ -74,6 +75,10 @@ Route::prefix('banks')->group(function () {
 
 Route::prefix('purposes')->group(function () {
     Route::get('/', [PurposeApiController::class, 'index']);
+});
+
+Route::prefix('accounts')->group(function () {
+    Route::get('/', [AccountApiController::class, 'index']);
 });
 
 

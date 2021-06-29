@@ -119,7 +119,7 @@ class InvoiceBatchTextFileGenerator
         $transactionTypeCode = "10";                                                        //transaction code 2  characters
         $filler1 = static::rightPaddingGenerator(" ", " ", 11);                             //space filler 11 characters
         $originatingBankCode = substr($user->getBank()->swift, 0, 11);                           //originating bank code(swift) 11 characters
-        $accountNumber = static::rightPaddingGenerator($user->account_number, " ", 34);     //account number 34 characters
+        $accountNumber = static::rightPaddingGenerator($user->company->getDefaultAccountNumber(), " ", 34);     //account number 34 characters
         $filler2 = static::rightPaddingGenerator(" ", " ", 147);                            // 147 space filler
         $clearing = "FAST";                                                                 //Clearing 4 characters(FAST OR GIRO)
         $referenceNumber = static::rightPaddingGenerator($batch->batch_name, " ", 16);      // References Number(Batch #) 16 characters

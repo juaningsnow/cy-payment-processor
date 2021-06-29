@@ -50,12 +50,28 @@ class Supplier extends Model
     {
         return $this->belongsTo(Purpose::class);
     }
+    
+    public function account()
+    {
+        return $this->belongsTo(Account::class);
+    }
 
     public function invoices()
     {
         return $this->hasMany(Invoice::class);
     }
 
+    public function getAccount()
+    {
+        return $this->account;
+    }
+
+    public function setAccount(Account $value)
+    {
+        $this->account()->associate($value);
+        $this->account_id = $value->id;
+        return $this;
+    }
 
     public function getBank()
     {

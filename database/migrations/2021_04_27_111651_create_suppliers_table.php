@@ -25,6 +25,7 @@ class CreateSuppliersTable extends Migration
             $table->bigInteger('purpose_id')->unsigned()->nullable();
             $table->foreign('purpose_id')->references('id')->on('purposes');
             $table->foreignId('company_id');
+            $table->foreignId('account_id')->nullable();
             $table->timestamps();
         });
     }

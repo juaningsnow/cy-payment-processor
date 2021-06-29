@@ -3,6 +3,7 @@ import { Form } from "./components/Form";
 import SaveButton from "./components/SaveButton";
 import DeleteButton from "./components/DeleteButton";
 import VueSweetalert2 from "vue-sweetalert2";
+import AddBankModal from "./components/AddBankModal.vue";
 Vue.use(VueSweetalert2);
 
 Vue.config.devtools = true;
@@ -24,6 +25,7 @@ new Vue({
     components: {
         SaveButton,
         DeleteButton,
+        AddBankModal,
     },
 
     data: {
@@ -31,6 +33,7 @@ new Vue({
             id: null,
             name: "",
         }),
+        showBankModal: false,
         dataInitialized: true,
     },
 
@@ -70,9 +73,69 @@ new Vue({
                 }).then(() => (window.location = "/companies/" + id));
             });
         },
+        makeDefault(companyBank) {
+            this.form
+                .get(`/api/companies/make-default/${this.form.id}/${companyBank.bankId}`)
+                .then((response) => {
+                    this.$swal({
+                        title: "Bank was saved!",
+                        text: "Default Bank Changed.",
+                        type: "success",
+                    }).then(() => {
+                        this.load();
+                    });
+                })
+                .catch((error) => {
+                    this.$swal({
+                        title: "Error",
+                        text: error.message,
+                        type: "danger",
+                    });
+                });
+        },
+        removeBank(companyBank) {
+            if (companyBank.default) {
+                this.$swal({
+                    title: "Warning",
+                    text: "Cannot Remove Default Bank!",
+                    type: 'warning'
+                });
+            } else {
+                this.form
+                    .get(`/api/companies/detach-bank/${this.form.id}/${companyBank.bankId}`)
+                    .then((response) => {
+                        this.$swal({
+                            title: "Bank Removed!",
+                            text: "Bank was saved.",
+                            type: "success",
+                        }).then(() => {
+                            this.load();
+                        });
+                    })
+                    .catch((error) => {
+                        this.$swal({
+                            title: "Error",
+                            text: error.message,
+                            type: "danger",
+                        });
+                    });
+            }
+        },
         loadData(data) {
             this.form = new Form(data);
-        }
+        },
+
+        load() {
+            this.dataInitialized = false;
+            this.isEdit = true;
+            this.form
+                .get(
+                    "/api/companies/" + this.form.id + "?include=companyBanks.bank,banks"
+                ).then(response => {
+                    this.loadData(response.data);
+                    this.dataInitialized = true;
+                });
+        },
     },
 
     created() {
@@ -82,7 +145,7 @@ new Vue({
             this.isEdit = true;
             this.form
                 .get(
-                    "/api/companies/" + id
+                    "/api/companies/" + id + "?include=companyBanks.bank,banks"
                 ).then(response => {
                     this.loadData(response.data);
                     this.dataInitialized = true;

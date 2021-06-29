@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Interpreters\XeroInterpreter;
 use App\Utils\HasCompanyFilter;
 use App\Utils\StatusList;
 use Carbon\Carbon;
@@ -18,6 +19,23 @@ class Invoice extends Model implements HasMedia
     use InteractsWithMedia;
 
     protected $table = 'invoices';
+
+    protected static function booted()
+    {
+        $xeroInterpreter = resolve(XeroInterpreter::class);
+
+        static::created(function ($model) use ($xeroInterpreter) {
+            $xeroInterpreter->createInvoice($model);
+        });
+
+        static::updated(function ($model) use ($xeroInterpreter) {
+            $xeroInterpreter->updateInvoice($model);
+        });
+
+        static::deleting(function ($model) use ($xeroInterpreter) {
+            $xeroInterpreter->voidInvoice($model);
+        });
+    }
 
     public function supplier()
     {

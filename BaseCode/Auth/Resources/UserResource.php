@@ -27,8 +27,6 @@ class UserResource extends JsonResource
             'username' => $this->username,
             'companyId' => $this->company_id,
             'password' => null,
-            'userBanks' => new UserBankResourceCollection($this->whenLoaded('userBanks')),
-            'banks' => new BankResourceCollection($this->whenLoaded('banks')),
             'company' => new CompanyResource($this->whenLoaded('company'))
         ];
     }

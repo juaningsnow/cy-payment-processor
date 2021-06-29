@@ -100,7 +100,7 @@ export default {
         },
         save() {
             this.form
-                .patch(`/api/user-management/attach-bank/${this.userId}`)
+                .patch(`/api/companies/attach-bank/${this.userId}`)
                 .then((response) => {
                     this.$swal({
                         title: "Bank Added!",

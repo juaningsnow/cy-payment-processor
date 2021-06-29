@@ -24,13 +24,5 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('admin'),
             'company_id' => Company::first()->id
         ]);
-        $bank = Bank::where('swift', 'OCBCSGSGXXX')->first();
-        $accountNumber = '687586784001';
-        $user->banks()->attach([
-            $bank->id => [
-                'account_number' => $accountNumber,
-                'default' => true
-            ]
-        ]);
     }
 }

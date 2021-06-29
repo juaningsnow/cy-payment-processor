@@ -22,16 +22,13 @@ class XeroController extends Controller
     {
         $xeroInterpreter = resolve(XeroInterpreter::class);
         $code = $request->get('code');
-        $accessToken = $request->get('access_token');
-        if ($accessToken) {
+        if ($code) {
+            $response = $xeroInterpreter->exchangeToken($code);
             $config = Config::first();
-            $config->access_token = $request->get('access_token');
-            $config->refresh_token = $request->get('refresh_token');
+            $config->access_token = $response->access_token;
+            $config->refresh_token = $response->refresh_token;
             $config->save();
             return redirect()->route('xero_status');
-        }
-        if ($code) {
-            $xeroInterpreter->exchangeToken($code);
         }
     }
 }

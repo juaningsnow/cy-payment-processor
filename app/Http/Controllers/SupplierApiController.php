@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\SupplierResource;
 use App\Http\Resources\SupplierResourceCollection;
+use App\Models\Account;
 use App\Models\Bank;
 use App\Models\Purpose;
 use App\Models\Supplier;
@@ -44,10 +45,12 @@ class SupplierApiController extends ResourceApiController
             'paymentType' => 'required',
             'accountNumber' => 'required',
             'email' => 'required|email',
-            'bankId' => 'required'
+            'bankId' => 'required',
+            'accountId' => 'required',
         ]);
         $bank = Bank::find($request->input('bankId'));
         $purpose = Purpose::find($request->input('purposeId'));
+        $account = Account::find($request->input('accountId'));
         $supplier = new Supplier;
         $supplier->setName($request->input('name'));
         $supplier->setPurpose($purpose);
@@ -55,6 +58,7 @@ class SupplierApiController extends ResourceApiController
         $supplier->setPaymentType($request->input('paymentType'));
         $supplier->setAccountNumber($request->input('accountNumber'));
         $supplier->setBank($bank);
+        $supplier->setAccount($account);
         $supplier->setCompany($request->user()->company);
         $supplier->save();
         return $this->getResource($supplier);
@@ -72,6 +76,7 @@ class SupplierApiController extends ResourceApiController
         ]);
         $bank = Bank::find($request->input('bankId'));
         $purpose = Purpose::find($request->input('purposeId'));
+        $account = Account::find($request->input('accountId'));
         $supplier = Supplier::find($id);
         $supplier->setName($request->input('name'));
         $supplier->setPurpose($purpose);
@@ -79,6 +84,7 @@ class SupplierApiController extends ResourceApiController
         $supplier->setPaymentType($request->input('paymentType'));
         $supplier->setAccountNumber($request->input('accountNumber'));
         $supplier->setBank($bank);
+        $supplier->setAccount($account);
         $supplier->save();
         return $this->getResource($supplier);
     }

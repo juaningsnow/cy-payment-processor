@@ -38,6 +38,17 @@
     </select>
 </div>
 
+<div class="form-group">
+    <label for="account">Xero Account</label>
+    <select class="form-control select2" :disabled="isShow" v-model="form.accountId">
+        <option selected="selected" disabled :value="null">
+            -Select Account-
+        </option>
+        <option v-for="(item, index) in accountSelections" :key="index" :value="item.id">
+            @{{item.name}}
+        </option>
+    </select>
+</div>
 
 <div class="form-group">
     <label for="accountNumber">Account Number</label>

@@ -36,6 +36,6 @@ class CompanyController extends Controller
     public function show($id)
     {
         $company = Company::find($id);
-        return view('companies.show', ['title' => $company ? $company->name() : "--", 'id' => $id]);
+        return view('companies.show', ['title' => $company ? $company->name : "--", 'id' => $id]);
     }
 }

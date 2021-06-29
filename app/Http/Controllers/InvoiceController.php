@@ -67,7 +67,7 @@ class InvoiceController extends Controller
         if ($invoice->getPaid()) {
             return redirect()->route('invoice_show', $id);
         }
-        return view('invoices.edit', ['title' => "Invoice Batch Edit", 'id' => $id]);
+        return view('invoices.edit', ['title' => "Invoice Edit", 'id' => $id]);
     }
 
     public function show($id)

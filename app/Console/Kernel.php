@@ -25,7 +25,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('xero:refresh-token')->everyFifteenMinutes();
+        $schedule->command('xero:refresh-token')->everyMinute();
+        // $schedule->command('xero:refresh-token')->everyFifteenMinutes();
     }
 
     /**

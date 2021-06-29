@@ -2,7 +2,9 @@
 
 namespace App\Http\Interpreters;
 
+use App\Http\Interpreters\Traits\AccountsTrait;
 use App\Http\Interpreters\Traits\ContactsTrait;
+use App\Http\Interpreters\Traits\InvoicesTrait;
 use App\Models\Config;
 use Exception;
 use Illuminate\Support\Facades\Http;
@@ -10,7 +12,9 @@ use Illuminate\Support\Facades\Http;
 class XeroInterpreter
 {
     use ContactsTrait;
-    
+    use InvoicesTrait;
+    use AccountsTrait;
+
     protected $tokenUrl = 'https://identity.xero.com/connect/token';
     protected $authorizationUrl = 'https://login.xero.com/identity/connect/authorize';
     protected $connectionCheckUrl = 'https://api.xero.com/connections';
@@ -58,12 +62,7 @@ class XeroInterpreter
         ];
         try {
             $response = Http::withHeaders($headers)->asForm()->post($this->tokenUrl, $body);
-            $data = json_decode($response->getBody()->getContents());
-            $config = clone $this->config;
-            $config->access_token = $data->access_token;
-            $config->refresh_token = $data->refresh_token;
-            $config->save();
-            return redirect()->route('xero_status');
+            return json_decode($response->getBody()->getContents());
         } catch (Exception $e) {
             return false;
         }

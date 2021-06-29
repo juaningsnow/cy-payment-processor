@@ -2,10 +2,9 @@
 
 namespace App\Http\Resources;
 
-use BaseCode\Auth\Resources\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserBankResource extends JsonResource
+class CompanyBankResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,9 +17,9 @@ class UserBankResource extends JsonResource
         return [
             'id' => $this->id,
             'bankId' => $this->bank_id,
-            'userId' => $this->user_id,
+            'companyId' => $this->company_id,
             'bank' => new BankResource($this->whenLoaded('bank')),
-            'user' => new UserResource($this->whenLoaded('user')),
+            'company' => new CompanyResource($this->whenLoaded('company')),
             'accountNumber' => $this->account_number,
             'default' => (bool) $this->default,
        ];

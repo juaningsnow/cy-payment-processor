@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CompanyResource extends JsonResource
+class AccountResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,10 +17,7 @@ class CompanyResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'companyBanks' => new CompanyBankResourceCollection($this->whenLoaded('companyBanks')),
-            'banks' => new BankResourceCollection($this->whenLoaded('banks')),
-            'showUrl' => route('company_show', $this->id),
-            'editUrl' => route('company_edit', $this->id),
-       ];
+            'code' => $this->code
+        ];
     }
 }

@@ -48,18 +48,6 @@ class User extends Authenticatable
         return $this->belongsTo(Company::class);
     }
 
-    public function banks()
-    {
-        return $this->belongsToMany(Bank::class, 'user_banks')
-            ->withPivot(['bank_id', 'user_id', 'account_number', 'default'])
-            ->withTimestamps();
-    }
-
-    public function userBanks()
-    {
-        return $this->hasMany(UserBank::class);
-    }
-
     public function setSettings(array $values)
     {
         $this->settings = array_merge(

@@ -26,6 +26,7 @@ class CreateInvoiceBatchesTable extends Migration
             $table->boolean('cancelled')->default(false);
             $table->string('status')->nullable();
             $table->foreignId('company_id');
+            $table->boolean('is_paid')->default(0);
             $table->timestamps();
         });
     }

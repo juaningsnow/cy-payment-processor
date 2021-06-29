@@ -41,46 +41,7 @@
           </div>
         </div>
       </div>
-      <hr>
-      <h5>Banks</h5>
-      <div class="row">
-        <table class="table table-simple">
-          <thead>
-            <tr>
-              <th>Bank</th>
-              <th>Account Number</th>
-              <th>Default</th>
-              <th>Remove</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="userBank in form.userBanks.data">
-              <td>@{{userBank.bank.name}}</td>
-              <td>@{{userBank.accountNumber}}</td>
-              <td>
-                <span v-if="userBank.default" class="badge badge-info">default</span>
-                <button v-else type="button" @click="makeDefault(userBank)" class="btn btn-success btn-sm">Make
-                  Default</button>
-              </td>
-              <td>
-                <button type="button" @click="removeBank(userBank)" class="btn btn-danger btn-sm"><i
-                    class="fas fa-trash"></i></button>
-              </td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="4">
-                <add-bank-modal :user-id="form.id" v-if="showBankModal" @close="showBankModal = false"
-                  @reload-data="load">
-                </add-bank-modal>
-                <button type="button" @click="showBankModal = true" class="btn btn-success btn-sm">Add Bank</button>
-              </td>
-            </tr>
-          </tfoot>
-        </table>
 
-      </div>
     </div>
 
   </div>

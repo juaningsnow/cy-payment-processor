@@ -35,6 +35,7 @@ new Vue({
             paymentType: "",
             accountNumber: "",
             bankId: "",
+            accountId: "",
         }),
         dataInitialized: true,
         purposeSelections: [],
@@ -45,6 +46,8 @@ new Vue({
             'FAST',
             'GIRO'
         ],
+        accountSelections: [],
+        accountsInitialized: false,
     },
 
     watch: {
@@ -56,7 +59,7 @@ new Vue({
     computed: {
 
         initializationComplete() {
-            return this.dataInitialized && this.purposeInitialized && this.banksInitialized;
+            return this.dataInitialized && this.purposeInitialized && this.banksInitialized && this.accountsInitialized;
         },
     },
 
@@ -96,17 +99,21 @@ new Vue({
             this.form.get(`/api/purposes?limit=${Number.MAX_SAFE_INTEGER}`).then(response => {
                 this.purposeSelections = response.data;
                 this.purposeInitialized = true;
-                if (id != null) {
-                    this.dataInitialized = false;
-                    this.isEdit = true;
-                    this.form
-                        .get(
-                            "/api/suppliers/" + id
-                        ).then(response => {
-                            this.loadData(response.data);
-                            this.dataInitialized = true;
-                        });
-                }
+                this.form.get(`/api/accounts?limit=${Number.MAX_SAFE_INTEGER}`).then(response => {
+                    this.accountSelections = response.data;
+                    this.accountsInitialized = true;
+                    if (id != null) {
+                        this.dataInitialized = false;
+                        this.isEdit = true;
+                        this.form
+                            .get(
+                                "/api/suppliers/" + id
+                            ).then(response => {
+                                this.loadData(response.data);
+                                this.dataInitialized = true;
+                            });
+                    }
+                })
             })
         })
         this.isShow = typeof isShow !== "undefined" ? isShow : false;

@@ -26,37 +26,6 @@ class UserRecordService
         return $user;
     }
 
-    public static function addBank(User $user, Bank $bank, $accountNumber)
-    {
-        $tempUser = clone $user;
-        $tempUser->banks()->attach([
-            $bank->id => [
-                'account_number' => $accountNumber
-            ]
-        ]);
-        return $tempUser;
-    }
-
-    public static function removeBank(User $user, Bank $bank)
-    {
-        $tempUser = clone $user;
-        $tempUser->banks()->detach($bank->id);
-        return $tempUser;
-    }
-
-    public static function makeDefault(UserBank $userBank)
-    {
-        $user = $userBank->user;
-        $user->userBanks()->each(function ($userBank) {
-            $userBank->default = false;
-            $userBank->save();
-        });
-        $tempUserBank = clone $userBank;
-        $tempUserBank->default = true;
-        $tempUserBank->save();
-        return $tempUserBank;
-    }
-
     public static function update(
         User $user,
         $name,

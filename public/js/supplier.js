@@ -18223,14 +18223,17 @@ new vue__WEBPACK_IMPORTED_MODULE_4__.default({
       purposeId: "",
       paymentType: "",
       accountNumber: "",
-      bankId: ""
+      bankId: "",
+      accountId: ""
     }),
     dataInitialized: true,
     purposeSelections: [],
     purposeInitialized: false,
     bankSelections: [],
     banksInitialized: false,
-    paymentTypes: ['FAST', 'GIRO']
+    paymentTypes: ['FAST', 'GIRO'],
+    accountSelections: [],
+    accountsInitialized: false
   },
   watch: {
     initializationComplete: function initializationComplete(val) {
@@ -18239,7 +18242,7 @@ new vue__WEBPACK_IMPORTED_MODULE_4__.default({
   },
   computed: {
     initializationComplete: function initializationComplete() {
-      return this.dataInitialized && this.purposeInitialized && this.banksInitialized;
+      return this.dataInitialized && this.purposeInitialized && this.banksInitialized && this.accountsInitialized;
     }
   },
   methods: {
@@ -18286,16 +18289,21 @@ new vue__WEBPACK_IMPORTED_MODULE_4__.default({
         _this3.purposeSelections = response.data;
         _this3.purposeInitialized = true;
 
-        if (id != null) {
-          _this3.dataInitialized = false;
-          _this3.isEdit = true;
+        _this3.form.get("/api/accounts?limit=".concat(Number.MAX_SAFE_INTEGER)).then(function (response) {
+          _this3.accountSelections = response.data;
+          _this3.accountsInitialized = true;
 
-          _this3.form.get("/api/suppliers/" + id).then(function (response) {
-            _this3.loadData(response.data);
+          if (id != null) {
+            _this3.dataInitialized = false;
+            _this3.isEdit = true;
 
-            _this3.dataInitialized = true;
-          });
-        }
+            _this3.form.get("/api/suppliers/" + id).then(function (response) {
+              _this3.loadData(response.data);
+
+              _this3.dataInitialized = true;
+            });
+          }
+        });
       });
     });
     this.isShow = typeof isShow !== "undefined" ? isShow : false;
