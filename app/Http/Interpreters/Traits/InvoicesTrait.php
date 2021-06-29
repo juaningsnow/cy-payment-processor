@@ -26,7 +26,7 @@ trait InvoicesTrait
             "DueDateString" => $date->toDateTimeLocalString(),
             "InvoiceNumber" => $invoice->invoice_number,
             "LineItems" => [[
-                "Description" => $invoice->remarks ? $invoice->remarks : '.',
+                "Description" => $invoice->description ? $invoice->description : '.',
                 "Quantity" => '1',
                 "TaxType" => "NONE",
                 "UnitAmount" => $invoice->amount,
@@ -71,7 +71,7 @@ trait InvoicesTrait
             "DueDateString" => $date->toDateTimeLocalString(),
             "InvoiceNumber" => $invoice->invoice_number,
             "LineItems" => [[
-                "Description" => $invoice->remarks ? $invoice->remarks : '.',
+                "Description" => $invoice->description ? $invoice->description : '.',
                 "Quantity" => '1',
                 "TaxType" => "NONE",
                 "UnitAmount" => $invoice->amount,

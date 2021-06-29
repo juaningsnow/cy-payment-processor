@@ -30,6 +30,9 @@ class Invoice extends Model implements HasMedia
 
         static::updated(function ($model) use ($xeroInterpreter) {
             $xeroInterpreter->updateInvoice($model);
+            if (!$model->xero_payment_id && $model->paid) {
+                $xeroInterpreter->makePayment($model);
+            }
         });
 
         static::deleting(function ($model) use ($xeroInterpreter) {

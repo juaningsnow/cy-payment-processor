@@ -96,7 +96,6 @@ new Vue({
                 },
                 showCancelButton: true,
             }).then(response => {
-                console.log(response);
                 this.form.paidBy = response.value;
                 this.form.post(`/api/invoices/pay`).then(response => {
                     this.$swal({

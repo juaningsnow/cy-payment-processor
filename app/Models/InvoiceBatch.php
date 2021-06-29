@@ -23,6 +23,12 @@ class InvoiceBatch extends BaseModel
             $config->batch_counter++;
             $config->save();
         });
+
+        // static::updated(function ($model) {
+        //     $config = Config::first();
+        //     $config->batch_counter++;
+        //     $config->save();
+        // });
     }
 
     public function supplier()

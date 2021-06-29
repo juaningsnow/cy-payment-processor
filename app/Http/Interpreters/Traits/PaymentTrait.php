@@ -2,7 +2,9 @@
 
 namespace App\Http\Interpreters\Traits;
 
+use App\Models\Account;
 use App\Models\Invoice;
+use App\Models\InvoiceBatch;
 use BaseCode\Common\Exceptions\GeneralApiException;
 use Carbon\Carbon;
 use Exception;
@@ -10,18 +12,6 @@ use Illuminate\Support\Facades\Http;
 
 trait PaymentTrait
 {
-    public function getAccounts()
-    {
-        try {
-            $response = Http::withHeaders($this->getTenantDefaultHeaders())
-                ->get($this->baseUrl.'/Accounts');
-            $data = json_decode($response->getBody()->getContents());
-            return $data->Accounts;
-        } catch (Exception $e) {
-            throw new GeneralApiException($e);
-        }
-    }
-
     public function makePayment(Invoice $invoice)
     {
         try {
@@ -30,32 +20,59 @@ trait PaymentTrait
                     'InvoiceId' => $invoice->xero_invoice_id
                 ],
                 "Account" => [
-                    "Code" => $invoice->supplier->account->code,
+                    "Code" => $invoice->company->getDefaultAccountCode(),
                 ],
-                "Date" => Carbon::now()->toDateTimeLocalString()
+                "Date" => Carbon::now()->toDateString(),
+                "Amount" => $invoice->amount,
             ];
-            // Http::withHeaders($this->getTenantDefaultHeaders())->withBody(
-            //     json_encode($body), 'application/json'
-            // )->
+            $response = Http::withHeaders($this->getTenantDefaultHeaders())->withBody(
+                json_encode($body),
+                'application/json'
+            )->put($this->baseUrl.'/Payments');
+            $data = json_decode($response->getBody()->getContents());
+            $invoice->xero_payment_id = $data->Payments[0]->PaymentID;
+            $invoice->save();
         } catch (Exception $e) {
             throw new GeneralApiException($e);
         }
     }
 
-    public function archiveContact(Supplier $supplier)
+    public function makeBatchPayment(InvoiceBatch $invoiceBatch)
     {
-        $body = [
-            'ContactID' => $supplier->xero_contact_id,
-            'ContactStatus' => "ARCHIVED",
-        ];
-
+        $accountId = Account::where('code', $invoiceBatch->company->getDefaultAccountCode())->first()->xero_account_id;
+        $payToSupplier = $invoiceBatch->supplier()->exists() ? $invoiceBatch->supplier : null;
         try {
-            Http::withHeaders($this->getTenantDefaultHeaders())->withBody(
+            $body = [
+                "Account" => [
+                    "AccountID" => $accountId,
+                ],
+                "Date" => Carbon::now()->toDateString(),
+                "Details" => $invoiceBatch->batch_name,
+                "Payments" => $this->assembleInvoiceBatchDetailForBatchPayment($invoiceBatch->invoiceBatchDetails->all(), $payToSupplier)
+            ];
+            $response = Http::withHeaders($this->getTenantDefaultHeaders())->withBody(
                 json_encode($body),
                 'application/json'
-            )->post($this->baseUrl.'/Contacts');
+            )->put($this->baseUrl.'/BatchPayments');
+            $data = json_decode($response->getBody()->getContents());
+            $invoiceBatch->xero_batch_payment_id = $data->BatchPayments[0]->BatchPaymentID;
+            $invoiceBatch->save();
         } catch (Exception $e) {
             throw new GeneralApiException($e);
         }
+    }
+
+    private function assembleInvoiceBatchDetailForBatchPayment(array $invoiceBatchDetails, $payToSupplier = null)
+    {
+        return array_map(function ($attribute) use ($payToSupplier) {
+            return [
+                "BankAccountNumber" => $payToSupplier ? $payToSupplier->account_number."_".$payToSupplier->bank->swift : $attribute->invoice->supplier->account_number."_".$attribute->invoice->supplier->bank->swift,
+                "Invoice" => [
+                    "InvoiceID" => $attribute->invoice->xero_invoice_id,
+                ],
+                "Details" => $attribute->invoice->invoice_number,
+                "Amount" => $attribute->invoice->amount
+            ];
+        }, $invoiceBatchDetails);
     }
 }
