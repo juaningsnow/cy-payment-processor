@@ -11,21 +11,29 @@ class Supplier extends Model
 {
     use HasFactory;
     use HasCompanyFilter;
+
+    public $fromXero = false;
     
     protected static function booted()
     {
         $xeroInterpreter = resolve(XeroInterpreter::class);
 
         static::created(function ($model) use ($xeroInterpreter) {
-            $xeroInterpreter->createContact($model);
+            if (!$model->fromXero) {
+                $xeroInterpreter->createContact($model);
+            }
         });
-
-        static::updated(function($model) use ($xeroInterpreter){
-            $xeroInterpreter->updateContact($model);
+    
+        static::updated(function ($model) use ($xeroInterpreter) {
+            if (!$model->fromXero) {
+                $xeroInterpreter->updateContact($model);
+            }
         });
-
-        static::deleting(function($model) use ($xeroInterpreter){
-            $xeroInterpreter->archiveContact($model);
+    
+        static::deleting(function ($model) use ($xeroInterpreter) {
+            if (!$model->fromXero) {
+                $xeroInterpreter->archiveContact($model);
+            }
         });
     }
 

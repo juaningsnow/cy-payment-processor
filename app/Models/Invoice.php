@@ -20,23 +20,31 @@ class Invoice extends Model implements HasMedia
 
     protected $table = 'invoices';
 
+    public $fromXero = false;
+
     protected static function booted()
     {
         $xeroInterpreter = resolve(XeroInterpreter::class);
 
         static::created(function ($model) use ($xeroInterpreter) {
-            $xeroInterpreter->createInvoice($model);
+            if (!$model->fromXero) {
+                $xeroInterpreter->createInvoice($model);
+            }
         });
 
         static::updated(function ($model) use ($xeroInterpreter) {
-            $xeroInterpreter->updateInvoice($model);
-            if (!$model->xero_payment_id && $model->paid) {
-                $xeroInterpreter->makePayment($model);
+            if (!$model->fromXero) {
+                $xeroInterpreter->updateInvoice($model);
+                if (!$model->xero_payment_id && $model->paid) {
+                    $xeroInterpreter->makePayment($model);
+                }
             }
         });
 
         static::deleting(function ($model) use ($xeroInterpreter) {
-            $xeroInterpreter->voidInvoice($model);
+            if (!$model->fromXero) {
+                $xeroInterpreter->voidInvoice($model);
+            }
         });
     }
 

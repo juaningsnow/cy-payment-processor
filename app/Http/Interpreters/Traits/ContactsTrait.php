@@ -9,6 +9,17 @@ use Illuminate\Support\Facades\Http;
 
 trait ContactsTrait
 {
+    public function getContact($contactId)
+    {
+        try {
+            $response = Http::withHeaders($this->getTenantDefaultHeaders())->get($this->baseUrl.'/Contacts/'.$contactId);
+            $data = json_decode($response->getBody()->getContents());
+            return $data->Contacts[0];
+        } catch (Exception $e) {
+            throw new GeneralApiException($e);
+        }
+    }
+
     public function createContact(Supplier $supplier)
     {
         $body = [

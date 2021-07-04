@@ -9,6 +9,7 @@ use App\Http\Controllers\InvoiceBatchDetailApiController;
 use App\Http\Controllers\PurposeApiController;
 use App\Http\Controllers\SupplierApiController;
 use App\Http\Controllers\UserApiController;
+use App\Http\Controllers\WebhookApiController;
 use BaseCode\Auth\Controllers\UserApiController as ControllersUserApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,10 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::prefix('webhooks')->group(function () {
+    Route::post('/xero', [WebhookApiController::class, 'xeroWebhooks'])->middleware('verify_xero');
+    Route::post('/picky-assist', [WebhookApiController::class, 'pickyAssists']);
+});
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

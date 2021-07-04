@@ -18,7 +18,7 @@ class CreateSuppliersTable extends Migration
             $table->string('name');
             $table->string('payment_type');
             $table->string('account_number')->nullable();
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->string('xero_contact_id')->nullable();
             $table->bigInteger('bank_id')->unsigned()->nullable();
             $table->foreign('bank_id')->references('id')->on('banks');

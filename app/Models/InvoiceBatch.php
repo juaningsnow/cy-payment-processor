@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Interpreters\XeroInterpreter;
 use App\Utils\HasCompanyFilter;
 use BaseCode\Common\Models\BaseModel;
 use DateTime;
@@ -18,17 +19,22 @@ class InvoiceBatch extends BaseModel
 
     protected static function booted()
     {
+        $xeroInterpreter = resolve(XeroInterpreter::class);
+
         static::created(function ($model) {
             $config = Config::first();
             $config->batch_counter++;
             $config->save();
         });
 
-        // static::updated(function ($model) {
-        //     $config = Config::first();
-        //     $config->batch_counter++;
-        //     $config->save();
-        // });
+        static::updated(function ($model) use ($xeroInterpreter) {
+            if ($model->generated && !$model->xero_batch_payment_id) {
+                $xeroInterpreter->makeBatchPayment($model);
+            }
+            if($model->cancelled){
+                $xeroInterpreter->cancelBatchPayment($model);
+            }
+        });
     }
 
     public function supplier()

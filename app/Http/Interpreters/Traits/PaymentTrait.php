@@ -62,6 +62,21 @@ trait PaymentTrait
         }
     }
 
+    public function cancelBatchPayment(InvoiceBatch $invoiceBatch)
+    {
+        try {
+            $body = [
+                "Status" => "DELETED"
+            ];
+            $response = Http::withHeaders($this->getTenantDefaultHeaders())->withBody(
+                json_encode($body),
+                'application/json'
+            )->post($this->baseUrl.'/BatchPayments/'.$invoiceBatch->xero_batch_payment_id);
+        } catch (Exception $e) {
+            throw new GeneralApiException($e);
+        }
+    }
+
     private function assembleInvoiceBatchDetailForBatchPayment(array $invoiceBatchDetails, $payToSupplier = null)
     {
         return array_map(function ($attribute) use ($payToSupplier) {
