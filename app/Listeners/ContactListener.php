@@ -40,8 +40,8 @@ class ContactListener
                     $contact->Name,
                     $contact->EmailAddress,
                     $contact->ContactID,
-                    $contact->BankAccountDetails,
-                    $contact->PurchasesDefaultAccountCode
+                    $contact->BankAccountDetails ? $contact->BankAccountDetails : null,
+                    $contact->PurchasesDefaultAccountCode ? $contact->PurchasesDefaultAccountCode : null
                 );
             } else {
                 $contact = $xeroInterpreter->getContact($event->contactId);
@@ -49,8 +49,8 @@ class ContactListener
                     $contact->Name,
                     $contact->EmailAddress,
                     $contact->ContactID,
-                    $contact->BankAccountDetails,
-                    $contact->PurchasesDefaultAccountCode
+                    $contact->BankAccountDetails ? $contact->BankAccountDetails : null,
+                    $contact->PurchasesDefaultAccountCode ? $contact->PurchasesDefaultAccountCode : null
                 );
             }
         }
@@ -64,7 +64,7 @@ class ContactListener
         }
     }
 
-    private function createSupplier($name, $email, $xeroContactId, $accountNumber, $accountCode)
+    private function createSupplier($name, $email, $xeroContactId, $accountNumber = null, $accountCode = null)
     {
         $account = Account::where('code', $accountCode)->first();
         $company = Company::first();
@@ -80,7 +80,7 @@ class ContactListener
         $supplier->save();
     }
     
-    private function updateSupplier($name, $email, $xeroContactId, $accountNumber, $accountCode)
+    private function updateSupplier($name, $email, $xeroContactId, $accountNumber = null, $accountCode = null)
     {
         $supplier = Supplier::where('xero_contact_id', $xeroContactId)->first();
         $account = Account::where('code', $accountCode)->first();

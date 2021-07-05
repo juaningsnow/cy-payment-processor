@@ -46835,7 +46835,6 @@ new vue__WEBPACK_IMPORTED_MODULE_5__.default({
         },
         showCancelButton: true
       }).then(function (response) {
-        console.log(response);
         _this2.form.paidBy = response.value;
 
         _this2.form.post("/api/invoices/pay").then(function (response) {

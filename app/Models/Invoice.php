@@ -5,14 +5,14 @@ namespace App\Models;
 use App\Http\Interpreters\XeroInterpreter;
 use App\Utils\HasCompanyFilter;
 use App\Utils\StatusList;
+use BaseCode\Common\Models\BaseModel;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Invoice extends Model implements HasMedia
+class Invoice extends BaseModel implements HasMedia
 {
     use HasFactory;
     use HasCompanyFilter;
@@ -56,6 +56,11 @@ class Invoice extends Model implements HasMedia
     public function invoiceBatchDetails()
     {
         return $this->hasMany(InvoiceBatchDetail::class, 'invoice_id');
+    }
+
+    public function invoiceXeroAttachments()
+    {
+        return $this->hasMany(InvoiceXeroAttachment::class, 'invoice_id');
     }
 
     public function hasOneNonCancelledInvoiceBatchDetail()
@@ -203,7 +208,7 @@ class Invoice extends Model implements HasMedia
         return $this->invoiceBatchDetails()->orderBy('id', 'desc')->first();
     }
 
-    private function computeStatus()
+    public function computeStatus()
     {
         if ($this->hasInvoiceBatchDetails()) {
             if ($this->getInvoiceBatchDetail()->getInvoiceBatch()->getCancelled()) {

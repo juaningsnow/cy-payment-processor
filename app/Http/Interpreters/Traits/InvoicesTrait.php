@@ -3,10 +3,12 @@
 namespace App\Http\Interpreters\Traits;
 
 use App\Models\Invoice;
+use App\Models\InvoiceXeroAttachment;
 use BaseCode\Common\Exceptions\GeneralApiException;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 trait InvoicesTrait
 {
@@ -15,8 +17,18 @@ trait InvoicesTrait
         try {
             $response = Http::withHeaders($this->getTenantDefaultHeaders())->get($this->baseUrl.'/Invoices/'.$invoiceId);
             $data = json_decode($response->getBody()->getContents());
-            // dd($data);
             return $data->Invoices[0];
+        } catch (Exception $e) {
+            throw new GeneralApiException($e);
+        }
+    }
+
+    public function getInvoiceAttachments($invoiceId)
+    {
+        try {
+            $response = Http::withHeaders($this->getTenantDefaultHeaders())->get($this->baseUrl.'/Invoices/'.$invoiceId.'/Attachments');
+            $data = json_decode($response->getBody()->getContents());
+            return $data->Attachments;
         } catch (Exception $e) {
             throw new GeneralApiException($e);
         }
@@ -147,5 +159,22 @@ trait InvoicesTrait
                 throw new GeneralApiException($e);
             }
         }
+    }
+
+    public function syncAttachments($invoice)
+    {
+        $processorInvoice = Invoice::where('xero_invoice_id', $invoice->InvoiceID)->first();
+        $attachments = $this->assembleInvoiceAttachments($invoice);
+        $processorInvoice->invoiceXeroAttachments()->sync($attachments);
+    }
+
+    private function assembleInvoiceAttachments($invoice)
+    {
+        return array_map(function ($attachment) {
+            return new InvoiceXeroAttachment([
+                'name' => $attachment->FileName,
+                'url' => $attachment->Url
+            ]);
+        }, $invoice->Attachments);
     }
 }

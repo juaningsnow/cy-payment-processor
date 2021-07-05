@@ -10,6 +10,7 @@ use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Log;
 
 class InvoiceListener
 {
@@ -33,6 +34,10 @@ class InvoiceListener
     {
         $xeroInterpreter = resolve(XeroInterpreter::class);
         $invoice = $xeroInterpreter->getInvoice($event->invoiceId);
+        Log::info($invoice->HasAttachments."-".(bool)$invoice->HasAttachments);
+        if ((bool)$invoice->HasAttachments) {
+            $xeroInterpreter->syncAttachments($invoice);
+        }
         if ($invoice->Type == 'ACCPAY') {
             if ($invoice->Status == "VOIDED") {
                 $this->deleteInvoice($invoice->InvoiceID);
@@ -57,7 +62,7 @@ class InvoiceListener
         if (!$supplier) {
             $supplier = $this->createSupplier($invoice->Contact);
         }
-        $processorInvoice = Invoice::where('xero_invoice_id', $invoice->InvoiceID);
+        $processorInvoice = Invoice::where('xero_invoice_id', $invoice->InvoiceID)->first();
         if (!$processorInvoice) {
             $this->createInvoice($invoice);
         } else {
@@ -101,7 +106,7 @@ class InvoiceListener
         if (!$supplier) {
             $supplier = $this->createSupplier($invoice->Contact);
         }
-        $processorInvoice = Invoice::where('xero_invoice_id', $invoice->InvoiceID);
+        $processorInvoice = Invoice::where('xero_invoice_id', $invoice->InvoiceID)->first();
         if (!$processorInvoice) {
             $this->createInvoice($invoice);
         } else {

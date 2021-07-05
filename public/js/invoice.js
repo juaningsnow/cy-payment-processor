@@ -37396,7 +37396,7 @@ new vue__WEBPACK_IMPORTED_MODULE_7__.default({
       var _this2 = this;
 
       this.dataInitialized = false;
-      this.form.get("/api/invoices/" + id + "?include=supplier,media").then(function (response) {
+      this.form.get("/api/invoices/" + id + "?include=supplier,media,invoiceXeroAttachments").then(function (response) {
         _this2.loadData(response.data);
 
         _this2.dataInitialized = true;

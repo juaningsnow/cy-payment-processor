@@ -35,7 +35,6 @@ trait ContactsTrait
                 'application/json'
             )->post($this->baseUrl.'/Contacts');
             $data = json_decode($response->getBody()->getContents());
-
             $supplier->xero_contact_id = $data->Contacts[0]->ContactID;
             $supplier->save();
         } catch (Exception $e) {

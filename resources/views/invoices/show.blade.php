@@ -27,7 +27,28 @@
                                 <table class="table table-simple">
                                     <thead>
                                         <tr>
-                                            <th colspan="2">Attachments</th>
+                                            <th class="text-center">Xero Attachments</th>
+                                        </tr>
+                                        <tr>
+                                            <th>FileName</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="item in form.attachments.data">
+                                            <td>
+                                                <a :href="item.url">
+                                                    @{{item.name}}
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <table class="table table-simple">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" colspan="2">Attachments</th>
                                         </tr>
                                         <tr>
                                             <th>FileName</th>
@@ -60,6 +81,7 @@
                                     }
                                   }" v-bind:files="myFiles" v-on:init="handleFilePondInit"
                                 @processfile="reloadData(form.id)" />
+
                         </div>
                     </form>
                 </div>
