@@ -26,7 +26,10 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'username' => $this->username,
             'companyId' => $this->company_id,
+            'isAdmin' => (bool)$this->is_admin,
             'password' => null,
+            'showUrl' => route('user_show', $this->id),
+            'editUrl' => route('user_edit', $this->id),
             'company' => new CompanyResource($this->whenLoaded('company'))
         ];
     }
