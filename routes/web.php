@@ -77,6 +77,7 @@ Route::prefix('invoices')->group(function () {
     // Route::get('/create', [InvoiceController::class, 'create'])->name('invoices_create');
     Route::get('/{id}', [InvoiceController::class, 'show'])->name('invoice_show');
     Route::get('/{id}/edit', [InvoiceController::class, 'edit'])->name('invoice_edit');
+    Route::get('download-xero-attachment/{id}', [InvoiceController::class, 'downloadXeroAttachment'])->name('invoice_download-attachment');
 });
 
 Route::prefix('invoice-histories')->group(function () {

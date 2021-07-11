@@ -48,4 +48,9 @@ class Company extends Model
     {
         return $this->hasMany(CompanyBank::class);
     }
+
+    public function isXeroConnected()
+    {
+        return $this->xero_tenant_id ? true : false;
+    }
 }

@@ -16,7 +16,7 @@ class InvoiceXeroAttachmentResource extends JsonResource
     {
         return [
             'name' => $this->name,
-            'url' => $this->url,
+            'url' => route('invoice_download-attachment', $this->id)
         ];
     }
 }

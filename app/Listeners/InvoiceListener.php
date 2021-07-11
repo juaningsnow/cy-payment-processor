@@ -33,8 +33,7 @@ class InvoiceListener
     public function handle($event)
     {
         $xeroInterpreter = resolve(XeroInterpreter::class);
-        $invoice = $xeroInterpreter->getInvoice($event->invoiceId);
-        Log::info($invoice->HasAttachments."-".(bool)$invoice->HasAttachments);
+        $invoice = $xeroInterpreter->getInvoice($event->invoiceId, $event->tenantId);
         if ((bool)$invoice->HasAttachments) {
             $xeroInterpreter->syncAttachments($invoice);
         }
@@ -89,7 +88,6 @@ class InvoiceListener
         $supplier->fromXero = true;
         $supplier->name = $contact->Name;
         $supplier->payment_type = "FAST";
-        $supplier->account_number = $contact->BankAccountDetails;
         $supplier->email = $contact->EmailAddress;
         $supplier->xero_contact_id = $contact->ContactID;
         $supplier->company_id = $company->id;

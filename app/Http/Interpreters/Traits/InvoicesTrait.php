@@ -7,15 +7,16 @@ use App\Models\InvoiceXeroAttachment;
 use BaseCode\Common\Exceptions\GeneralApiException;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 trait InvoicesTrait
 {
-    public function getInvoice($invoiceId)
+    public function getInvoice($invoiceId, $tenantId)
     {
         try {
-            $response = Http::withHeaders($this->getTenantDefaultHeaders())->get($this->baseUrl.'/Invoices/'.$invoiceId);
+            $response = Http::withHeaders($this->getTenantDefaultHeaders($tenantId))->get($this->baseUrl.'/Invoices/'.$invoiceId);
             $data = json_decode($response->getBody()->getContents());
             return $data->Invoices[0];
         } catch (Exception $e) {
@@ -23,10 +24,10 @@ trait InvoicesTrait
         }
     }
 
-    public function getInvoiceAttachments($invoiceId)
+    public function getInvoiceAttachments($invoiceId, $tenantId)
     {
         try {
-            $response = Http::withHeaders($this->getTenantDefaultHeaders())->get($this->baseUrl.'/Invoices/'.$invoiceId.'/Attachments');
+            $response = Http::withHeaders($this->getTenantDefaultHeaders($tenantId))->get($this->baseUrl.'/Invoices/'.$invoiceId.'/Attachments');
             $data = json_decode($response->getBody()->getContents());
             return $data->Attachments;
         } catch (Exception $e) {
@@ -36,7 +37,7 @@ trait InvoicesTrait
 
     public function createInvoice(Invoice $invoice)
     {
-        $contactId = $invoice->supplier->xero_contact_id ? $invoice->supplier->xero_contact_id : $this->retrieveContactId($invoice->supplier->email);
+        $contactId = $invoice->supplier->xero_contact_id ? $invoice->supplier->xero_contact_id : $this->retrieveContactId($invoice->supplier->email, $invoice->company->xero_tenant_id);
         if (!$contactId) {
             throw new GeneralApiException("Supplier does not exists in xero!");
         }
@@ -61,7 +62,7 @@ trait InvoicesTrait
         ];
         
         try {
-            $response = Http::withHeaders($this->getTenantDefaultHeaders())->withBody(
+            $response = Http::withHeaders($this->getTenantDefaultHeaders($invoice->company->xero_tenant_id))->withBody(
                 json_encode($body),
                 'application/json'
             )->post($this->baseUrl.'/Invoices');
@@ -79,7 +80,7 @@ trait InvoicesTrait
             throw new GeneralApiException("Does not exists in xero!");
         }
 
-        $contactId = $invoice->supplier->xero_contact_id ? $invoice->supplier->xero_contact_id : $this->retrieveContactId($invoice->supplier->email);
+        $contactId = $invoice->supplier->xero_contact_id ? $invoice->supplier->xero_contact_id : $this->retrieveContactId($invoice->supplier->email, $invoice->company->xero_tenant_id);
         if (!$contactId) {
             throw new GeneralApiException("Supplier does not exists in xero!");
         }
@@ -105,7 +106,7 @@ trait InvoicesTrait
             "Status" => "AUTHORISED",
         ];
         try {
-            $response = Http::withHeaders($this->getTenantDefaultHeaders())->withBody(
+            $response = Http::withHeaders($this->getTenantDefaultHeaders($invoice->company->xero_tenant_id))->withBody(
                 json_encode($body),
                 'application/json'
             )->post($this->baseUrl.'/Invoices');
@@ -131,7 +132,7 @@ trait InvoicesTrait
             "Status" => "AUTHORISED",
         ];
         try {
-            $response = Http::withHeaders($this->getTenantDefaultHeaders())->withBody(
+            $response = Http::withHeaders($this->getTenantDefaultHeaders($invoice->company->xero_tenant_id))->withBody(
                 json_encode($body),
                 'application/json'
             )->post($this->baseUrl.'/Invoices');
@@ -139,6 +140,38 @@ trait InvoicesTrait
         } catch (Exception $e) {
             throw new GeneralApiException($e);
             return false;
+        }
+    }
+
+    public function downloadAttachment(InvoiceXeroAttachment $invoiceXeroAttachment)
+    {
+        try {
+            $response = Http::withHeaders($this->getTenantDefaultHeaders($invoiceXeroAttachment->invoice->company->xero_tenant_id))->get($invoiceXeroAttachment->url);
+            return $response;
+        } catch (Exception $e) {
+            throw new GeneralApiException($e);
+        }
+    }
+
+    public function uploadAttachment(Invoice $invoice, Request $request)
+    {
+        try {
+            $header = [
+                'Authorization' => "Bearer {$this->config->access_token}",
+                'Content-Type' => $request->file->getMimeType(),
+                'Content-Length' => 10496,
+                'Accept' => 'text/xml',
+                'Xero-tenant-id' => $this->config->xero_tenant_id
+            ];
+            Http::withHeaders($header)->attach(
+                'attachment',
+                file_get_contents($request->file->getRealPath()),
+                $request->file->getClientOriginalName()
+            )->post($this->baseUrl.'/Invoices/'.$invoice->xero_invoice_id.'/Attachments/'. $request->file->getClientOriginalName());
+            $xeroInvoice = $this->getInvoice($invoice->xero_invoice_id, $invoice->company->xero_tenant_id);
+            $this->syncAttachments($xeroInvoice);
+        } catch (Exception $e) {
+            throw new GeneralApiException($e);
         }
     }
 
@@ -150,7 +183,7 @@ trait InvoicesTrait
         ];
         if ($this->updateInvoiceNumber($invoice)) {
             try {
-                $response = Http::withHeaders($this->getTenantDefaultHeaders())->withBody(
+                $response = Http::withHeaders($this->getTenantDefaultHeaders($invoice->company->xero_tenant_id))->withBody(
                     json_encode($body),
                     'application/json'
                 )->post($this->baseUrl.'/Invoices/'.$invoice->xero_invoice_id);

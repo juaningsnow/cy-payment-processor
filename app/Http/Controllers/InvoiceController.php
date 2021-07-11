@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Interpreters\XeroInterpreter;
 use App\Models\Invoice;
+use App\Models\InvoiceXeroAttachment;
 use App\Utils\StatusList;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -74,5 +77,13 @@ class InvoiceController extends Controller
     {
         $invoice = Invoice::find($id);
         return view('invoices.show', ['title' => $invoice ? $invoice->getInvoiceNumber() : "--", 'id' => $id]);
+    }
+
+    public function downloadXeroAttachment($id)
+    {
+        $attachment = InvoiceXeroAttachment::find($id);
+        $xeroInterpreter = resolve(XeroInterpreter::class);
+        $fileResponse = $xeroInterpreter->downloadAttachment($attachment);
+        return Response::make($fileResponse->body(), 200, $fileResponse->getHeaders());
     }
 }

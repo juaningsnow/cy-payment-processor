@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Http;
 
 trait ContactsTrait
 {
-    public function getContact($contactId)
+    public function getContact($contactId, $tenantId)
     {
         try {
-            $response = Http::withHeaders($this->getTenantDefaultHeaders())->get($this->baseUrl.'/Contacts/'.$contactId);
+            $response = Http::withHeaders($this->getTenantDefaultHeaders($tenantId))->get($this->baseUrl.'/Contacts/'.$contactId);
             $data = json_decode($response->getBody()->getContents());
             return $data->Contacts[0];
         } catch (Exception $e) {
@@ -30,7 +30,7 @@ trait ContactsTrait
         ];
 
         try {
-            $response = Http::withHeaders($this->getTenantDefaultHeaders())->withBody(
+            $response = Http::withHeaders($this->getTenantDefaultHeaders($supplier->company->xero_tenant_id))->withBody(
                 json_encode($body),
                 'application/json'
             )->post($this->baseUrl.'/Contacts');
@@ -53,7 +53,7 @@ trait ContactsTrait
         ];
 
         try {
-            Http::withHeaders($this->getTenantDefaultHeaders())->withBody(
+            Http::withHeaders($this->getTenantDefaultHeaders($supplier->company->xero_tenant_id))->withBody(
                 json_encode($body),
                 'application/json'
             )->post($this->baseUrl.'/Contacts');
@@ -70,7 +70,7 @@ trait ContactsTrait
         ];
 
         try {
-            Http::withHeaders($this->getTenantDefaultHeaders())->withBody(
+            Http::withHeaders($this->getTenantDefaultHeaders($supplier->company->xero_tenant_id))->withBody(
                 json_encode($body),
                 'application/json'
             )->post($this->baseUrl.'/Contacts');
@@ -79,10 +79,10 @@ trait ContactsTrait
         }
     }
 
-    public function retrieveContactId($email)
+    public function retrieveContactId($email, $tenantId)
     {
         try {
-            $response = Http::withHeaders($this->getTenantDefaultHeaders())
+            $response = Http::withHeaders($this->getTenantDefaultHeaders($tenantId))
                 ->get($this->baseUrl.'/Contacts?where=EmailAddress="'.$email.'"');
             $data = json_decode($response->getBody()->getContents());
             if (count($data->Contacts) > 0) {

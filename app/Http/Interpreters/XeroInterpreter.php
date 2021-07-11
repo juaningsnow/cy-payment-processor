@@ -6,6 +6,7 @@ use App\Http\Interpreters\Traits\AccountsTrait;
 use App\Http\Interpreters\Traits\ContactsTrait;
 use App\Http\Interpreters\Traits\InvoicesTrait;
 use App\Http\Interpreters\Traits\PaymentTrait;
+use App\Models\Account;
 use App\Models\Config;
 use Exception;
 use Illuminate\Support\Facades\Http;
@@ -52,6 +53,22 @@ class XeroInterpreter
         return false;
     }
 
+    public function getTenantConnection($authEventId)
+    {
+        $response = Http::withHeaders(
+            $this->getGeneralDefaultHeaders()
+        )->get($this->connectionCheckUrl.'?authEventId='.$authEventId);
+        $data = json_decode($response->getBody()->getContents());
+        return $data[0];
+    }
+
+    public function revokeConnection($connectionId)
+    {
+        Http::withHeaders(
+            $this->getGeneralDefaultHeaders()
+        )->delete($this->connectionCheckUrl.'/'.$connectionId);
+    }
+
     public function exchangeToken($code)
     {
         $headers = [
@@ -82,9 +99,6 @@ class XeroInterpreter
             )->get($this->connectionCheckUrl);
             if ($response->getStatusCode() == 200) {
                 $data = json_decode($response->getBody()->getContents());
-                $config = Config::first();
-                $config->xero_tenant_id = $data[0]->tenantId;
-                $config->save();
                 return true;
             }
         } catch (Exception $e) {
@@ -109,17 +123,18 @@ class XeroInterpreter
 
     public function getGeneralDefaultHeaders()
     {
+        $config = Config::first();
         return [
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
-            'Authorization' => "Bearer {$this->config->access_token}",
+            'Authorization' => "Bearer {$config->access_token}",
         ];
     }
 
-    public function getTenantDefaultHeaders()
+    public function getTenantDefaultHeaders($tenantId)
     {
         return array_merge($this->getGeneralDefaultHeaders(), [
-            'Xero-tenant-id' => $this->config->xero_tenant_id
+            'Xero-tenant-id' => $tenantId
         ]);
     }
 }

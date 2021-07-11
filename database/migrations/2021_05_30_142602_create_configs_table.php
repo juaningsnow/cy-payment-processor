@@ -20,7 +20,6 @@ class CreateConfigsTable extends Migration
             $table->text('client_secret')->nullable();
             $table->text('access_token')->nullable();
             $table->text('refresh_token')->nullable();
-            $table->text('xero_tenant_id')->nullable();
             $table->text('redirect_url')->nullable();
             $table->text('scope')->nullable();
             $table->timestamps();

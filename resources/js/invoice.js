@@ -6,6 +6,7 @@ import VueSweetalert2 from "vue-sweetalert2";
 import Datepicker from 'vuejs-datepicker';
 import vueFilePond, { setOptions } from "vue-filepond";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import InvoiceAttachmentModal from "./components/InvoiceAttachmentModal.vue";
 
 const FilePond = vueFilePond(
     FilePondPluginImagePreview
@@ -34,6 +35,7 @@ new Vue({
         DeleteButton,
         Datepicker,
         FilePond,
+        InvoiceAttachmentModal
     },
 
     data: {
@@ -51,6 +53,7 @@ new Vue({
         suppliersInitialized: false,
         dataInitialized: true,
         isShow: false,
+        showInvoiceAttachmentModal: false,
     },
 
     watch: {
@@ -72,7 +75,6 @@ new Vue({
         handleFilePondInit: function () {
             console.log("FilePond has initialized");
 
-            // FilePond instance methods are available on `this.$refs.pond`
         },
         update() {
             this.form.patch("/api/invoices/" + this.form.id).then(response => {

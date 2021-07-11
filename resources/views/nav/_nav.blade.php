@@ -1,8 +1,8 @@
 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
     <!-- Add icons to the links using the .nav-icon class
         with font-awesome or any other icon font library -->
-
     <li class="nav-header">Navigation</li>
+    @if(auth()->user()->company->isXeroConnected())
     <li class="nav-item">
         <a href="{{route('suppliers')}}" class="nav-link">
             <i class="fas fa-list"></i>
@@ -55,5 +55,6 @@
             </p>
         </a>
     </li>
+    @endif
     @endif
 </ul>

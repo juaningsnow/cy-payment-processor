@@ -25,7 +25,7 @@ trait PaymentTrait
                 "Date" => Carbon::now()->toDateString(),
                 "Amount" => $invoice->amount,
             ];
-            $response = Http::withHeaders($this->getTenantDefaultHeaders())->withBody(
+            $response = Http::withHeaders($this->getTenantDefaultHeaders($invoice->company->xero_tenant_id))->withBody(
                 json_encode($body),
                 'application/json'
             )->put($this->baseUrl.'/Payments');
@@ -50,7 +50,7 @@ trait PaymentTrait
                 "Details" => $invoiceBatch->batch_name,
                 "Payments" => $this->assembleInvoiceBatchDetailForBatchPayment($invoiceBatch->invoiceBatchDetails->all(), $payToSupplier)
             ];
-            $response = Http::withHeaders($this->getTenantDefaultHeaders())->withBody(
+            $response = Http::withHeaders($this->getTenantDefaultHeaders($invoiceBatch->company->xero_tenant_id))->withBody(
                 json_encode($body),
                 'application/json'
             )->put($this->baseUrl.'/BatchPayments');
@@ -68,7 +68,7 @@ trait PaymentTrait
             $body = [
                 "Status" => "DELETED"
             ];
-            $response = Http::withHeaders($this->getTenantDefaultHeaders())->withBody(
+            $response = Http::withHeaders($this->getTenantDefaultHeaders($invoiceBatch->company->xero_tenant_id))->withBody(
                 json_encode($body),
                 'application/json'
             )->post($this->baseUrl.'/BatchPayments/'.$invoiceBatch->xero_batch_payment_id);

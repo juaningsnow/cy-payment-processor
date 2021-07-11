@@ -65,11 +65,13 @@ Route::prefix('companies')->group(function () {
 Route::prefix('invoices')->group(function () {
     Route::get('/', [InvoiceApiController::class, 'index']);
     Route::get('{id}', [InvoiceApiController::class, 'show']);
+    // Route::get('/download-xero-attachment/{id}', [InvoiceApiController::class, 'downloadXeroAttachment']);
     Route::post('/', [InvoiceApiController::class, 'storeMultipleInvoice']);
     Route::post('/pay', [InvoiceApiController::class, 'markAsPaid']);
-    Route::post('{id}/attachment', [InvoiceApiController::class, 'addAttachment']);
+    Route::post('{id}/upload', [InvoiceApiController::class, 'uploadAttachment']);
+    // Route::post('{id}/attachment', [InvoiceApiController::class, 'addAttachment']);
     Route::post('destroy-multiple', [InvoiceApiController::class, 'destroyMultiple']);
-    Route::patch('remove-attachment/{id}', [InvoiceApiController::class, 'removeAttachment']);
+    // Route::patch('remove-attachment/{id}', [InvoiceApiController::class, 'removeAttachment']);
     Route::patch('{id}', [InvoiceApiController::class, 'update']);
     Route::delete('{id}', [InvoiceApiController::class, 'destroy']);
 });

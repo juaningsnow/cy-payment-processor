@@ -18,34 +18,19 @@ class WebhookApiController extends Controller
     public function xeroWebhooks(Request $request)
     {
         Log::info(json_encode($request->all()));
-        $activeTenantId = Config::first()->xero_tenant_id;
         foreach ($request->all()['events'] as $event) {
-            if ($activeTenantId == $event['tenantId']) {
-                // if (($event['eventType'] == "CREATE" || $event['eventType'] == "Create") && $event['eventCategory'] == "CONTACT") {
-                //     ContactCreated::dispatch(
-                //         $event['resourceId']
-                //     );
-                // }
+            if (($event['eventType'] == "CREATE" || $event['eventType'] == "Create") && $event['eventCategory'] == "INVOICE") {
+                InvoiceCreated::dispatch(
+                    $event['resourceId'],
+                    $event['tenantId']
+                );
+            }
     
-                // if (($event['eventType'] == "UPDATE" || $event['eventType'] == "Update") && $event['eventCategory'] == "CONTACT") {
-                //     ContactUpdated::dispatch(
-                //         $event['resourceId']
-                //     );
-                // }
-
-                if (($event['eventType'] == "CREATE" || $event['eventType'] == "Create") && $event['eventCategory'] == "INVOICE") {
-                    Log::info("Invoice Create");
-                    InvoiceCreated::dispatch(
-                        $event['resourceId']
-                    );
-                }
-    
-                if (($event['eventType'] == "UPDATE" || $event['eventType'] == "Update") && $event['eventCategory'] == "INVOICE") {
-                    Log::info("Invoice Update");
-                    InvoiceUpdated::dispatch(
-                        $event['resourceId']
-                    );
-                }
+            if (($event['eventType'] == "UPDATE" || $event['eventType'] == "Update") && $event['eventCategory'] == "INVOICE") {
+                InvoiceUpdated::dispatch(
+                    $event['resourceId'],
+                    $event['tenantId']
+                );
             }
         }
         $response = response()->json(null, 200);

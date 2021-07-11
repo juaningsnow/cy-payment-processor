@@ -15,6 +15,7 @@ class InvoiceUpdated
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $invoiceId;
+    public $tenantId;
     public $isCreate = false;
 
     /**
@@ -22,9 +23,10 @@ class InvoiceUpdated
      *
      * @return void
      */
-    public function __construct($invoiceId)
+    public function __construct($invoiceId, $tenantId)
     {
         $this->invoiceId = $invoiceId;
+        $this->tenantId = $tenantId;
     }
 
     /**

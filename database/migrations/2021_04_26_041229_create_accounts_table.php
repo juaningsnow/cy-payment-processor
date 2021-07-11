@@ -18,6 +18,7 @@ class CreateAccountsTable extends Migration
             $table->string('xero_account_id');
             $table->string('name');
             $table->string('code');
+            $table->foreignId('company_id');
             $table->timestamps();
         });
     }

@@ -23,6 +23,9 @@ class HomeController extends Controller
      */
     public function index()
     {
+        if (!auth()->user()->company->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         return view('dashboard', ['title' => "Dashboard"]);
     }
 }

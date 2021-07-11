@@ -30,21 +30,33 @@
                                             <th class="text-center">Xero Attachments</th>
                                         </tr>
                                         <tr>
+                                            <td class="text-left">
+                                                <button type="button" class="btn btn-success btn-xs"
+                                                    @click="showInvoiceAttachmentModal = true">
+                                                    Add Attachment
+                                                </button>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
                                             <th>FileName</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr v-for="item in form.attachments.data">
                                             <td>
-                                                <a :href="item.url">
+                                                <a target="_blank" :href="item.url">
                                                     @{{item.name}}
                                                 </a>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
+
+                                <invoice-attachment-modal v-show="showInvoiceAttachmentModal" :invoice-id="form.id"
+                                    @close="showInvoiceAttachmentModal = false"></invoice-attachment-modal>
                             </div>
-                            <div class="row">
+                            {{-- <div class="row">
                                 <table class="table table-simple">
                                     <thead>
                                         <tr>
@@ -60,19 +72,18 @@
                                             <td>
                                                 <a :href="item.downloadUrl">
                                                     @{{item.fileName}}
-                                                </a>
-                                            </td>
-                                            <td class="text-right">
-                                                <button type="button" @click="removeFile(item.id)"
-                                                    class="btn btn-danger btn-sm"><i
-                                                        class="fas fa-times"></i></button></a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <file-pond name="file" ref="pond" label-idle="Drop files here..."
-                                v-bind:allow-multiple="true" :server="{
+                            </a>
+                            </td>
+                            <td class="text-right">
+                                <button type="button" @click="removeFile(item.id)" class="btn btn-danger btn-sm"><i
+                                        class="fas fa-times"></i></button></a>
+                            </td>
+                            </tr>
+                            </tbody>
+                            </table>
+                        </div>
+                        <file-pond name="file" ref="pond" label-idle="Drop files here..." v-bind:allow-multiple="true"
+                            :server="{
                                     url:  `/api/invoices/${form.id}/attachment`,
                                     process: {
                                       headers: {
@@ -80,14 +91,14 @@
                                       }
                                     }
                                   }" v-bind:files="myFiles" v-on:init="handleFilePondInit"
-                                @processfile="reloadData(form.id)" />
+                            @processfile="reloadData(form.id)" /> --}}
 
-                        </div>
-                    </form>
                 </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 </div>
 @endsection
 @push('scripts')

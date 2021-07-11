@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Interpreters\XeroInterpreter;
 use App\Http\Resources\InvoiceResource;
 use App\Http\Resources\InvoiceResourceCollection;
 use App\Models\Invoice;
@@ -35,6 +36,14 @@ class InvoiceApiController extends ResourceApiController
     public function getResourceCollection($items)
     {
         return new InvoiceResourceCollection($items);
+    }
+
+    public function uploadAttachment($id,Request $request)
+    {
+        $invoice = Invoice::find($id);
+        $xero = resolve(XeroInterpreter::class);
+        $xero->uploadAttachment($invoice, $request);
+        return response('success', 200);
     }
 
     public function storeMultipleInvoice(Request $request)
