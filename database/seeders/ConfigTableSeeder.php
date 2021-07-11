@@ -26,8 +26,8 @@ class ConfigTableSeeder extends Seeder
 
         // Config::create([
         //     'batch_counter' => 1,
-        //     'client_id' => '21439E70FFA342D3B0016CE59AF36704',
-        //     'client_secret' => 'c5-0y333j9tgIwTCn-tczXJJ31dUhqIhCJ636FU8q9x0ezfo',
+        //     'client_id' => '4762A1EB358C4896B65255ADADB7A58C',
+        //     'client_secret' => 'MoeB8UFSYqw98AXc69fBmoGn58jR5m-zPCeD9jlRCCBvEKQT',
         //     'access_token' => null,
         //     'refresh_token' => null,
         //     'redirect_url' => 'https://cy.test/callback',

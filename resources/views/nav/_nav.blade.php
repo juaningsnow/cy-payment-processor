@@ -56,5 +56,13 @@
         </a>
     </li>
     @endif
+    <li class="nav-item">
+        <a href="{{route('xero_status')}}" class="nav-link">
+            <i class="fas fa-link"></i>
+            <p>
+                Xero Connection
+            </p>
+        </a>
+    </li>
     @endif
 </ul>

@@ -56,6 +56,7 @@ Route::prefix('companies')->group(function () {
     Route::get('/detach-bank/{id}/{bankId}', [CompanyApiController::class, 'removeBank']);
     Route::get('/make-default/{id}/{bankId}', [CompanyApiController::class, 'makeDefault']);
     Route::post('/', [CompanyApiController::class, 'store']);
+    Route::post('revoke', [CompanyApiController::class, 'revokeApiConnection']);
     Route::patch('{id}', [CompanyApiController::class, 'update']);
     Route::patch('/attach-bank/{id}', [CompanyApiController::class, 'addBank']);
     Route::patch('/update/{id}/{bankId}', [CompanyApiController::class, 'updateBank']);

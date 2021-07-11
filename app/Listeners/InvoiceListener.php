@@ -82,7 +82,10 @@ class InvoiceListener
 
     private function createSupplier($contact)
     {
-        $account = Account::where('code', $contact->PurchasesDefaultAccountCode)->first();
+        $account = null;
+        if (property_exists($contact, 'PurchasesDefaultAccountCode')) {
+            $account = Account::where('code', $contact->PurchasesDefaultAccountCode)->first();
+        }
         $company = Company::first();
         $supplier = new Supplier();
         $supplier->fromXero = true;
@@ -91,7 +94,7 @@ class InvoiceListener
         $supplier->email = $contact->EmailAddress;
         $supplier->xero_contact_id = $contact->ContactID;
         $supplier->company_id = $company->id;
-        $supplier->account_id = $account->id;
+        $supplier->account_id = $account ? $account->id : null;
         $supplier->fromXero = true;
         $supplier->save();
         return $supplier;

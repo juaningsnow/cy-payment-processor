@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Interpreters\XeroInterpreter;
 use App\Http\Resources\CompanyBankResource;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\CompanyResourceCollection;
@@ -97,6 +98,19 @@ class CompanyApiController extends ResourceApiController
         });
 
         return new CompanyBankResource($companyBank);
+    }
+
+    public function revokeApiConnection(Request $request)
+    {
+        $company = auth()->user()->company;
+        $connectionId = $company->xero_connection_id;
+        $xero = resolve(XeroInterpreter::class);
+        $xero->revokeConnection($connectionId);        
+        $company->xero_connection_id = null;
+        $company->auth_event_id = null;
+        $company->xero_tenant_id = null;
+        $company->save();
+        return response('succes', 200);
     }
 
     public function updateBank($id, $bankId, Request $request)

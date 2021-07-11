@@ -94,7 +94,7 @@ trait InvoicesTrait
             ],
             "DateString" => $date->toDateTimeLocalString(),
             "DueDateString" => $date->toDateTimeLocalString(),
-            "InvoiceNumber" => $invoice->invoice_number.'-'.$invoice->supplier->id,
+            "InvoiceNumber" => $invoice->invoice_number,
             "LineItems" => [[
                 "Description" => $invoice->description ? $invoice->description : '.',
                 "Quantity" => '1',
