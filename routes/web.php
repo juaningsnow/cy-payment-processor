@@ -37,6 +37,7 @@ Route::get('/', [HomeController::class, 'index'])->name('dashboard');
 
 Route::get('/xero', [XeroController::class, 'status'])->name('xero_status');
 Route::get('/callback', [XeroController::class, 'callback'])->name('xero_callback');
+Route::get('set-active-company/{userCompanyId}', [UserController::class, 'setActive'])->name('set_active_company');
 
 Route::prefix('suppliers')->group(function () {
     Route::get('/', [SupplierController::class, 'index'])->name('suppliers');

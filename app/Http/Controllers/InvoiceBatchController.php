@@ -28,11 +28,17 @@ class InvoiceBatchController extends Controller
 
     public function create()
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         return view('invoice-batches.create', ['title' => "Batch Create", 'id' => null]);
     }
 
     public function index()
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         $indexVariables = [
             'filterable' => $this->availableFilters,
             'sorter' => 'batch_name',
@@ -45,6 +51,9 @@ class InvoiceBatchController extends Controller
 
     public function edit($id)
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         $batch = InvoiceBatch::find($id);
         if ($batch->isGenerated()) {
             return redirect()->route('invoice-batches_show', $id);
@@ -54,6 +63,9 @@ class InvoiceBatchController extends Controller
 
     public function show($id)
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         $indexVariables = [
             'filterable' => $this->invoiceFilters,
             'sorter' => 'id',
@@ -67,6 +79,9 @@ class InvoiceBatchController extends Controller
 
     public function downloadTextFile($id)
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         $batch = InvoiceBatch::find($id);
         $batch->setGenerated(true);
         $batch->save();

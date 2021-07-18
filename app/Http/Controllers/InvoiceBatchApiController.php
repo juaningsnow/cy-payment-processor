@@ -47,7 +47,7 @@ class InvoiceBatchApiController extends ResourceApiController
         $invoiceBatch->setBatchName($batchNumber);
         $invoiceBatch->setDate($request->getDate());
         $invoiceBatch->setInvoiceBatchDetails($request->getInvoiceBatchDetails());
-        $invoiceBatch->setCompany($request->user()->company);
+        $invoiceBatch->setCompany($request->user()->getActiveCompany());
         $invoiceBatch->setName($request->input('name'));
         $invoiceBatch->save();
         $invoiceBatch->invoiceBatchDetails()->sync($invoiceBatch->getInvoiceBatchDetails());

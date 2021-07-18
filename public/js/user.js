@@ -18222,8 +18222,7 @@ new vue__WEBPACK_IMPORTED_MODULE_4__.default({
       username: null,
       email: null,
       password: null,
-      isAdmin: false,
-      companyId: null
+      isAdmin: false
     }),
     nullValue: null,
     trueValue: true,
@@ -18255,8 +18254,21 @@ new vue__WEBPACK_IMPORTED_MODULE_4__.default({
           return window.location = "/user-management";
         });
       })["catch"](function (error) {
-        console.log(error);
+        _this.$swal({
+          title: "Error",
+          text: error.message,
+          type: "warning"
+        });
       });
+    },
+    addCompany: function addCompany() {
+      this.form.userCompanies.data.push({
+        companyId: null,
+        isActive: false
+      });
+    },
+    removeCompany: function removeCompany(index) {
+      this.form.userCompanies.data.splice(index, 1);
     },
     update: function update() {
       var _this2 = this;
@@ -18268,6 +18280,12 @@ new vue__WEBPACK_IMPORTED_MODULE_4__.default({
           type: "success"
         }).then(function () {
           return window.location = "/user-management/" + id;
+        });
+      })["catch"](function (error) {
+        _this2.$swal({
+          title: "Error",
+          text: error.message,
+          type: "warning"
         });
       });
     },
@@ -18286,7 +18304,7 @@ new vue__WEBPACK_IMPORTED_MODULE_4__.default({
         _this3.dataInitialized = false;
         _this3.isEdit = true;
 
-        _this3.form.get("/api/user-management/" + id).then(function (response) {
+        _this3.form.get("/api/user-management/" + id + "?include=userCompanies.company").then(function (response) {
           _this3.loadData(response.data);
 
           _this3.dataInitialized = true;

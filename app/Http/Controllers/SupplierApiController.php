@@ -59,7 +59,7 @@ class SupplierApiController extends ResourceApiController
         $supplier->setAccountNumber($request->input('accountNumber'));
         $supplier->setBank($bank);
         $supplier->setAccount($account);
-        $supplier->setCompany($request->user()->company);
+        $supplier->setCompany($request->user()->getActiveCompany());
         $supplier->save();
         return $this->getResource($supplier);
     }

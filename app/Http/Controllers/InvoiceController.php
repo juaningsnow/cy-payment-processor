@@ -32,6 +32,9 @@ class InvoiceController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         $indexVariables = [
             'filterable' => $this->availableFilters,
             'sorter' => 'id',
@@ -44,6 +47,9 @@ class InvoiceController extends Controller
 
     public function index2()
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         $indexVariables = [
             'filterable' => $this->availableFilters2,
             'sorter' => 'id',
@@ -56,11 +62,17 @@ class InvoiceController extends Controller
 
     public function create()
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         return view('invoices.create', ['title' => "Invoice Create", 'id' => null]);
     }
 
     public function edit($id)
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         $invoice = Invoice::find($id);
         if ($invoice->hasInvoiceBatchDetails()) {
             if ($invoice->getInvoiceBatchDetail()->invoiceBatch->isGenerated()) {
@@ -75,12 +87,18 @@ class InvoiceController extends Controller
 
     public function show($id)
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         $invoice = Invoice::find($id);
         return view('invoices.show', ['title' => $invoice ? $invoice->getInvoiceNumber() : "--", 'id' => $id]);
     }
 
     public function downloadXeroAttachment($id)
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         $attachment = InvoiceXeroAttachment::find($id);
         $xeroInterpreter = resolve(XeroInterpreter::class);
         $fileResponse = $xeroInterpreter->downloadAttachment($attachment);

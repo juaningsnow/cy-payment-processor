@@ -29,5 +29,19 @@ class CompaniesTableSeeder extends Seeder
                 'default' => true
             ]
         ]);
+
+        // $company2 = Company::create([
+        //     'name' => "CY Industries 2"
+        // ]);
+
+        // $bank = Bank::where('swift', 'OCBCSGSGXXX')->first();
+        // $accountNumber = '687586784001';
+        // $company2->banks()->attach([
+        //     $bank->id => [
+        //         'account_number' => $accountNumber,
+        //         'xero_account_code' => '090',
+        //         'default' => true
+        //     ]
+        // ]);
     }
 }

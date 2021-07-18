@@ -7,6 +7,7 @@ use App\Http\Resources\BankResourceCollection;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\UserBankResource;
 use App\Http\Resources\UserBankResourceCollection;
+use App\Http\Resources\UserCompanyResourceCollection;
 use BaseCode\Auth\Resources\RoleResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -30,7 +31,7 @@ class UserResource extends JsonResource
             'password' => null,
             'showUrl' => route('user_show', $this->id),
             'editUrl' => route('user_edit', $this->id),
-            'company' => new CompanyResource($this->whenLoaded('company'))
+            'userCompanies' => new UserCompanyResourceCollection($this->whenLoaded('userCompanies')),
         ];
     }
 }

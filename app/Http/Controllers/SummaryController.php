@@ -15,6 +15,9 @@ class SummaryController extends Controller
 
     public function exportExcel($dateFrom, $dateTo)
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         $dateFromCarbon = new Carbon($dateFrom);
         $dateToCarbon = new Carbon($dateTo);
         $fileName = "Summary {$dateFromCarbon->toFormattedDateString()} - {$dateToCarbon->toFormattedDateString()}.xlsx";
@@ -23,6 +26,9 @@ class SummaryController extends Controller
 
     public function exportCsv($dateFrom, $dateTo)
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         $dateFromCarbon = new Carbon($dateFrom);
         $dateToCarbon = new Carbon($dateTo);
         $fileName = "Summary {$dateFromCarbon->toFormattedDateString()} - {$dateToCarbon->toFormattedDateString()}.csv";

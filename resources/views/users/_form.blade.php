@@ -35,16 +35,49 @@
     </select>
 </div>
 
-<div class="form-group">
-    <label for="paymentType">Company</label>
-    <select class="form-control select2" :disabled="isShow" v-model="form.companyId">
-        <option selected="selected" disabled :value="null">
-            -Select Company-
-        </option>
-        <option v-for="(item, index) in companySelections" :key="index" :value="item.id">
-            @{{item.name}}
-        </option>
-    </select>
-</div>
-
+<div class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <th colspan="3" class="text-center">Companies</th>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <th>Active</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(userCompany,index) in form.userCompanies.data">
+                <td>
+                    <select class="form-control select2" :disabled="isShow" v-model="userCompany.companyId">
+                        <option selected="selected" disabled :value="null">
+                            -Select Company-
+                        </option>
+                        <option v-for="(item, index) in companySelections" :key="index" :value="item.id">
+                            @{{item.name}}
+                        </option>
+                    </select>
+                </td>
+                <td>
+                    <i class="fas fa-check" v-if="userCompany.isActive"></i>
+                </td>
+                <td>
+                    <button v-if="!userCompany.isActive" :disabled="isShow" @click="removeCompany(index)" type="button"
+                        class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-left">
+                    <button :disabled="isShow" @click="addCompany" type="button" class="btn btn-success btn-sm">
+                        Add Company
+                    </button>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
 </div>

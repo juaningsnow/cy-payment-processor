@@ -17,11 +17,14 @@ class SupplierController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth']);
     }
 
     public function index()
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         $indexVariables = [
             'filterable' => $this->availableFilters,
             'sorter' => 'name',
@@ -34,16 +37,25 @@ class SupplierController extends Controller
 
     public function create()
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         return view('suppliers.create', ['title' => "Supplier Create", 'id' => null]);
     }
 
     public function edit($id)
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         return view('suppliers.edit', ['title' => "Supplier Edit", 'id' => $id]);
     }
 
     public function show($id)
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         $supplier = Supplier::find($id);
         return view('suppliers.show', ['title' => $supplier ? $supplier->getName() : "--", 'id' => $id]);
     }

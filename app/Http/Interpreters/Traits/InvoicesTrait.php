@@ -9,7 +9,6 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 trait InvoicesTrait
 {
@@ -56,7 +55,7 @@ trait InvoicesTrait
                 "TaxType" => "NONE",
                 "UnitAmount" => $invoice->amount,
                 "LineAmount" => $invoice->amount,
-                "AccountCode" => $invoice->supplier->account->code,
+                "AccountCode" => $invoice->supplier->account ? $invoice->supplier->account->code : null,
             ]],
             "Status" => "AUTHORISED",
         ];
@@ -101,7 +100,7 @@ trait InvoicesTrait
                 "TaxType" => "NONE",
                 "UnitAmount" => $invoice->amount,
                 "LineAmount" => $invoice->amount,
-                "AccountCode" => $invoice->supplier->account->code,
+                "AccountCode" =>  $invoice->supplier->account ? $invoice->supplier->account->code : null,
             ]],
             "Status" => "AUTHORISED",
         ];
@@ -127,7 +126,6 @@ trait InvoicesTrait
                 "TaxType" => "NONE",
                 "UnitAmount" => $invoice->amount,
                 "LineAmount" => $invoice->amount,
-                "AccountCode" => $invoice->supplier->account->code,
             ]],
             "Status" => "AUTHORISED",
         ];
@@ -198,7 +196,9 @@ trait InvoicesTrait
     {
         $processorInvoice = Invoice::where('xero_invoice_id', $invoice->InvoiceID)->first();
         $attachments = $this->assembleInvoiceAttachments($invoice);
-        $processorInvoice->invoiceXeroAttachments()->sync($attachments);
+        if ($processorInvoice) {
+            $processorInvoice->invoiceXeroAttachments()->sync($attachments);
+        }
     }
 
     private function assembleInvoiceAttachments($invoice)
@@ -209,5 +209,17 @@ trait InvoicesTrait
                 'url' => $attachment->Url
             ]);
         }, $invoice->Attachments);
+    }
+
+    public function retrieveAuthorisedInvoices($tenantId)
+    {
+        $url = $this->baseUrl.'/Invoices?where='.urlencode('Status="AUTHORISED" AND Type="ACCREC"');
+        try {
+            $response = Http::withHeaders($this->getTenantDefaultHeaders($tenantId))->get($url);
+            $data = json_decode($response->getBody()->getContents());
+            return $data->Invoices;
+        } catch (Exception $e) {
+            throw new GeneralApiException($e);
+        }
     }
 }

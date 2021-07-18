@@ -34,7 +34,6 @@ new Vue({
             email: null,
             password: null,
             isAdmin: false,
-            companyId: null,
         }),
         nullValue: null,
         trueValue: true,
@@ -66,9 +65,24 @@ new Vue({
                     text: "User was saved.",
                     type: "success"
                 }).then(() => window.location = "/user-management");
-            }).catch(error => {
-                console.log(error);
+            }).catch((error) => {
+                this.$swal({
+                    title: "Error",
+                    text: error.message,
+                    type: "warning",
+                });
             });
+        },
+
+        addCompany() {
+            this.form.userCompanies.data.push({
+                companyId: null,
+                isActive: false
+            });
+        },
+
+        removeCompany(index) {
+            this.form.userCompanies.data.splice(index, 1);
         },
 
         update() {
@@ -78,6 +92,12 @@ new Vue({
                     text: "Changes saved to database.",
                     type: "success"
                 }).then(() => (window.location = "/user-management/" + id));
+            }).catch((error) => {
+                this.$swal({
+                    title: "Error",
+                    text: error.message,
+                    type: "warning",
+                });
             });
         },
         loadData(data) {
@@ -86,7 +106,6 @@ new Vue({
     },
 
     created() {
-
         this.form.get(`/api/companies`).then(response => {
             this.companySelections = response.data;
             this.companyInitialized = true;
@@ -95,7 +114,7 @@ new Vue({
                 this.isEdit = true;
                 this.form
                     .get(
-                        "/api/user-management/" + id
+                        "/api/user-management/" + id + "?include=userCompanies.company"
                     ).then(response => {
                         this.loadData(response.data);
                         this.dataInitialized = true;

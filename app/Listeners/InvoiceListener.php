@@ -43,21 +43,21 @@ class InvoiceListener
             }
             if ($invoice->Status == "AUTHORISED") {
                 if ($event->isCreate) {
-                    $this->createInvoice($invoice);
+                    $this->createInvoice($invoice, $event->tenantId);
                 } else {
-                    $this->updateInvoice($invoice);
+                    $this->updateInvoice($invoice, $event->tenantId);
                 }
             }
             if ($invoice->Status == "PAID") {
-                $this->updateInvoicePayment($invoice);
+                $this->updateInvoicePayment($invoice, $event->tenantId);
             }
         }
     }
 
-    private function updateInvoicePayment($invoice)
+    private function updateInvoicePayment($invoice, $tenantId)
     {
         $supplier = Supplier::where('xero_contact_Id', $invoice->Contact->ContactID)->first();
-        $company = Company::first();
+        $company = Company::where('xero_tenant_id', $tenantId)->first();
         if (!$supplier) {
             $supplier = $this->createSupplier($invoice->Contact);
         }
@@ -80,13 +80,13 @@ class InvoiceListener
         }
     }
 
-    private function createSupplier($contact)
+    private function createSupplier($contact, $tenantId)
     {
         $account = null;
         if (property_exists($contact, 'PurchasesDefaultAccountCode')) {
             $account = Account::where('code', $contact->PurchasesDefaultAccountCode)->first();
         }
-        $company = Company::first();
+        $company = Company::where('xero_tenant_id', $tenantId)->first();
         $supplier = new Supplier();
         $supplier->fromXero = true;
         $supplier->name = $contact->Name;
@@ -100,16 +100,16 @@ class InvoiceListener
         return $supplier;
     }
 
-    private function updateInvoice($invoice)
+    private function updateInvoice($invoice, $tenantId)
     {
         $supplier = Supplier::where('xero_contact_Id', $invoice->Contact->ContactID)->first();
-        $company = Company::first();
+        $company = Company::where('xero_tenant_id', $tenantId)->first();
         if (!$supplier) {
-            $supplier = $this->createSupplier($invoice->Contact);
+            $supplier = $this->createSupplier($invoice->Contact, $tenantId);
         }
         $processorInvoice = Invoice::where('xero_invoice_id', $invoice->InvoiceID)->first();
         if (!$processorInvoice) {
-            $this->createInvoice($invoice);
+            $this->createInvoice($invoice, $tenantId);
         } else {
             $processorInvoice->supplier_id = $supplier->id;
             $processorInvoice->date = new Carbon($invoice->DateString);
@@ -125,12 +125,12 @@ class InvoiceListener
         }
     }
 
-    private function createInvoice($invoice)
+    private function createInvoice($invoice, $tenantId)
     {
         $supplier = Supplier::where('xero_contact_Id', $invoice->Contact->ContactID)->first();
-        $company = Company::first();
+        $company = Company::where('xero_tenant_id', $tenantId)->first();
         if (!$supplier) {
-            $supplier = $this->createSupplier($invoice->Contact);
+            $supplier = $this->createSupplier($invoice->Contact, $tenantId);
         }
         $processorInvoice = new Invoice();
         $processorInvoice->supplier_id = $supplier->id;

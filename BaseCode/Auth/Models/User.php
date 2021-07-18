@@ -3,10 +3,11 @@
 namespace BaseCode\Auth\Models;
 
 use App\Models\Bank;
-use App\Models\UserBank;
+use App\Models\Company;
+use App\Models\UserCompany;
+use BaseCode\Common\Traits\HasMany;
 use BaseCode\Common\Traits\HasTimestamps;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use Spatie\Permission\Traits\HasRoles;
@@ -17,6 +18,7 @@ class User extends Authenticatable
 {
     use Notifiable;
     use HasTimestamps;
+    use HasMany;
 
     protected $guard_name = 'web';
 
@@ -43,9 +45,26 @@ class User extends Authenticatable
         'settings' => 'array'
     ];
 
-    public function company()
+    public function companies()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsToMany(Company::class, 'user_companies', 'user_id', 'company_id')->withPivot([
+            'is_active'
+        ])->withTimestamps();
+    }
+    
+    public function userCompanies()
+    {
+        return $this->hasMany(UserCompany::class);
+    }
+
+    public function getActiveCompany()
+    {
+        return $this->userCompanies()->where('is_active', true)->first()->company;
+    }
+
+    public function getActiveUserCompanyId()
+    {
+        return $this->userCompanies()->where('is_active', true)->first()->id;
     }
 
     public function setSettings(array $values)

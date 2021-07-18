@@ -13,6 +13,9 @@ class CompanyController extends Controller
 
     public function index()
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         $indexVariables = [
             'filterable' => $this->availableFilters,
             'sorter' => 'name',
@@ -25,16 +28,25 @@ class CompanyController extends Controller
 
     public function create()
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         return view('companies.create', ['title' => "Company Create", 'id' => null]);
     }
 
     public function edit($id)
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         return view('companies.edit', ['title' => "Company Edit", 'id' => $id]);
     }
 
     public function show($id)
     {
+        if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
+            return redirect()->route('xero_status');
+        }
         $company = Company::find($id);
         return view('companies.show', ['title' => $company ? $company->name : "--", 'id' => $id]);
     }

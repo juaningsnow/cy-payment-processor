@@ -8,6 +8,8 @@ use App\Http\Resources\CompanyResource;
 use App\Http\Resources\CompanyResourceCollection;
 use App\Models\Company;
 use App\Models\CompanyBank;
+use App\Models\Invoice;
+use App\Models\InvoiceBatch;
 use BaseCode\Common\Controllers\ResourceApiController;
 use Illuminate\Http\Request;
 
@@ -102,15 +104,31 @@ class CompanyApiController extends ResourceApiController
 
     public function revokeApiConnection(Request $request)
     {
-        $company = auth()->user()->company;
+        $company = auth()->user()->getActiveCompany();
         $connectionId = $company->xero_connection_id;
         $xero = resolve(XeroInterpreter::class);
-        $xero->revokeConnection($connectionId);        
+        $xero->revokeConnection($connectionId);
         $company->xero_connection_id = null;
         $company->auth_event_id = null;
         $company->xero_tenant_id = null;
         $company->save();
-        return response('succes', 200);
+        $this->archiveCompanyData($company->id);
+        return response('success', 200);
+    }
+
+    private function archiveCompanyData($companyId)
+    {
+        Invoice::where('company_id', $companyId)->get()->each(function ($invoice) {
+            $invoice->invoice_number = $invoice->invoice_number.'arch'.today()->format('dmYHis');
+            $invoice->archived = true;
+            $invoice->save();
+        });
+
+        InvoiceBatch::where('company_id', $companyId)->get()->each(function ($batch) {
+            $batch->batch_name = $batch->batch_name.'arch'.today()->format('dmYHis');
+            $batch->archived = true;
+            $batch->save();
+        });
     }
 
     public function updateBank($id, $bankId, Request $request)

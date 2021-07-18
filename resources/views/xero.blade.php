@@ -4,7 +4,7 @@
 <div id="xero" v-cloak>
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title"><b>{{auth()->user()->company->name}} API Connection Status</b></h3>
+            <h3 class="card-title"><b>{{auth()->user()->getActiveCompany()->name}} API Connection Status</b></h3>
 
             <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">

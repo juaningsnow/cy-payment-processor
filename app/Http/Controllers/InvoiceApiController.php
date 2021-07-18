@@ -38,7 +38,7 @@ class InvoiceApiController extends ResourceApiController
         return new InvoiceResourceCollection($items);
     }
 
-    public function uploadAttachment($id,Request $request)
+    public function uploadAttachment($id, Request $request)
     {
         $invoice = Invoice::find($id);
         $xero = resolve(XeroInterpreter::class);
@@ -144,7 +144,7 @@ class InvoiceApiController extends ResourceApiController
             $detail->setInvoiceNumber($item['invoiceNumber']);
             $detail->setAmount($item['amount']);
             $detail->setDescription($item['description']);
-            $detail->setCompany($request->user()->company);
+            $detail->setCompany($request->user()->getActiveCompany());
             return $detail;
         }, $request->input('invoices.data'));
     }

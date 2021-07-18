@@ -46,9 +46,21 @@ class User extends Authenticatable
         // 'two_factor_secret',
     ];
 
-    public function company()
+    public function companies()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsToMany(Company::class, 'user_companies', 'user_id', 'company_id')->withPivot([
+            'is_active'
+        ])->withTimestamps();
+    }
+    
+    public function userCompanies()
+    {
+        return $this->hasMany(UserCompany::class);
+    }
+
+    public function getActiveCompany()
+    {
+        return $this->userCompanies()->where('is_active', true)->first()->company;
     }
 
     public function isAdmin()

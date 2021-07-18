@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\User;
+use App\Models\UserCompany;
 use BaseCode\Auth\Resources\UserResource;
 use BaseCode\Auth\Resources\UserResourceCollection;
 use BaseCode\Common\Controllers\ResourceApiController;
+use BaseCode\Common\Exceptions\GeneralApiException;
 use Illuminate\Http\Request;
 
 class UserApiController extends ResourceApiController
@@ -36,21 +38,63 @@ class UserApiController extends ResourceApiController
         $request->validate([
             'name' => 'required',
             'username' => 'required',
-            'companyId' => 'required',
             'isAdmin' => 'required',
             'email' => 'required|email',
         ]);
+        $userCompanies = $this->assembleUserCompanies($request);
+        $userCompanies2 = $this->setFirstAsActive($userCompanies);
         $user = new User;
-        $company = Company::find($request->input('companyId'));
         $user->name = $request->input('name');
         $user->username = $request->input('username');
         $user->email = $request->input('email');
         $user->password = bcrypt($request->input('password'));
         $user->is_admin = $request->input("isAdmin");
-        $user->company()->associate($company);
-        $user->company_id = $request->input('companyId');
         $user->save();
+        $user->userCompanies()->sync($userCompanies2);
         return $this->getResource($user);
+    }
+
+    private function setFirstAsActive(array $userCompanies)
+    {
+        $array = [];
+        foreach ($userCompanies as $key => $userCompany) {
+            if ($key < 1) {
+                $userCompany->is_active = true;
+            }
+            $array[] = $userCompany;
+        }
+        return $array;
+    }
+
+    private function assembleUserCompanies(Request $request)
+    {
+        $array = array_map(function ($item) {
+            if (!isset($item['id'])) {
+                $detail = new UserCompany;
+            } else {
+                $detail = UserCompany::find($item['id']);
+            }
+            $company = Company::find($item['companyId']);
+            $detail->setCompany($company);
+            return $detail;
+        }, $request->input('userCompanies.data'));
+
+        $this->checkIfDuplicateCompany($array);
+
+        return $array;
+    }
+
+    private function checkIfDuplicateCompany(array $array)
+    {
+        $companyIds = [];
+        foreach ($array as $item) {
+            $companyIds[] = $item->company_id;
+        }
+
+        $hasDuplicate = count($companyIds) !== count(array_unique($companyIds));
+        if ($hasDuplicate) {
+            throw new GeneralApiException('Please Remove Duplicate Company Entries');
+        }
     }
 
     public function update($id, Request $request)
@@ -58,20 +102,18 @@ class UserApiController extends ResourceApiController
         $request->validate([
             'name' => 'required',
             'username' => 'required',
-            'companyId' => 'required',
             'isAdmin' => 'required',
             'email' => 'required|email',
         ]);
+        $userCompanies = $this->assembleUserCompanies($request);
         $user = User::find($id);
-        $company = Company::find($request->input('companyId'));
         $user->name = $request->input('name');
         $user->username = $request->input('username');
         $user->email = $request->input('email');
         $user->password = bcrypt($request->input('password'));
         $user->is_admin = $request->input("isAdmin");
-        $user->company()->associate($company);
-        $user->company_id = $request->input('companyId');
         $user->save();
+        $user->userCompanies()->sync($userCompanies);
         return $this->getResource($user);
     }
 

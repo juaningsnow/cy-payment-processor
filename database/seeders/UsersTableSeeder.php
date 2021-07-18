@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Bank;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -22,7 +21,18 @@ class UsersTableSeeder extends Seeder
             'email' => 'admin@cy-bm.sg',
             'is_admin' => true,
             'password' => bcrypt('admin'),
-            'company_id' => Company::first()->id
         ]);
+        
+        Company::all()->each(function ($company, $key) use ($user) {
+            if ($key > 0) {
+                // $user->companies()->attach($company, [
+                //     'is_active' => false
+                // ]);
+            } else {
+                $user->companies()->attach($company, [
+                    'is_active' => true
+                ]);
+            }
+        });
     }
 }
