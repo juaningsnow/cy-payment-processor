@@ -34,22 +34,24 @@ class InvoiceListener
     {
         $xeroInterpreter = resolve(XeroInterpreter::class);
         $invoice = $xeroInterpreter->getInvoice($event->invoiceId, $event->tenantId);
-        if ((bool)$invoice->HasAttachments) {
-            $xeroInterpreter->syncAttachments($invoice);
-        }
-        if ($invoice->Type == 'ACCPAY') {
-            if ($invoice->Status == "VOIDED") {
-                $this->deleteInvoice($invoice->InvoiceID);
+        if ($invoice) {
+            if ((bool)$invoice->HasAttachments) {
+                $xeroInterpreter->syncAttachments($invoice);
             }
-            if ($invoice->Status == "AUTHORISED") {
-                if ($event->isCreate) {
-                    $this->createInvoice($invoice, $event->tenantId);
-                } else {
-                    $this->updateInvoice($invoice, $event->tenantId);
+            if ($invoice->Type == 'ACCPAY') {
+                if ($invoice->Status == "VOIDED") {
+                    $this->deleteInvoice($invoice->InvoiceID);
                 }
-            }
-            if ($invoice->Status == "PAID") {
-                $this->updateInvoicePayment($invoice, $event->tenantId);
+                if ($invoice->Status == "AUTHORISED") {
+                    if ($event->isCreate) {
+                        $this->createInvoice($invoice, $event->tenantId);
+                    } else {
+                        $this->updateInvoice($invoice, $event->tenantId);
+                    }
+                }
+                if ($invoice->Status == "PAID") {
+                    $this->updateInvoicePayment($invoice, $event->tenantId);
+                }
             }
         }
     }

@@ -17,7 +17,10 @@ trait InvoicesTrait
         try {
             $response = Http::withHeaders($this->getTenantDefaultHeaders($tenantId))->get($this->baseUrl.'/Invoices/'.$invoiceId);
             $data = json_decode($response->getBody()->getContents());
-            return $data->Invoices[0];
+            if (count($data->Invoices) > 0) {
+                return $data->Invoices[0];
+            }
+            return null;
         } catch (Exception $e) {
             throw new GeneralApiException($e);
         }
