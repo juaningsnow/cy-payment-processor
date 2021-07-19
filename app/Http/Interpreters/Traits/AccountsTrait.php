@@ -34,9 +34,8 @@ trait AccountsTrait
                     'code' => $account->Code,
                     'company_id' => $company->id
                 ]);
+                $seeds[] = $seeded;
             }
-            
-            $seeds[] = $seeded;
         }
         return $seeds;
     }
