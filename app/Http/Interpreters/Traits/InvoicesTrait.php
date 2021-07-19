@@ -216,7 +216,7 @@ trait InvoicesTrait
 
     public function retrieveAuthorisedInvoices($tenantId)
     {
-        $url = $this->baseUrl.'/Invoices?where='.urlencode('Status="AUTHORISED" AND Type="ACCREC"');
+        $url = $this->baseUrl.'/Invoices?where='.urlencode('Status="AUTHORISED" AND Type="ACCPAY"');
         try {
             $response = Http::withHeaders($this->getTenantDefaultHeaders($tenantId))->get($url);
             $data = json_decode($response->getBody()->getContents());

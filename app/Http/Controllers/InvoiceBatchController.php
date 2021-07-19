@@ -6,6 +6,7 @@ use App\Models\Config;
 use App\Models\InvoiceBatch;
 use App\Utils\InvoiceBatchTextFileGenerator;
 use App\Utils\StatusList;
+use BaseCode\Common\Exceptions\GeneralApiException;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Response;
 
@@ -81,6 +82,9 @@ class InvoiceBatchController extends Controller
     {
         if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
             return redirect()->route('xero_status');
+        }
+        if (!auth()->user()->getActiveCompany()->geDefaultBank()) {
+            throw new GeneralApiException('User company does not have a default Bank!');
         }
         $batch = InvoiceBatch::find($id);
         $batch->setGenerated(true);
