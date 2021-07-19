@@ -27,12 +27,15 @@ trait AccountsTrait
         $accounts = $this->getAccounts($company);
         $seeds = [];
         foreach ($accounts as $account) {
-            $seeded = Account::create([
-                'xero_account_id' => $account->AccountID,
-                'name' => $account->Name,
-                'code' => $account->Code,
-                'company_id' => $company->id
-            ]);
+            if (property_exists($account, 'Code')) {
+                $seeded = Account::create([
+                    'xero_account_id' => $account->AccountID,
+                    'name' => $account->Name,
+                    'code' => $account->Code,
+                    'company_id' => $company->id
+                ]);
+            }
+            
             $seeds[] = $seeded;
         }
         return $seeds;
