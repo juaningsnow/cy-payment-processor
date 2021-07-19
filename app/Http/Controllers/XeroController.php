@@ -83,15 +83,21 @@ class XeroController extends Controller
         $xeroInterpreter = resolve(XeroInterpreter::class);
         $contact = $xeroInterpreter->getContact($contactId, $tenantId);
         $account = null;
+        $email = null;
         if (property_exists($contact, 'PurchasesDefaultAccountCode')) {
             $account = Account::where('code', $contact->PurchasesDefaultAccountCode)->first();
         }
+
+        if (property_exists($contact, 'EmailAddress')) {
+            $email = $contact->EmailAddress;
+        }
+
         $company = Company::where('xero_tenant_id', $tenantId)->first();
         $supplier = new Supplier();
         $supplier->fromXero = true;
         $supplier->name = $contact->Name;
         $supplier->payment_type = "FAST";
-        $supplier->email = $contact->EmailAddress ? $contact->EmailAddress : null;
+        $supplier->email = $email;
         $supplier->xero_contact_id = $contact->ContactID;
         $supplier->company_id = $company->id;
         $supplier->account_id = $account ? $account->id : null;
