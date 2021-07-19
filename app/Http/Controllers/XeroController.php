@@ -91,7 +91,7 @@ class XeroController extends Controller
         $supplier->fromXero = true;
         $supplier->name = $contact->Name;
         $supplier->payment_type = "FAST";
-        $supplier->email = $contact->EmailAddress;
+        $supplier->email = $contact->EmailAddress ? $contact->EmailAddress : null;
         $supplier->xero_contact_id = $contact->ContactID;
         $supplier->company_id = $company->id;
         $supplier->account_id = $account ? $account->id : null;
