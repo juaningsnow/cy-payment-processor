@@ -23,7 +23,7 @@ trait PaymentTrait
                     "Code" => $invoice->company->getDefaultAccountCode(),
                 ],
                 "Date" => Carbon::now()->toDateString(),
-                "Amount" => $invoice->amount,
+                "Amount" => $invoice->amount_due,
             ];
             $response = Http::withHeaders($this->getTenantDefaultHeaders($invoice->company->xero_tenant_id))->withBody(
                 json_encode($body),
@@ -86,7 +86,7 @@ trait PaymentTrait
                     "InvoiceID" => $attribute->invoice->xero_invoice_id,
                 ],
                 "Details" => $attribute->invoice->invoice_number,
-                "Amount" => $attribute->invoice->amount
+                "Amount" => $attribute->invoice->amount_due
             ];
         }, $invoiceBatchDetails);
     }

@@ -17,6 +17,11 @@
             <button type="button" v-if="selected.length > 0" @click="deleteAll" class="btn btn-danger btn-sm">
                 Delete Selected
             </button>
+            @if(auth()->user()->isAdmin())
+            <button type="button" @click="refreshInvoices" class="btn btn-success btn-sm">
+                Refresh Invoices
+            </button>
+            @endif
             <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                     <i class="fas fa-minus"></i>
@@ -52,8 +57,13 @@
                                 </a>
                             </th>
                             <th class="text-right">
-                                <a v-on:click="setSorter('amount')">
-                                    Amount <i class="fa" :class="getSortIcon('name')"></i>
+                                <a v-on:click="setSorter('amount_paid')">
+                                    Amount Paid <i class="fa" :class="getSortIcon('amount_paid')"></i>
+                                </a>
+                            </th>
+                            <th class="text-right">
+                                <a v-on:click="setSorter('amount_due')">
+                                    Amount Due <i class="fa" :class="getSortIcon('amount_due')"></i>
                                 </a>
                             </th>
                             <th class="text-center">Action</th>
@@ -70,7 +80,8 @@
                             <td>@{{item.invoiceNumber}}</td>
                             <td>@{{item.supplier.name}}</td>
                             <td>@{{item.date}}</td>
-                            <td class="text-right">@{{item.amount | numeric}}</td>
+                            <td class="text-right">@{{item.amountPaid | numeric}}</td>
+                            <td class="text-right">@{{item.amountDue | numeric}}</td>
                             <td class="text-center">
                                 <div class="btn-group">
                                     <a :href="item.showUrl"><button type="button" class="btn btn-default"><i

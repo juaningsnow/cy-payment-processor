@@ -34,9 +34,15 @@ new Vue({
         form: new Form({
             id: null,
             name: "",
+            companyOwners: { data: [] },
+            cashAccountId: null,
         }),
+        nullValue: null,
         showBankModal: false,
         dataInitialized: true,
+        accountSelections: [],
+        accountsInitialized: false,
+        counter: -1,
     },
 
     watch: {
@@ -53,6 +59,26 @@ new Vue({
     },
 
     methods: {
+
+        addOwner() {
+            this.form.companyOwners.data.push({
+                id: this.counter--,
+                name: "",
+                accountId: null,
+            });
+        },
+
+        refreshCurrencies() {
+            this.form.patch(`/api/companies/refresh-currencies/${this.form.id}`).then(response => {
+                this.$swal({
+                    title: "Currencies refreshed!",
+                    text: "",
+                    type: "success"
+                }).then(() => window.location = `/companies/${this.form.id}`);
+            }).catch(error => {
+                console.log(error);
+            });
+        },
 
         store() {
             this.form.post("/api/companies").then(response => {
@@ -132,7 +158,7 @@ new Vue({
             this.isEdit = true;
             this.form
                 .get(
-                    "/api/companies/" + this.form.id + "?include=companyBanks.bank,banks"
+                    "/api/companies/" + this.form.id + "?include=currencies,companyOwners,companyBanks.bank,companyBanks.account,banks"
                 ).then(response => {
                     this.loadData(response.data);
                     this.dataInitialized = true;
@@ -145,13 +171,15 @@ new Vue({
         if (id != null) {
             this.dataInitialized = false;
             this.isEdit = true;
-            this.form
-                .get(
-                    "/api/companies/" + id + "?include=companyBanks.bank,banks"
-                ).then(response => {
+            this.form.get(`/api/accounts?limit=${Number.MAX_SAFE_INTEGER}`).then((response) => {
+                this.accountSelections = response.data;
+                this.accountsInitialized = true;
+                this.form.get("/api/companies/" + id + "?include=currencies,companyOwners,companyBanks.bank,companyBanks.account,banks").then(response => {
                     this.loadData(response.data);
                     this.dataInitialized = true;
                 });
+            });
+
         }
         this.isShow = typeof isShow !== "undefined" ? isShow : false;
     },

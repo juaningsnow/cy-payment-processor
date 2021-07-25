@@ -17,8 +17,11 @@ class CompanyResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'cashAccountId' => $this->cash_account_id,
             'companyBanks' => new CompanyBankResourceCollection($this->whenLoaded('companyBanks')),
             'banks' => new BankResourceCollection($this->whenLoaded('banks')),
+            'companyOwners' => new CompanyOwnerResourceCollection($this->whenLoaded('companyOwners')),
+            'currencies' => new CurrencyResourceCollection($this->whenLoaded('currencies')),
             'showUrl' => route('company_show', $this->id),
             'editUrl' => route('company_edit', $this->id),
        ];

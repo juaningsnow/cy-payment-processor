@@ -5,11 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Interpreters\XeroInterpreter;
 use App\Http\Resources\InvoiceResource;
 use App\Http\Resources\InvoiceResourceCollection;
+use App\Models\Account;
+use App\Models\Company;
+use App\Models\Currency;
 use App\Models\Invoice;
+use App\Models\InvoiceBatch;
 use App\Models\Supplier;
 use App\Utils\CompanyIndexFilter;
 use BaseCode\Common\Controllers\ResourceApiController;
 use BaseCode\Common\Exceptions\GeneralApiException;
+use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -100,6 +105,98 @@ class InvoiceApiController extends ResourceApiController
         return response('success', 200);
     }
 
+    public function refreshAttachments($id)
+    {
+        $invoice = Invoice::find($id);
+        $company = auth()->user()->getActiveCompany();
+        $xero = resolve(XeroInterpreter::class);
+        $xeroInvoice = $xero->getInvoice($invoice->xero_invoice_id, $company->xero_tenant_id);
+        $xero->syncAttachments($xeroInvoice);
+        return response('success', 200);
+    }
+
+    public function refreshInvoices(Request $request)
+    {
+        $company = auth()->user()->getActiveCompany();
+        $xero = resolve(XeroInterpreter::class);
+        $this->deleteCompanyData($company->id);
+        $this->seedXeroInvoices($xero->retrieveAuthorisedInvoices($company->xero_tenant_id), $company->xero_tenant_id);
+        return response('success', 200);
+    }
+
+    private function seedXeroInvoices(array $invoices, $tenantId)
+    {
+        foreach ($invoices as $invoice) {
+            $this->createInvoice($invoice, $tenantId);
+        }
+    }
+
+    private function createInvoice($invoice, $tenantId)
+    {
+        $supplier = Supplier::where('xero_contact_Id', $invoice->Contact->ContactID)->first();
+        $company = Company::where('xero_tenant_id', $tenantId)->first();
+        $sgd = Currency::where('code', 'SGD')->first();
+        if (!$supplier) {
+            $supplier = $this->createSupplier($invoice->Contact->ContactID, $tenantId);
+        }
+        if ($invoice->CurrencyCode == 'SGD') {
+            $processorInvoice = new Invoice();
+            $processorInvoice->supplier_id = $supplier->id;
+            $processorInvoice->date = new Carbon($invoice->DateString);
+            $processorInvoice->invoice_number = $invoice->InvoiceNumber;
+            $processorInvoice->total = $invoice->Total;
+            $processorInvoice->amount_due = $invoice->AmountDue;
+            $processorInvoice->amount_paid = $invoice->AmountPaid;
+            $processorInvoice->company_id = $company->id;
+            $processorInvoice->status = $processorInvoice->computeStatus();
+            $processorInvoice->xero_invoice_id = $invoice->InvoiceID;
+            $processorInvoice->currency_id = $sgd->id;
+            $processorInvoice->fromXero = true;
+            $processorInvoice->save();
+        }
+    }
+
+    private function createSupplier($contactId, $tenantId)
+    {
+        $xeroInterpreter = resolve(XeroInterpreter::class);
+        $contact = $xeroInterpreter->getContact($contactId, $tenantId);
+        $account = null;
+        $email = null;
+        if (property_exists($contact, 'PurchasesDefaultAccountCode')) {
+            $account = Account::where('code', $contact->PurchasesDefaultAccountCode)->first();
+        }
+
+        if (property_exists($contact, 'EmailAddress')) {
+            $email = $contact->EmailAddress;
+        }
+
+        $company = Company::where('xero_tenant_id', $tenantId)->first();
+        $supplier = new Supplier();
+        $supplier->fromXero = true;
+        $supplier->name = $contact->Name;
+        $supplier->payment_type = "FAST";
+        $supplier->email = $email;
+        $supplier->xero_contact_id = $contact->ContactID;
+        $supplier->company_id = $company->id;
+        $supplier->account_id = $account ? $account->id : null;
+        $supplier->fromXero = true;
+        $supplier->save();
+        return $supplier;
+    }
+
+    private function deleteCompanyData($companyId)
+    {
+        Invoice::where('company_id', $companyId)->get()->each(function ($invoice) {
+            $invoice->fromXero = true;
+            $invoice->delete();
+        });
+
+        InvoiceBatch::where('company_id', $companyId)->get()->each(function ($batch) {
+            $batch->delete();
+        });
+    }
+
+
     public function update($id, Request $request)
     {
         if ($this->checkIfExists($request->input('invoiceNumber'), $request->input('supplierId'), $id)) {
@@ -110,7 +207,7 @@ class InvoiceApiController extends ResourceApiController
         $invoice->setSupplier($supplier);
         $invoice->setDate(new DateTime($request->input('date')));
         $invoice->setInvoiceNumber($request->input('invoiceNumber'));
-        $invoice->setAmount($request->input('amount'));
+        $invoice->setAmount($request->input('total'));
         $invoice->setDescription($request->input('description'));
         $invoice->save();
         return $this->getResource($invoice);
@@ -138,12 +235,21 @@ class InvoiceApiController extends ResourceApiController
                     throw new GeneralApiException("Invoice: {$item['invoiceNumber']} already exis1ts!");
                 }
             }
+            $currency = Currency::find($item['currencyId']);
+            if (!$currency || $currency->code !== 'SGD') {
+                throw new GeneralApiException('Currency input is missing or not SGD!');
+            }
             $supplier = Supplier::find($item['supplierId']);
+
+            if (!$supplier->getAccount()) {
+                throw new GeneralApiException('Update '.$supplier->name.' Xero account.');
+            }
             $detail->setSupplier($supplier);
             $detail->setDate(new DateTime($item['date']));
             $detail->setInvoiceNumber($item['invoiceNumber']);
-            $detail->setAmount($item['amount']);
+            $detail->setTotal($item['amount']);
             $detail->setDescription($item['description']);
+            $detail->setCurrency($currency);
             $detail->setCompany($request->user()->getActiveCompany());
             return $detail;
         }, $request->input('invoices.data'));

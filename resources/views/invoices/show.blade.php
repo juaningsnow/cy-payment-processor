@@ -14,6 +14,8 @@
                     <div class="card-header">
                         <a v-if="!form.isGenerated" href="{{route('invoice_edit', $id)}}">
                             <button type="button" class="btn btn-info"><i class="fas fa-edit"></i></button></a>
+                        <button type="button" @click="refreshAttachments" class="btn btn-info">Refresh
+                            Attachments</button>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                 <i class="fas fa-minus"></i>

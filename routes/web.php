@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\DownloadMediaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceBatchController;
@@ -63,6 +64,13 @@ Route::prefix('companies')->group(function () {
     Route::get('/{id}', [CompanyController::class, 'show'])->name('company_show');
     Route::get('/{id}/edit', [CompanyController::class, 'edit'])->name('company_edit');
 });
+
+// Route::prefix('currencies')->group(function () {
+//     Route::get('/', [CurrencyController::class, 'index'])->name('currencies');
+//     Route::get('/create', [CurrencyController::class, 'create'])->name('currency_create');
+//     Route::get('/{id}', [CurrencyController::class, 'show'])->name('currency_show');
+//     Route::get('/{id}/edit', [CurrencyController::class, 'edit'])->name('currency_edit');
+// });
 
 
 Route::prefix('invoice-batches')->group(function () {

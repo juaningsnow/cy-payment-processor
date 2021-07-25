@@ -43,6 +43,7 @@
                     is="invoice"
                     :key="detail.id"
                     :supplier-selections="supplierSelections"
+                    :currency-selections="currencySelections"
                     :detail="detail"
                     :is-show="isShow"
                     :index="index"
@@ -114,6 +115,8 @@ export default {
             }),
             supplierSelections: [],
             suppliersInitialized: false,
+            currencySelections: [],
+            currenciesInitialized: false,
             dataInitialized: true,
             counter: -1,
         };
@@ -125,6 +128,12 @@ export default {
             .then((response) => {
                 this.supplierSelections = response.data;
                 this.suppliersInitialized = true;
+                this.form
+                    .get(`/api/currencies?limit=${Number.MAX_SAFE_INTEGER}`)
+                    .then((response) => {
+                        this.currencySelections = response.data;
+                        this.currenciesInitialized = true;
+                    });
             });
     },
 
@@ -161,8 +170,9 @@ export default {
                 supplierId: null,
                 date: moment().toString(),
                 invoiceNumber: "",
-                amount: 0.0,
+                total: 0.0,
                 description: "",
+                currencyId: null,
             });
         },
     },
@@ -175,7 +185,11 @@ export default {
 
     computed: {
         initializationComplete() {
-            return this.dataInitialized && this.suppliersInitialized;
+            return (
+                this.dataInitialized &&
+                this.suppliersInitialized &&
+                this.currenciesInitialized
+            );
         },
         totalAmount() {
             return this.form.invoices.data.reduce((prev, curr) => {

@@ -64,6 +64,14 @@
             </p>
         </a>
     </li>
+    {{-- <li class="nav-item">
+        <a href="{{route('currencies')}}" class="nav-link">
+    <i class="nav-icon fas fa-money-bill-wave"></i>
+    <p>
+        Currencies
+    </p>
+    </a>
+    </li> --}}
     @endif
 
     <li class="nav-item">

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountApiController;
 use App\Http\Controllers\BankApiController;
 use App\Http\Controllers\CompanyApiController;
+use App\Http\Controllers\CurrencyApiController;
 use App\Http\Controllers\InvoiceApiController;
 use App\Http\Controllers\InvoiceBatchApiController;
 use App\Http\Controllers\InvoiceBatchDetailApiController;
@@ -50,6 +51,14 @@ Route::prefix('suppliers')->group(function () {
     Route::delete('{id}', [SupplierApiController::class, 'destroy']);
 });
 
+Route::prefix('currencies')->group(function () {
+    Route::get('/', [CurrencyApiController::class, 'index']);
+    Route::get('{id}', [CurrencyApiController::class, 'show']);
+    Route::post('/', [CurrencyApiController::class, 'store']);
+    Route::patch('{id}', [CurrencyApiController::class, 'update']);
+    Route::delete('{id}', [CurrencyApiController::class, 'destroy']);
+});
+
 Route::prefix('companies')->group(function () {
     Route::get('/', [CompanyApiController::class, 'index']);
     Route::get('{id}', [CompanyApiController::class, 'show']);
@@ -59,6 +68,7 @@ Route::prefix('companies')->group(function () {
     Route::post('revoke', [CompanyApiController::class, 'revokeApiConnection']);
     Route::patch('{id}', [CompanyApiController::class, 'update']);
     Route::patch('/attach-bank/{id}', [CompanyApiController::class, 'addBank']);
+    Route::patch('/refresh-currencies/{id}', [CompanyApiController::class, 'refreshCurrencies']);
     Route::patch('/update/{id}/{bankId}', [CompanyApiController::class, 'updateBank']);
     Route::delete('{id}', [CompanyApiController::class, 'destroy']);
 });
@@ -70,10 +80,12 @@ Route::prefix('invoices')->group(function () {
     Route::post('/', [InvoiceApiController::class, 'storeMultipleInvoice']);
     Route::post('/pay', [InvoiceApiController::class, 'markAsPaid']);
     Route::post('{id}/upload', [InvoiceApiController::class, 'uploadAttachment']);
+    Route::post('/refresh-invoices', [InvoiceApiController::class, 'refreshInvoices']);
     // Route::post('{id}/attachment', [InvoiceApiController::class, 'addAttachment']);
     Route::post('destroy-multiple', [InvoiceApiController::class, 'destroyMultiple']);
     // Route::patch('remove-attachment/{id}', [InvoiceApiController::class, 'removeAttachment']);
     Route::patch('{id}', [InvoiceApiController::class, 'update']);
+    Route::patch('refresh-attachments/{id}', [InvoiceApiController::class, 'refreshAttachments']);
     Route::delete('{id}', [InvoiceApiController::class, 'destroy']);
 });
 

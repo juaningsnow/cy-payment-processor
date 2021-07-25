@@ -19,6 +19,7 @@ class CreateInvoiceBatchDetailsTable extends Migration
             $table->foreign('invoice_batch_id')->references('id')->on('invoice_batches')->onDelete('cascade');
             $table->bigInteger('invoice_id')->unsigned();
             $table->foreign('invoice_id')->references('id')->on('invoices');
+            $table->decimal('amount', 15, 2);
             $table->timestamps();
         });
     }

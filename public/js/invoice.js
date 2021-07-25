@@ -38000,35 +38000,48 @@ new vue__WEBPACK_IMPORTED_MODULE_8__.default({
         });
       });
     },
+    refreshAttachments: function refreshAttachments() {
+      var _this2 = this;
+
+      this.form.patch("/api/invoices/refresh-attachments/".concat(this.form.id)).then(function (response) {
+        _this2.$swal({
+          title: "attachments refreshed!",
+          text: "Changes saved to database.",
+          type: "success"
+        }).then(function () {
+          return window.location = "/invoices/" + id;
+        });
+      });
+    },
     loadData: function loadData(data) {
       this.form = new _components_Form__WEBPACK_IMPORTED_MODULE_0__.Form(data);
     },
     reloadData: function reloadData(id) {
-      var _this2 = this;
+      var _this3 = this;
 
       this.dataInitialized = false;
       this.form.get("/api/invoices/" + id + "?include=supplier,media,invoiceXeroAttachments").then(function (response) {
-        _this2.loadData(response.data);
+        _this3.loadData(response.data);
 
-        _this2.dataInitialized = true;
+        _this3.dataInitialized = true;
       });
     },
     removeFile: function removeFile(id) {
-      var _this3 = this;
+      var _this4 = this;
 
       this.form.patch("/api/invoices/remove-attachment/".concat(id)).then(function (response) {
-        _this3.$swal({
+        _this4.$swal({
           title: "File Deleted!",
           text: "Changes saved to database.",
           type: "success"
         }).then(function () {
-          _this3.reloadData(_this3.form.id);
+          _this4.reloadData(_this4.form.id);
         });
       });
     }
   },
   created: function created() {
-    var _this4 = this;
+    var _this5 = this;
 
     if (id != null) {
       this.isEdit = true;
@@ -38036,8 +38049,8 @@ new vue__WEBPACK_IMPORTED_MODULE_8__.default({
     }
 
     this.form.get("/api/suppliers?limit=".concat(Number.MAX_SAFE_INTEGER)).then(function (response) {
-      _this4.supplierSelections = response.data;
-      _this4.suppliersInitialized = true;
+      _this5.supplierSelections = response.data;
+      _this5.suppliersInitialized = true;
     });
     this.isShow = typeof isShow !== "undefined" ? isShow : false;
   }

@@ -20,6 +20,7 @@ mix.copy('node_modules/admin-lte/node_modules/select2/dist/js/select2.full.js', 
     .js(`resources/js/invoice.js`, "public/js")
     .js(`resources/js/dashboard.js`, "public/js")
     .js(`resources/js/company.js`, "public/js")
+    .js(`resources/js/currency.js`, "public/js")
     .js(`resources/js/user.js`, "public/js")
     .js(`resources/js/xero.js`, "public/js")
     // .js(`resources/js/summary.js`, "public/js")

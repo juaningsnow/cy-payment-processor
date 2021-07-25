@@ -58,14 +58,27 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="xeroAccountCode">Xero Account Code</label>
-                        <input
-                            id="xeroAccountCode"
-                            type="text"
-                            class="form-control"
-                            v-model="form.xeroAccountCode"
-                            placeholder="Account Number"
-                        />
+                        <label for="xeroAccount">Xero Account</label>
+                        <select
+                            class="form-control select2"
+                            v-model="form.accountId"
+                            style="width: 100%"
+                        >
+                            <option
+                                selected="selected"
+                                disabled
+                                :value="nullValue"
+                            >
+                                -Select Account-
+                            </option>
+                            <option
+                                v-for="(item, index) in accountSelections"
+                                :key="index"
+                                :value="item.id"
+                            >
+                                {{ item.name }} ({{ item.code }})
+                            </option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -92,11 +105,13 @@ export default {
             form: new Form({
                 bankId: null,
                 accountNumber: null,
-                xeroAccountCode: null,
+                accountId: null,
             }),
             nullValue: null,
             bankSelections: [],
             banksInitialized: false,
+            accountSelections: [],
+            accountsInitialized: false,
             dataInitialized: true,
         };
     },
@@ -105,6 +120,12 @@ export default {
         this.form.get(`/api/banks/user`).then((response) => {
             this.bankSelections = response.data;
             this.banksInitialized = true;
+            this.form
+                .get(`/api/accounts?limit=${Number.MAX_SAFE_INTEGER}`)
+                .then((response) => {
+                    this.accountSelections = response.data;
+                    this.accountsInitialized = true;
+                });
         });
     },
 
@@ -144,7 +165,11 @@ export default {
 
     computed: {
         initializationComplete() {
-            return this.dataInitialized && this.banksInitialized;
+            return (
+                this.dataInitialized &&
+                this.banksInitialized &&
+                this.accountsInitialized
+            );
         },
     },
 };

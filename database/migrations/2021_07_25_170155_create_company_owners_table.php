@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddCodeOnCompanyBanksTable extends Migration
+class CreateCompanyOwnersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class AddCodeOnCompanyBanksTable extends Migration
      */
     public function up()
     {
-        Schema::table('company_banks', function (Blueprint $table) {
-            $table->string('xero_account_code')->nullable();
+        Schema::create('company_owners', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->foreignId('company_id');
+            $table->foreignId('account_id');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +29,6 @@ class AddCodeOnCompanyBanksTable extends Migration
      */
     public function down()
     {
-        Schema::table('company_banks', function (Blueprint $table) {
-            $table->dropColumn('xero_account_code');
-        });
+        Schema::dropIfExists('company_owners');
     }
 }

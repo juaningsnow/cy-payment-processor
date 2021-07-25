@@ -33,6 +33,7 @@ new Vue({
             username: null,
             email: null,
             password: null,
+            userCompanies: { data: [] },
             isAdmin: false,
         }),
         nullValue: null,
@@ -116,12 +117,12 @@ new Vue({
                     .get(
                         "/api/user-management/" + id + "?include=userCompanies.company"
                     ).then(response => {
+                        console.log(response);
                         this.loadData(response.data);
                         this.dataInitialized = true;
                     });
             }
         }).catch(error => {
-            console.log(error);
             this.companyInitialized = true;
         });
         this.isShow = typeof isShow !== "undefined" ? isShow : false;

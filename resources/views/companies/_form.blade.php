@@ -7,38 +7,14 @@
     <label for="name">Name</label>
     <input type="text" :disabled="isShow" class="form-control" placeholder="Name" v-model="form.name">
 </div>
-
-<div v-if="isShow">
-    <hr>
-    <h5>Banks</h5>
-    <div class="row">
-        <table class="table table-simple">
-            <thead>
-                <tr>
-                    <th>Bank</th>
-                    <th>Account Number</th>
-                    <th>Xero Account Code</th>
-                    <th>Default</th>
-                    <th>Remove</>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="companyBank in form.companyBanks.data" is="company-bank-row" :company-id="form.id"
-                    :company-bank="companyBank" @remove-bank="removeBank" @reload-data="load">
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="5">
-                        <add-bank-modal :company-id="form.id" v-if="showBankModal" @close="showBankModal = false"
-                            @reload-data="load">
-                        </add-bank-modal>
-                        <button type="button" @click="showBankModal = true" class="btn btn-success btn-sm">Add
-                            Bank</button>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-
-    </div>
+<div class="form-group">
+    <label for="cashAccount">Xero Cash Account</label>
+    <select class="form-control select2" :disabled="isShow" v-model="form.cashAccountId" style="width: 100%">
+        <option selected="selected" disabled :value="nullValue">
+            -Select Account-
+        </option>
+        <option v-for="(item, index) in accountSelections" :key="index" :value="item.id">
+            @{{ item.name }} (@{{ item.code }})
+        </option>
+    </select>
 </div>

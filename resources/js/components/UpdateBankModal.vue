@@ -59,14 +59,27 @@
                 </div>
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="xeroAccountCode">Xero Account Code</label>
-                        <input
-                            id="xeroAccountCode"
-                            type="text"
-                            class="form-control"
-                            v-model="form.xeroAccountCode"
-                            placeholder="Account Number"
-                        />
+                        <label for="xeroAccount">Xero Account</label>
+                        <select
+                            class="form-control select2"
+                            v-model="form.accountId"
+                            style="width: 100%"
+                        >
+                            <option
+                                selected="selected"
+                                disabled
+                                :value="nullValue"
+                            >
+                                -Select Account-
+                            </option>
+                            <option
+                                v-for="(item, index) in accountSelections"
+                                :key="index"
+                                :value="item.id"
+                            >
+                                {{ item.name }} ({{ item.code }})
+                            </option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -97,7 +110,7 @@ export default {
             form: new Form({
                 bankId: this.companyBank.bankId,
                 accountNumber: this.companyBank.accountNumber,
-                xeroAccountCode: this.companyBank.xeroAccountCode,
+                accountId: this.companyBank.accountId,
             }),
             nullValue: null,
             bankSelections: [],
@@ -110,6 +123,12 @@ export default {
         this.form.get(`/api/banks/user`).then((response) => {
             this.bankSelections = response.data;
             this.banksInitialized = true;
+            this.form
+                .get(`/api/accounts?limit=${Number.MAX_SAFE_INTEGER}`)
+                .then((response) => {
+                    this.accountSelections = response.data;
+                    this.accountsInitialized = true;
+                });
         });
     },
 

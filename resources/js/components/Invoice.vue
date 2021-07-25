@@ -59,7 +59,7 @@
         </tr>
         <tr>
             <td>Remarks:</td>
-            <td colspan="3">
+            <td>
                 <input
                     type="text"
                     :disabled="isShow"
@@ -67,6 +67,26 @@
                     placeholder="Remarks"
                     v-model="detail.description"
                 />
+            </td>
+            <td>Currency:</td>
+            <td>
+                <select
+                    class="form-control select2"
+                    v-model="detail.currencyId"
+                    style="width: 100%"
+                    :disabled="isShow"
+                >
+                    <option selected="selected" disabled :value="null">
+                        -Select Currency-
+                    </option>
+                    <option
+                        v-for="(item, index) in currencySelections"
+                        :key="index"
+                        :value="item.id"
+                    >
+                        {{ item.code }}
+                    </option>
+                </select>
             </td>
         </tr>
     </tbody>
@@ -90,6 +110,10 @@ export default {
             default: false,
         },
         supplierSelections: {
+            type: Array,
+            default: [],
+        },
+        currencySelections: {
             type: Array,
             default: [],
         },

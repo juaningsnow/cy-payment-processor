@@ -20,4 +20,9 @@ class CompanyBank extends Model
     {
         return $this->belongsTo(Bank::class, 'bank_id');
     }
+
+    public function account()
+    {
+        return $this->belongsTo(Account::class, 'account_id');
+    }
 }

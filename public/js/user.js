@@ -18222,6 +18222,9 @@ new vue__WEBPACK_IMPORTED_MODULE_4__.default({
       username: null,
       email: null,
       password: null,
+      userCompanies: {
+        data: []
+      },
       isAdmin: false
     }),
     nullValue: null,
@@ -18305,13 +18308,14 @@ new vue__WEBPACK_IMPORTED_MODULE_4__.default({
         _this3.isEdit = true;
 
         _this3.form.get("/api/user-management/" + id + "?include=userCompanies.company").then(function (response) {
+          console.log(response);
+
           _this3.loadData(response.data);
 
           _this3.dataInitialized = true;
         });
       }
     })["catch"](function (error) {
-      console.log(error);
       _this3.companyInitialized = true;
     });
     this.isShow = typeof isShow !== "undefined" ? isShow : false;

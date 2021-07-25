@@ -42,8 +42,13 @@
                                 </a>
                             </th>
                             <th class="text-right">
-                                <a v-on:click="setSorter('amount')">
-                                    Amount <i class="fa" :class="getSortIcon('name')"></i>
+                                <a v-on:click="setSorter('amount_paid')">
+                                    Amount Paid <i class="fa" :class="getSortIcon('amount_paid')"></i>
+                                </a>
+                            </th>
+                            <th class="text-right">
+                                <a v-on:click="setSorter('amount_due')">
+                                    Amount Due <i class="fa" :class="getSortIcon('amount_due')"></i>
                                 </a>
                             </th>
                             <th class="text-center">Action</th>
@@ -63,7 +68,8 @@
                                     class="badge badge-danger">@{{item.status}}</span>
                                 <span v-else class="badge badge-success">@{{item.status}}</span>
                             </td>
-                            <td class="text-right">@{{item.amount | numeric}}</td>
+                            <td class="text-right">@{{item.amountPaid | numeric}}</td>
+                            <td class="text-right">@{{item.amountDue | numeric}}</td>
                             <td class="text-center">
                                 <div class="btn-group">
                                     <a :href="item.showUrl"><button type="button" class="btn btn-default"><i

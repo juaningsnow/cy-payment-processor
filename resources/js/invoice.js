@@ -85,6 +85,17 @@ new Vue({
                 }).then(() => (window.location = "/invoices/" + id));
             });
         },
+
+        refreshAttachments() {
+            this.form.patch(`/api/invoices/refresh-attachments/${this.form.id}`).then(response => {
+                this.$swal({
+                    title: "attachments refreshed!",
+                    text: "Changes saved to database.",
+                    type: "success"
+                }).then(() => (window.location = "/invoices/" + id));
+            });
+        },
+
         loadData(data) {
             this.form = new Form(data);
         },

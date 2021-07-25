@@ -28,7 +28,7 @@
                 <span class="badge badge-danger">Disconnected</span>
             </div>
             <div class="row">
-                <a target="_blank" href="{{$authUrl}}">Click Here to Connect</a>
+                <a href="{{$authUrl}}">Click Here to Connect</a>
             </div>
             @endif
 

@@ -35,6 +35,10 @@ class InvoiceBatch extends BaseModel
                 $xeroInterpreter->cancelBatchPayment($model);
             }
         });
+
+        static::deleting(function ($model) use ($xeroInterpreter) {
+                $xeroInterpreter->cancelBatchPayment($model);
+        });
     }
 
     public function supplier()

@@ -74,6 +74,18 @@ new Vue({
             this.allSelected = !this.allSelected;
         },
 
+        refreshInvoices() {
+            this.form.confirm('This will delete all the invoices in your active company and will retrieve outstanding invoices from Xero').then(response => {
+                if (response.value) {
+                    this.form.post(`/api/invoices/refresh-invoices`).then(response => {
+                        this.form.successModal('Invoices has been refreshed').then(() =>
+                            window.location = `/invoices`
+                        );
+                    })
+                }
+            });
+        },
+
         markAsPaid() {
             this.form.selected = this.selected;
             this.$swal({

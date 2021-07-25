@@ -4,6 +4,7 @@ namespace App\Http\Interpreters;
 
 use App\Http\Interpreters\Traits\AccountsTrait;
 use App\Http\Interpreters\Traits\ContactsTrait;
+use App\Http\Interpreters\Traits\CurrencyTrait;
 use App\Http\Interpreters\Traits\InvoicesTrait;
 use App\Http\Interpreters\Traits\PaymentTrait;
 use App\Models\Account;
@@ -17,6 +18,7 @@ class XeroInterpreter
     use InvoicesTrait;
     use AccountsTrait;
     use PaymentTrait;
+    use CurrencyTrait;
 
     protected $tokenUrl = 'https://identity.xero.com/connect/token';
     protected $authorizationUrl = 'https://login.xero.com/identity/connect/authorize';

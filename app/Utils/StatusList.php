@@ -17,6 +17,7 @@ class StatusList
     const GENERATED_AND_PAID = 'Generated and Paid';
     const BATCHED = 'Batched';
     const PAID = 'Paid';
+    const PARTIALLY_PAID = 'Partially Paid';
 
     const INVOICE_STATUS_LIST = [
         self::UNPAID, self::GENERATED, self::BATCHED, self::PAID

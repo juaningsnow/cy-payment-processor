@@ -6,11 +6,15 @@ use App\Http\Interpreters\XeroInterpreter;
 use App\Http\Resources\CompanyBankResource;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\CompanyResourceCollection;
+use App\Models\Account;
 use App\Models\Company;
 use App\Models\CompanyBank;
+use App\Models\CompanyOwner;
+use App\Models\Currency;
 use App\Models\Invoice;
 use App\Models\InvoiceBatch;
 use BaseCode\Common\Controllers\ResourceApiController;
+use BaseCode\Common\Exceptions\GeneralApiException;
 use Illuminate\Http\Request;
 
 class CompanyApiController extends ResourceApiController
@@ -35,25 +39,59 @@ class CompanyApiController extends ResourceApiController
         return new CompanyResourceCollection($items);
     }
 
+    public function refreshCurrencies($id,Request $request)
+    {
+        $company = Company::find($id);
+        $xeroInterpreter = resolve(XeroInterpreter::class);
+        $xeroInterpreter->seedCurrencies($company);
+        return response('success', 200);
+    }
+
     public function store(Request $request)
     {
         $company = new Company;
         $company->name = $request->input('name');
+        $company->cash_account_id = $request->input('cashAccountId');
+        $company->setCompanyOwners($this->getCompanyOwners($request));
         $company->save();
+        $company->companyOwners()->sync($company->getCompanyOwners());
         return $this->getResource($company);
+    }
+
+    private function getCompanyOwners(Request $request)
+    {
+        return array_map(function ($item) {
+            if (isset($item['id']) || $item['id'] < 0) {
+                $detail = new CompanyOwner();
+            } else {
+                $detail = CompanyOwner::find($item['id']);
+            }
+            $detail->name = $item['name'];
+            $detail->account_id = $item['accountId'];
+            return $detail;
+        }, $request->input('companyOwners.data'));
     }
 
     public function update($id, Request $request)
     {
         $company = Company::find($id);
         $company->name = $request->input('name');
+        $company->cash_account_id = $request->input('cashAccountId');
+        $company->setCompanyOwners($this->getCompanyOwners($request));
         $company->save();
+        $company->companyOwners()->sync($company->getCompanyOwners());
         return $this->getResource($company);
     }
 
     public function destroy($id)
     {
         $company = Company::find($id);
+        if ($company->isXeroConnected()) {
+            throw new GeneralApiException('Cannot Delete Company that has an active xero connection');
+        }
+        if ($company->hasUsers()) {
+            throw new GeneralApiException('Cannot Delete Company that is connected to a user');
+        }
         $company->delete();
         return response('success', 200);
     }
@@ -65,7 +103,7 @@ class CompanyApiController extends ResourceApiController
             $tempCompany->banks()->attach([
                 $request->input('bankId') => [
                     'account_number' => $request->input("accountNumber"),
-                    'xero_account_code' => $request->input("xeroAccountCode")
+                    'account_id' => $request->input("accountId")
                 ]
             ]);
             return $tempCompany;
@@ -112,23 +150,23 @@ class CompanyApiController extends ResourceApiController
         $company->auth_event_id = null;
         $company->xero_tenant_id = null;
         $company->save();
-        $this->archiveCompanyData($company->id);
+        $this->deleteCompanyData($company->id);
         return response('success', 200);
     }
+    
 
-    private function archiveCompanyData($companyId)
+    private function deleteCompanyData($companyId)
     {
         Invoice::where('company_id', $companyId)->get()->each(function ($invoice) {
-            $invoice->invoice_number = $invoice->invoice_number.'arch'.today()->format('dmYHis');
-            $invoice->archived = true;
-            $invoice->save();
+            $invoice->fromXero = true;
+            $invoice->delete();
         });
 
-        InvoiceBatch::where('company_id', $companyId)->get()->each(function ($batch) {
-            $batch->batch_name = $batch->batch_name.'arch'.today()->format('dmYHis');
-            $batch->archived = true;
-            $batch->save();
-        });
+        InvoiceBatch::where('company_id', $companyId)->delete();
+
+        Account::where('company_id', $companyId)->delete();
+
+        Currency::where('company_id', $companyId)->delete();
     }
 
     public function updateBank($id, $bankId, Request $request)
@@ -136,7 +174,7 @@ class CompanyApiController extends ResourceApiController
         $companyBank = \DB::transaction(function () use ($id, $bankId, $request) {
             $companyBank = CompanyBank::where('company_id', $id)->where('bank_id', $bankId)->first();
             $companyBank->account_number = $request->input('accountNumber');
-            $companyBank->xero_account_code = $request->input('xeroAccountCode');
+            $companyBank->account_id = $request->input('accountId');
             $companyBank->save();
             return $companyBank;
         });

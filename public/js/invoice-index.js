@@ -2811,6 +2811,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -2828,6 +2848,10 @@ __webpack_require__.r(__webpack_exports__);
       "default": false
     },
     supplierSelections: {
+      type: Array,
+      "default": []
+    },
+    currencySelections: {
       type: Array,
       "default": []
     }
@@ -3060,6 +3084,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -3089,6 +3114,8 @@ __webpack_require__.r(__webpack_exports__);
       }),
       supplierSelections: [],
       suppliersInitialized: false,
+      currencySelections: [],
+      currenciesInitialized: false,
       dataInitialized: true,
       counter: -1
     };
@@ -3099,6 +3126,11 @@ __webpack_require__.r(__webpack_exports__);
     this.form.get("/api/suppliers?limit=".concat(Number.MAX_SAFE_INTEGER)).then(function (response) {
       _this.supplierSelections = response.data;
       _this.suppliersInitialized = true;
+
+      _this.form.get("/api/currencies?limit=".concat(Number.MAX_SAFE_INTEGER)).then(function (response) {
+        _this.currencySelections = response.data;
+        _this.currenciesInitialized = true;
+      });
     });
   },
   methods: {
@@ -3133,8 +3165,9 @@ __webpack_require__.r(__webpack_exports__);
         supplierId: null,
         date: moment__WEBPACK_IMPORTED_MODULE_3___default()().toString(),
         invoiceNumber: "",
-        amount: 0.0,
-        description: ""
+        total: 0.0,
+        description: "",
+        currencyId: null
       });
     }
   },
@@ -3145,7 +3178,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     initializationComplete: function initializationComplete() {
-      return this.dataInitialized && this.suppliersInitialized;
+      return this.dataInitialized && this.suppliersInitialized && this.currenciesInitialized;
     },
     totalAmount: function totalAmount() {
       return this.form.invoices.data.reduce(function (prev, curr) {
@@ -30485,7 +30518,7 @@ var render = function() {
     _c("tr", [
       _c("td", [_vm._v("Remarks:")]),
       _vm._v(" "),
-      _c("td", { attrs: { colspan: "3" } }, [
+      _c("td", [
         _c("input", {
           directives: [
             {
@@ -30507,6 +30540,73 @@ var render = function() {
             }
           }
         })
+      ]),
+      _vm._v(" "),
+      _c("td", [_vm._v("Currency:")]),
+      _vm._v(" "),
+      _c("td", [
+        _c(
+          "select",
+          {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.detail.currencyId,
+                expression: "detail.currencyId"
+              }
+            ],
+            staticClass: "form-control select2",
+            staticStyle: { width: "100%" },
+            attrs: { disabled: _vm.isShow },
+            on: {
+              change: function($event) {
+                var $$selectedVal = Array.prototype.filter
+                  .call($event.target.options, function(o) {
+                    return o.selected
+                  })
+                  .map(function(o) {
+                    var val = "_value" in o ? o._value : o.value
+                    return val
+                  })
+                _vm.$set(
+                  _vm.detail,
+                  "currencyId",
+                  $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                )
+              }
+            }
+          },
+          [
+            _c(
+              "option",
+              {
+                attrs: { selected: "selected", disabled: "" },
+                domProps: { value: null }
+              },
+              [
+                _vm._v(
+                  "\n                    -Select Currency-\n                "
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _vm._l(_vm.currencySelections, function(item, index) {
+              return _c(
+                "option",
+                { key: index, domProps: { value: item.id } },
+                [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(item.code) +
+                      "\n                "
+                  )
+                ]
+              )
+            })
+          ],
+          2
+        )
       ])
     ])
   ])
@@ -30783,6 +30883,7 @@ var render = function() {
                       tag: "tbody",
                       attrs: {
                         "supplier-selections": _vm.supplierSelections,
+                        "currency-selections": _vm.currencySelections,
                         detail: detail,
                         "is-show": _vm.isShow,
                         index: index
@@ -46811,8 +46912,21 @@ new vue__WEBPACK_IMPORTED_MODULE_5__.default({
 
       this.allSelected = !this.allSelected;
     },
-    markAsPaid: function markAsPaid() {
+    refreshInvoices: function refreshInvoices() {
       var _this2 = this;
+
+      this.form.confirm('This will delete all the invoices in your active company and will retrieve outstanding invoices from Xero').then(function (response) {
+        if (response.value) {
+          _this2.form.post("/api/invoices/refresh-invoices").then(function (response) {
+            _this2.form.successModal('Invoices has been refreshed').then(function () {
+              return window.location = "/invoices";
+            });
+          });
+        }
+      });
+    },
+    markAsPaid: function markAsPaid() {
+      var _this3 = this;
 
       this.form.selected = this.selected;
       this.$swal({
@@ -46835,21 +46949,21 @@ new vue__WEBPACK_IMPORTED_MODULE_5__.default({
         },
         showCancelButton: true
       }).then(function (response) {
-        _this2.form.paidBy = response.value;
+        _this3.form.paidBy = response.value;
 
-        _this2.form.post("/api/invoices/pay").then(function (response) {
-          _this2.$swal({
+        _this3.form.post("/api/invoices/pay").then(function (response) {
+          _this3.$swal({
             title: "Invoices Updated!",
             text: "Invoices has been marked as paid",
             type: "success"
           }).then(function () {
-            _this2.reloadData();
+            _this3.reloadData();
 
-            _this2.close();
+            _this3.close();
           });
         });
       })["catch"](function (error) {
-        _this2.$swal({
+        _this3.$swal({
           title: "Error",
           text: error,
           type: "error"
@@ -46886,22 +47000,22 @@ new vue__WEBPACK_IMPORTED_MODULE_5__.default({
       };
     },
     destroy: function destroy(url, redirectUrl) {
-      var _this3 = this;
+      var _this4 = this;
 
       this.form.deleteWithConfirmation(url).then(function (response) {
-        _this3.form.successModal('Item has been removed').then(function () {
+        _this4.form.successModal('Item has been removed').then(function () {
           return window.location = redirectUrl;
         });
       });
     },
     deleteAll: function deleteAll() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.form.selected = this.selected;
       this.form.confirm().then(function (response) {
         if (response.value) {
-          _this4.form.post("/api/invoices/destroy-multiple").then(function (response) {
-            _this4.form.successModal('Items has been removed').then(function () {
+          _this5.form.post("/api/invoices/destroy-multiple").then(function (response) {
+            _this5.form.successModal('Items has been removed').then(function () {
               return window.location = "/invoices";
             });
           });

@@ -1921,6 +1921,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -1939,11 +1952,13 @@ __webpack_require__.r(__webpack_exports__);
       form: new _Form__WEBPACK_IMPORTED_MODULE_1__.Form({
         bankId: null,
         accountNumber: null,
-        xeroAccountCode: null
+        accountId: null
       }),
       nullValue: null,
       bankSelections: [],
       banksInitialized: false,
+      accountSelections: [],
+      accountsInitialized: false,
       dataInitialized: true
     };
   },
@@ -1953,6 +1968,11 @@ __webpack_require__.r(__webpack_exports__);
     this.form.get("/api/banks/user").then(function (response) {
       _this.bankSelections = response.data;
       _this.banksInitialized = true;
+
+      _this.form.get("/api/accounts?limit=".concat(Number.MAX_SAFE_INTEGER)).then(function (response) {
+        _this.accountSelections = response.data;
+        _this.accountsInitialized = true;
+      });
     });
   },
   methods: {
@@ -1989,7 +2009,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     initializationComplete: function initializationComplete() {
-      return this.dataInitialized && this.banksInitialized;
+      return this.dataInitialized && this.banksInitialized && this.accountsInitialized;
     }
   }
 });
@@ -2322,6 +2342,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -2344,7 +2377,7 @@ __webpack_require__.r(__webpack_exports__);
       form: new _Form__WEBPACK_IMPORTED_MODULE_1__.Form({
         bankId: this.companyBank.bankId,
         accountNumber: this.companyBank.accountNumber,
-        xeroAccountCode: this.companyBank.xeroAccountCode
+        accountId: this.companyBank.accountId
       }),
       nullValue: null,
       bankSelections: [],
@@ -2358,6 +2391,11 @@ __webpack_require__.r(__webpack_exports__);
     this.form.get("/api/banks/user").then(function (response) {
       _this.bankSelections = response.data;
       _this.banksInitialized = true;
+
+      _this.form.get("/api/accounts?limit=".concat(Number.MAX_SAFE_INTEGER)).then(function (response) {
+        _this.accountSelections = response.data;
+        _this.accountsInitialized = true;
+      });
     });
   },
   methods: {
@@ -6502,39 +6540,75 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "col-6" }, [
                   _c("div", { staticClass: "form-group" }, [
-                    _c("label", { attrs: { for: "xeroAccountCode" } }, [
-                      _vm._v("Xero Account Code")
+                    _c("label", { attrs: { for: "xeroAccount" } }, [
+                      _vm._v("Xero Account")
                     ]),
                     _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.form.xeroAccountCode,
-                          expression: "form.xeroAccountCode"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: {
-                        id: "xeroAccountCode",
-                        type: "text",
-                        placeholder: "Account Number"
-                      },
-                      domProps: { value: _vm.form.xeroAccountCode },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.accountId,
+                            expression: "form.accountId"
                           }
-                          _vm.$set(
-                            _vm.form,
-                            "xeroAccountCode",
-                            $event.target.value
-                          )
+                        ],
+                        staticClass: "form-control select2",
+                        staticStyle: { width: "100%" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.form,
+                              "accountId",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
                         }
-                      }
-                    })
+                      },
+                      [
+                        _c(
+                          "option",
+                          {
+                            attrs: { selected: "selected", disabled: "" },
+                            domProps: { value: _vm.nullValue }
+                          },
+                          [
+                            _vm._v(
+                              "\n                            -Select Account-\n                        "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _vm._l(_vm.accountSelections, function(item, index) {
+                          return _c(
+                            "option",
+                            { key: index, domProps: { value: item.id } },
+                            [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(item.name) +
+                                  " (" +
+                                  _vm._s(item.code) +
+                                  ")\n                        "
+                              )
+                            ]
+                          )
+                        })
+                      ],
+                      2
+                    )
                   ])
                 ])
               ])
@@ -6572,7 +6646,11 @@ var render = function() {
     _vm._v(" "),
     _c("td", [_vm._v(_vm._s(_vm.companyBank.accountNumber))]),
     _vm._v(" "),
-    _c("td", [_vm._v(_vm._s(_vm.companyBank.xeroAccountCode))]),
+    _c("td", [
+      _vm._v(
+        _vm._s(_vm.companyBank.account ? _vm.companyBank.account.code : "--")
+      )
+    ]),
     _vm._v(" "),
     _c("td", [
       _vm.companyBank.default
@@ -7047,39 +7125,75 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "col-6" }, [
                   _c("div", { staticClass: "form-group" }, [
-                    _c("label", { attrs: { for: "xeroAccountCode" } }, [
-                      _vm._v("Xero Account Code")
+                    _c("label", { attrs: { for: "xeroAccount" } }, [
+                      _vm._v("Xero Account")
                     ]),
                     _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.form.xeroAccountCode,
-                          expression: "form.xeroAccountCode"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: {
-                        id: "xeroAccountCode",
-                        type: "text",
-                        placeholder: "Account Number"
-                      },
-                      domProps: { value: _vm.form.xeroAccountCode },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.accountId,
+                            expression: "form.accountId"
                           }
-                          _vm.$set(
-                            _vm.form,
-                            "xeroAccountCode",
-                            $event.target.value
-                          )
+                        ],
+                        staticClass: "form-control select2",
+                        staticStyle: { width: "100%" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.$set(
+                              _vm.form,
+                              "accountId",
+                              $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            )
+                          }
                         }
-                      }
-                    })
+                      },
+                      [
+                        _c(
+                          "option",
+                          {
+                            attrs: { selected: "selected", disabled: "" },
+                            domProps: { value: _vm.nullValue }
+                          },
+                          [
+                            _vm._v(
+                              "\n                            -Select Account-\n                        "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _vm._l(_vm.accountSelections, function(item, index) {
+                          return _c(
+                            "option",
+                            { key: index, domProps: { value: item.id } },
+                            [
+                              _vm._v(
+                                "\n                            " +
+                                  _vm._s(item.name) +
+                                  " (" +
+                                  _vm._s(item.code) +
+                                  ")\n                        "
+                              )
+                            ]
+                          )
+                        })
+                      ],
+                      2
+                    )
                   ])
                 ])
               ])
@@ -19690,10 +19804,18 @@ new vue__WEBPACK_IMPORTED_MODULE_6__.default({
   data: {
     form: new _components_Form__WEBPACK_IMPORTED_MODULE_0__.Form({
       id: null,
-      name: ""
+      name: "",
+      companyOwners: {
+        data: []
+      },
+      cashAccountId: null
     }),
+    nullValue: null,
     showBankModal: false,
-    dataInitialized: true
+    dataInitialized: true,
+    accountSelections: [],
+    accountsInitialized: false,
+    counter: -1
   },
   watch: {
     initializationComplete: function initializationComplete(val) {
@@ -19706,11 +19828,33 @@ new vue__WEBPACK_IMPORTED_MODULE_6__.default({
     }
   },
   methods: {
-    store: function store() {
+    addOwner: function addOwner() {
+      this.form.companyOwners.data.push({
+        id: this.counter--,
+        name: "",
+        accountId: null
+      });
+    },
+    refreshCurrencies: function refreshCurrencies() {
       var _this = this;
 
-      this.form.post("/api/companies").then(function (response) {
+      this.form.patch("/api/companies/refresh-currencies/".concat(this.form.id)).then(function (response) {
         _this.$swal({
+          title: "Currencies refreshed!",
+          text: "",
+          type: "success"
+        }).then(function () {
+          return window.location = "/companies/".concat(_this.form.id);
+        });
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    store: function store() {
+      var _this2 = this;
+
+      this.form.post("/api/companies").then(function (response) {
+        _this2.$swal({
           title: "Company created!",
           text: "Company was saved.",
           type: "success"
@@ -19722,10 +19866,10 @@ new vue__WEBPACK_IMPORTED_MODULE_6__.default({
       });
     },
     update: function update() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.form.patch("/api/companies/" + this.form.id).then(function (response) {
-        _this2.$swal({
+        _this3.$swal({
           title: "Company updated!",
           text: "Changes saved to database.",
           type: "success"
@@ -19735,18 +19879,18 @@ new vue__WEBPACK_IMPORTED_MODULE_6__.default({
       });
     },
     makeDefault: function makeDefault(companyBank) {
-      var _this3 = this;
+      var _this4 = this;
 
       this.form.get("/api/companies/make-default/".concat(this.form.id, "/").concat(companyBank.bankId)).then(function (response) {
-        _this3.$swal({
+        _this4.$swal({
           title: "Bank was saved!",
           text: "Default Bank Changed.",
           type: "success"
         }).then(function () {
-          _this3.load();
+          _this4.load();
         });
       })["catch"](function (error) {
-        _this3.$swal({
+        _this4.$swal({
           title: "Error",
           text: error.message,
           type: "danger"
@@ -19754,7 +19898,7 @@ new vue__WEBPACK_IMPORTED_MODULE_6__.default({
       });
     },
     removeBank: function removeBank(companyBank) {
-      var _this4 = this;
+      var _this5 = this;
 
       if (companyBank["default"]) {
         this.$swal({
@@ -19764,15 +19908,15 @@ new vue__WEBPACK_IMPORTED_MODULE_6__.default({
         });
       } else {
         this.form.get("/api/companies/detach-bank/".concat(this.form.id, "/").concat(companyBank.bankId)).then(function (response) {
-          _this4.$swal({
+          _this5.$swal({
             title: "Bank Removed!",
             text: "Bank was saved.",
             type: "success"
           }).then(function () {
-            _this4.load();
+            _this5.load();
           });
         })["catch"](function (error) {
-          _this4.$swal({
+          _this5.$swal({
             title: "Error",
             text: error.message,
             type: "danger"
@@ -19784,27 +19928,32 @@ new vue__WEBPACK_IMPORTED_MODULE_6__.default({
       this.form = new _components_Form__WEBPACK_IMPORTED_MODULE_0__.Form(data);
     },
     load: function load() {
-      var _this5 = this;
+      var _this6 = this;
 
       this.dataInitialized = false;
       this.isEdit = true;
-      this.form.get("/api/companies/" + this.form.id + "?include=companyBanks.bank,banks").then(function (response) {
-        _this5.loadData(response.data);
+      this.form.get("/api/companies/" + this.form.id + "?include=currencies,companyOwners,companyBanks.bank,companyBanks.account,banks").then(function (response) {
+        _this6.loadData(response.data);
 
-        _this5.dataInitialized = true;
+        _this6.dataInitialized = true;
       });
     }
   },
   created: function created() {
-    var _this6 = this;
+    var _this7 = this;
 
     if (id != null) {
       this.dataInitialized = false;
       this.isEdit = true;
-      this.form.get("/api/companies/" + id + "?include=companyBanks.bank,banks").then(function (response) {
-        _this6.loadData(response.data);
+      this.form.get("/api/accounts?limit=".concat(Number.MAX_SAFE_INTEGER)).then(function (response) {
+        _this7.accountSelections = response.data;
+        _this7.accountsInitialized = true;
 
-        _this6.dataInitialized = true;
+        _this7.form.get("/api/companies/" + id + "?include=currencies,companyOwners,companyBanks.bank,companyBanks.account,banks").then(function (response) {
+          _this7.loadData(response.data);
+
+          _this7.dataInitialized = true;
+        });
       });
     }
 

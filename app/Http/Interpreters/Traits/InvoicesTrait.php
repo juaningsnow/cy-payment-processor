@@ -52,12 +52,13 @@ trait InvoicesTrait
             "DateString" => $date->toDateTimeLocalString(),
             "DueDateString" => $date->toDateTimeLocalString(),
             "InvoiceNumber" => $invoice->invoice_number.'-'.$invoice->supplier->id,
+            "CurrencyCode" => $invoice->getCurrency()->code,
             "LineItems" => [[
                 "Description" => $invoice->description ? $invoice->description : '.',
                 "Quantity" => '1',
                 "TaxType" => "NONE",
-                "UnitAmount" => $invoice->amount,
-                "LineAmount" => $invoice->amount,
+                "UnitAmount" => $invoice->total,
+                "LineAmount" => $invoice->total,
                 "AccountCode" => $invoice->supplier->account ? $invoice->supplier->account->code : null,
             ]],
             "Status" => "AUTHORISED",
@@ -101,8 +102,8 @@ trait InvoicesTrait
                 "Description" => $invoice->description ? $invoice->description : '.',
                 "Quantity" => '1',
                 "TaxType" => "NONE",
-                "UnitAmount" => $invoice->amount,
-                "LineAmount" => $invoice->amount,
+                "UnitAmount" => $invoice->total,
+                "LineAmount" => $invoice->total,
                 "AccountCode" =>  $invoice->supplier->account ? $invoice->supplier->account->code : null,
             ]],
             "Status" => "AUTHORISED",
@@ -127,8 +128,8 @@ trait InvoicesTrait
                 "Description" => $invoice->description ? $invoice->description : '.',
                 "Quantity" => '1',
                 "TaxType" => "NONE",
-                "UnitAmount" => $invoice->amount,
-                "LineAmount" => $invoice->amount,
+                "UnitAmount" => $invoice->total,
+                "LineAmount" => $invoice->total,
             ]],
             "Status" => "AUTHORISED",
         ];
@@ -217,6 +218,18 @@ trait InvoicesTrait
     public function retrieveAuthorisedInvoices($tenantId)
     {
         $url = $this->baseUrl.'/Invoices?where='.urlencode('Status="AUTHORISED" AND Type="ACCPAY"');
+        try {
+            $response = Http::withHeaders($this->getTenantDefaultHeaders($tenantId))->get($url);
+            $data = json_decode($response->getBody()->getContents());
+            return $data->Invoices;
+        } catch (Exception $e) {
+            throw new GeneralApiException($e);
+        }
+    }
+
+    public function retrievePaidInvoices($tenantId)
+    {
+        $url = $this->baseUrl.'/Invoices?where='.urlencode('Status="PAID" AND Type="ACCPAY"');
         try {
             $response = Http::withHeaders($this->getTenantDefaultHeaders($tenantId))->get($url);
             $data = json_decode($response->getBody()->getContents());

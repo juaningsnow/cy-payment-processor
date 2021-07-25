@@ -2,7 +2,7 @@
     <tr>
         <td>{{ companyBank.bank.name }}</td>
         <td>{{ companyBank.accountNumber }}</td>
-        <td>{{ companyBank.xeroAccountCode }}</td>
+        <td>{{ companyBank.account ? companyBank.account.code : "--" }}</td>
         <td>
             <span v-if="companyBank.default" class="badge badge-info"
                 >default</span

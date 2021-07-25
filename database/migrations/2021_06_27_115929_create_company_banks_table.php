@@ -21,6 +21,7 @@ class CreateCompanyBanksTable extends Migration
             $table->foreign('bank_id')->references('id')->on('banks');
             $table->string('account_number');
             $table->boolean('default')->default(false);
+            $table->foreignId('cash_account_id')->nullable();
             $table->timestamps();
         });
     }

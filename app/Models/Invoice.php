@@ -63,6 +63,23 @@ class Invoice extends BaseModel implements HasMedia
         return $this->hasMany(InvoiceXeroAttachment::class, 'invoice_id');
     }
 
+    public function currency()
+    {
+        return $this->belongsTo(Currency::class);
+    }
+
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(Currency $value)
+    {
+        $this->currency()->associate($value);
+        $this->currency_id = $value->id;
+        return $this;
+    }
+
     public function hasOneNonCancelledInvoiceBatchDetail()
     {
         foreach ($this->invoiceBatchDetails as $detail) {
@@ -89,6 +106,14 @@ class Invoice extends BaseModel implements HasMedia
             }
         }
         return false;
+    }
+
+    public function computePaidAmount()
+    {
+        if ($this->paid) {
+            return $this->total;
+        }
+        return $this->invoiceBatchDetails()->sum('amount');
     }
 
     public function scopeNoInvoiceBatchDetail($query, $value = null)
@@ -187,14 +212,36 @@ class Invoice extends BaseModel implements HasMedia
         return $this;
     }
 
-    public function getAmount()
+    public function getTotal()
     {
-        return (float) $this->amount;
+        return $this->total;
     }
 
-    public function setAmount($value)
+    public function setTotal($value)
     {
-        $this->amount = $value;
+        $this->total = $value;
+        return $this;
+    }
+
+    public function getAmountDue()
+    {
+        return $this->amount_due;
+    }
+
+    public function setAmountDue($value)
+    {
+        $this->amount_due = $value;
+        return $this;
+    }
+
+    public function getAmountPaid()
+    {
+        return $this->amount_paid;
+    }
+
+    public function setAmountPaid($value)
+    {
+        $this->amount_paid = $value;
         return $this;
     }
 
@@ -216,6 +263,9 @@ class Invoice extends BaseModel implements HasMedia
             }
             if ($this->getInvoiceBatchDetail()->getInvoiceBatch()->isGenerated() &&
                     !$this->getInvoiceBatchDetail()->getInvoiceBatch()->getCancelled()) {
+                if ($this->paid_amount != $this->total) {
+                    return StatusList::PARTIALLY_PAID;
+                }
                 return StatusList::GENERATED_AND_PAID;
             }
             return StatusList::BATCHED;

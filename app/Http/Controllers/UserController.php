@@ -56,8 +56,8 @@ class UserController extends Controller
         if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
             return redirect()->route('xero_status');
         }
-        $supplier = User::find($id);
-        return view('users.show', ['title' => $supplier ? $supplier->name : "--", 'id' => $id]);
+        $user = User::find($id);
+        return view('users.show', ['title' => $user ? $user->name : "--", 'id' => $id]);
     }
 
     public function setActive($userCompanyId)

@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use BaseCode\Common\Exceptions\GeneralApiException;
+use BaseCode\Common\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class Company extends Model
+class Company extends BaseModel
 {
     use HasFactory;
 
     protected $fillable = ['name'];
+
+    protected $companyOwnersToSet = null;
 
     public function getId()
     {
@@ -22,14 +23,65 @@ class Company extends Model
         return $this->companyBanks()->where('default', true)->first()->account_number;
     }
 
-    public function getDefaultAccountCode()
+    public function cashAccount()
     {
-        return $this->companyBanks()->where('default', true)->first()->xero_account_code;
+        return $this->belongsTo(Account::class, 'cash_account_id');
     }
+
+    public function companyOwners()
+    {
+        return $this->hasMany(CompanyOwner::class, 'company_id');
+    }
+
+    public function currencies()
+    {
+        return $this->hasMany(Currency::class, 'company_id');
+    }
+
+    public function getCompanyOwners()
+    {
+        if ($this->companyOwnersToSet !== null) {
+            return collect($this->companyOwnersToSet);
+        }
+        return $this->companyOwners;
+    }
+
+    public function setCompanyOwners(array $value)
+    {
+        $this->companyOwnersToSet = $value;
+        return $this;
+    }
+
+    public function getCashAccount()
+    {
+        return $this->cashAccount;
+    }
+
+    public function setCashAccount(Account $value)
+    {
+        $this->cashAccount()->associate($value);
+        $this->cash_account_id = $value->id;
+        return $this;
+    }
+
+    // public function getDefaultAccountCode()
+    // {
+    //     return $this->companyBanks()->where('default', true)->first()->xero_account_code;
+    // }
 
     public function getDefaultBank()
     {
         return $this->companyBanks()->where('default', true)->first();
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_companies', 'company_id', 'user_id');
+    }
+
+    public function hasUsers()
+    {
+        return $this->users()->exists();
     }
 
     public function hasBanks()
