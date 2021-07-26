@@ -115,6 +115,8 @@ export default {
             nullValue: null,
             bankSelections: [],
             banksInitialized: false,
+            accountSelections: [],
+            accountsInitialized: false,
             dataInitialized: true,
         };
     },

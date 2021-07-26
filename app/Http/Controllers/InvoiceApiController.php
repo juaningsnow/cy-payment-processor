@@ -135,25 +135,22 @@ class InvoiceApiController extends ResourceApiController
     {
         $supplier = Supplier::where('xero_contact_Id', $invoice->Contact->ContactID)->first();
         $company = Company::where('xero_tenant_id', $tenantId)->first();
-        $sgd = Currency::where('code', 'SGD')->first();
         if (!$supplier) {
             $supplier = $this->createSupplier($invoice->Contact->ContactID, $tenantId);
         }
-        if ($invoice->CurrencyCode == 'SGD') {
-            $processorInvoice = new Invoice();
-            $processorInvoice->supplier_id = $supplier->id;
-            $processorInvoice->date = new Carbon($invoice->DateString);
-            $processorInvoice->invoice_number = $invoice->InvoiceNumber;
-            $processorInvoice->total = $invoice->Total;
-            $processorInvoice->amount_due = $invoice->AmountDue;
-            $processorInvoice->amount_paid = $invoice->AmountPaid;
-            $processorInvoice->company_id = $company->id;
-            $processorInvoice->status = $processorInvoice->computeStatus();
-            $processorInvoice->xero_invoice_id = $invoice->InvoiceID;
-            $processorInvoice->currency_id = $sgd->id;
-            $processorInvoice->fromXero = true;
-            $processorInvoice->save();
-        }
+        $processorInvoice = new Invoice();
+        $processorInvoice->supplier_id = $supplier->id;
+        $processorInvoice->date = new Carbon($invoice->DateString);
+        $processorInvoice->invoice_number = $invoice->InvoiceNumber;
+        $processorInvoice->total = $invoice->Total;
+        $processorInvoice->amount_due = $invoice->AmountDue;
+        $processorInvoice->amount_paid = $invoice->AmountPaid;
+        $processorInvoice->company_id = $company->id;
+        $processorInvoice->status = $processorInvoice->computeStatus();
+        $processorInvoice->xero_invoice_id = $invoice->InvoiceID;
+        $processorInvoice->currency_id = $sgd->id;
+        $processorInvoice->fromXero = true;
+        $processorInvoice->save();
     }
 
     private function createSupplier($contactId, $tenantId)
