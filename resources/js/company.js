@@ -36,6 +36,7 @@ new Vue({
             name: "",
             companyOwners: { data: [] },
             cashAccountId: null,
+            bankAccountId: null,
         }),
         nullValue: null,
         showBankModal: false,

@@ -7,7 +7,7 @@
                     :disabled="isShow"
                     class="form-control"
                     placeholder="Supplier"
-                    v-model="detail.supplier.name"
+                    v-model="detail.invoice.supplier.name"
                 />
             </td>
             <td>
@@ -15,7 +15,7 @@
                     input-class="form-control"
                     :disabled="isShow"
                     :typeable="true"
-                    v-model="detail.date"
+                    v-model="detail.invoice.date"
                 ></datepicker>
             </td>
             <td>
@@ -24,14 +24,14 @@
                     :disabled="isShow"
                     class="form-control"
                     placeholder="Invoice Number"
-                    v-model="detail.invoiceNumber"
+                    v-model="detail.invoice.invoiceNumber"
                 />
             </td>
             <td>
                 <input
                     type="number"
-                    :disabled="isShow"
                     class="form-control text-right"
+                    :disabled="isShow"
                     placeholder="Amount"
                     v-model.number="detail.amount"
                 />
@@ -78,9 +78,9 @@ export default {
             type: Boolean,
             default: true,
         },
-        isEdit: {
+        isAdd: {
             type: Boolean,
-            default: true,
+            defailt: true,
         },
     },
 

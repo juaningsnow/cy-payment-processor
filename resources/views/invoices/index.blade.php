@@ -56,6 +56,11 @@
                                 </a>
                             </th>
                             <th class="text-right">
+                                <a v-on:click="setSorter('currency_code')">
+                                    Currency <i class="fa" :class="getSortIcon('currency_code')"></i>
+                                </a>
+                            </th>
+                            <th class="text-right">
                                 <a v-on:click="setSorter('amount_paid')">
                                     Amount Paid <i class="fa" :class="getSortIcon('amount_paid')"></i>
                                 </a>
@@ -79,6 +84,7 @@
                             <td>@{{item.invoiceNumber}}</td>
                             <td>@{{item.supplier.name}}</td>
                             <td>@{{item.date}}</td>
+                            <td>@{{item.currency.code}}</td>
                             <td class="text-right">@{{item.amountPaid | numeric}}</td>
                             <td class="text-right">@{{item.amountDue | numeric}}</td>
                             <td class="text-center">

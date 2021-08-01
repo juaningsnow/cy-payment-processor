@@ -36,6 +36,11 @@
                                     Date <i class="fa" :class="getSortIcon('date')"></i>
                                 </a>
                             </th>
+                            <th class="text-right">
+                                <a v-on:click="setSorter('currency_code')">
+                                    Currency <i class="fa" :class="getSortIcon('currency_code')"></i>
+                                </a>
+                            </th>
                             <th class="text-center">
                                 <a v-on:click="setSorter('status')">
                                     Status <i class="fa" :class="getSortIcon('status')"></i>
@@ -59,6 +64,7 @@
                             <td>@{{item.invoiceNumber}}</td>
                             <td>@{{item.supplier.name}}</td>
                             <td>@{{item.date}}</td>
+                            <td>@{{item.currency.code}}</td>
                             <td class="text-center">
                                 <span v-if="item.status == `Generated and Paid`"
                                     class="badge badge-success">@{{item.status}}</span>

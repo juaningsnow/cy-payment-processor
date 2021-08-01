@@ -2050,7 +2050,8 @@ __webpack_require__.r(__webpack_exports__);
           _this2.form.invoiceBatchDetails.data.push({
             id: _this2.counter--,
             invoiceId: invoice.id,
-            invoice: invoice
+            invoice: invoice,
+            amount: Number(invoice.amountDue)
           });
         });
 
@@ -2105,6 +2106,12 @@ __webpack_require__.r(__webpack_exports__);
 
           _this5.close();
         });
+      })["catch"](function (error) {
+        _this5.$swal({
+          title: "Error!",
+          text: error.message,
+          type: "warning"
+        });
       });
     },
     reloadData: function reloadData() {
@@ -2133,7 +2140,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     totalAmount: function totalAmount() {
       return this.form.invoiceBatchDetails.data.reduce(function (prev, curr) {
-        return prev + curr.invoice.amount;
+        return prev + curr.amount;
       }, 0.0);
     }
   }
@@ -2964,6 +2971,10 @@ __webpack_require__.r(__webpack_exports__);
     isEdit: {
       type: Boolean,
       "default": true
+    },
+    isAdd: {
+      type: Boolean,
+      defailt: true
     }
   },
   data: function data() {
@@ -3278,6 +3289,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -3302,6 +3326,7 @@ __webpack_require__.r(__webpack_exports__);
         paidBy: "Cash",
         ownerId: null
       }),
+      company: null,
       nullValue: null,
       ownerSelection: [],
       ownersInitialized: false,
@@ -3313,8 +3338,14 @@ __webpack_require__.r(__webpack_exports__);
 
     this.form.selected = this.selected;
     this.form.get("/api/companies/".concat(this.companyId, "?include=companyOwners")).then(function (response) {
+      _this.company = response.data;
       _this.ownerSelection = response.data.companyOwners.data;
       _this.ownersInitialized = true;
+
+      if (_this.company.cashAccountId == null) {
+        _this.form.paidBy = null;
+      }
+
       _this.dataInitialized = true;
     });
   },
@@ -3780,6 +3811,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -3799,14 +3850,17 @@ __webpack_require__.r(__webpack_exports__);
         purposeId: "",
         paymentType: "",
         accountNumber: "",
-        bankId: ""
+        bankId: "",
+        accountId: ""
       }),
       dataInitialized: true,
       purposeSelections: [],
       purposeInitialized: false,
       bankSelections: [],
       banksInitialized: false,
-      paymentTypes: ["FAST", "GIRO"]
+      paymentTypes: ["FAST", "GIRO"],
+      accountSelections: [],
+      accountsInitialized: false
     };
   },
   watch: {
@@ -3816,7 +3870,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     initializationComplete: function initializationComplete() {
-      return this.dataInitialized && this.purposeInitialized && this.banksInitialized;
+      return this.dataInitialized && this.purposeInitialized && this.banksInitialized && this.accountsInitialized;
     }
   },
   methods: {
@@ -3851,15 +3905,20 @@ __webpack_require__.r(__webpack_exports__);
       _this2.bankSelections = banksResponse.data;
       _this2.banksInitialized = true;
 
-      _this2.form.get("/api/purposes?limit=".concat(Number.MAX_SAFE_INTEGER)).then(function (response) {
-        _this2.purposeSelections = response.data;
-        _this2.purposeInitialized = true;
-        _this2.isEdit = true;
+      _this2.form.get("/api/accounts?limit=".concat(Number.MAX_SAFE_INTEGER)).then(function (response) {
+        _this2.accountSelections = response.data;
+        _this2.accountsInitialized = true;
 
-        _this2.form.get("/api/suppliers/" + _this2.supplierId).then(function (response) {
-          _this2.loadData(response.data);
+        _this2.form.get("/api/purposes?limit=".concat(Number.MAX_SAFE_INTEGER)).then(function (response) {
+          _this2.purposeSelections = response.data;
+          _this2.purposeInitialized = true;
+          _this2.isEdit = true;
 
-          _this2.dataInitialized = true;
+          _this2.form.get("/api/suppliers/" + _this2.supplierId).then(function (response) {
+            _this2.loadData(response.data);
+
+            _this2.dataInitialized = true;
+          });
         });
       });
     });
@@ -30142,7 +30201,7 @@ var render = function() {
                     return _c("invoice-batch-detail", {
                       key: detail.id,
                       tag: "tbody",
-                      attrs: { detail: detail.invoice, index: index },
+                      attrs: { detail: detail, index: index },
                       on: {
                         remove: function($event) {
                           return _vm.form.invoiceBatchDetails.data.splice(
@@ -30877,8 +30936,8 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.detail.supplier.name,
-              expression: "detail.supplier.name"
+              value: _vm.detail.invoice.supplier.name,
+              expression: "detail.invoice.supplier.name"
             }
           ],
           staticClass: "form-control",
@@ -30887,13 +30946,13 @@ var render = function() {
             disabled: _vm.isShow,
             placeholder: "Supplier"
           },
-          domProps: { value: _vm.detail.supplier.name },
+          domProps: { value: _vm.detail.invoice.supplier.name },
           on: {
             input: function($event) {
               if ($event.target.composing) {
                 return
               }
-              _vm.$set(_vm.detail.supplier, "name", $event.target.value)
+              _vm.$set(_vm.detail.invoice.supplier, "name", $event.target.value)
             }
           }
         })
@@ -30909,11 +30968,11 @@ var render = function() {
               typeable: true
             },
             model: {
-              value: _vm.detail.date,
+              value: _vm.detail.invoice.date,
               callback: function($$v) {
-                _vm.$set(_vm.detail, "date", $$v)
+                _vm.$set(_vm.detail.invoice, "date", $$v)
               },
-              expression: "detail.date"
+              expression: "detail.invoice.date"
             }
           })
         ],
@@ -30926,8 +30985,8 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.detail.invoiceNumber,
-              expression: "detail.invoiceNumber"
+              value: _vm.detail.invoice.invoiceNumber,
+              expression: "detail.invoice.invoiceNumber"
             }
           ],
           staticClass: "form-control",
@@ -30936,13 +30995,13 @@ var render = function() {
             disabled: _vm.isShow,
             placeholder: "Invoice Number"
           },
-          domProps: { value: _vm.detail.invoiceNumber },
+          domProps: { value: _vm.detail.invoice.invoiceNumber },
           on: {
             input: function($event) {
               if ($event.target.composing) {
                 return
               }
-              _vm.$set(_vm.detail, "invoiceNumber", $event.target.value)
+              _vm.$set(_vm.detail.invoice, "invoiceNumber", $event.target.value)
             }
           }
         })
@@ -30962,7 +31021,7 @@ var render = function() {
           staticClass: "form-control text-right",
           attrs: {
             type: "number",
-            disabled: _vm.isShow,
+            disabled: !_vm.isEdit,
             placeholder: "Amount"
           },
           domProps: { value: _vm.detail.amount },
@@ -31294,6 +31353,7 @@ var render = function() {
                         type: "radio",
                         id: "cash",
                         name: "radio1",
+                        disabled: !_vm.company.cashAccountId,
                         value: "Cash"
                       },
                       domProps: { checked: _vm._q(_vm.form.paidBy, "Cash") },
@@ -31327,15 +31387,51 @@ var render = function() {
                       staticClass: "form-check-input",
                       attrs: {
                         type: "radio",
+                        id: "bank",
                         name: "radio1",
-                        value: "Owner",
+                        disabled: !_vm.company.bankAccountId,
+                        value: "Bank"
+                      },
+                      domProps: { checked: _vm._q(_vm.form.paidBy, "Bank") },
+                      on: {
+                        change: function($event) {
+                          return _vm.$set(_vm.form, "paidBy", "Bank")
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "label",
+                      {
+                        staticClass: "form-check-label",
+                        attrs: { for: "bank" }
+                      },
+                      [_vm._v("Bank")]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-check" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.form.paidBy,
+                          expression: "form.paidBy"
+                        }
+                      ],
+                      staticClass: "form-check-input",
+                      attrs: {
+                        type: "radio",
+                        name: "radio1",
+                        value: "Other",
                         id: "owner",
                         disabled: _vm.ownerSelection.length < 1
                       },
-                      domProps: { checked: _vm._q(_vm.form.paidBy, "Owner") },
+                      domProps: { checked: _vm._q(_vm.form.paidBy, "Other") },
                       on: {
                         change: function($event) {
-                          return _vm.$set(_vm.form, "paidBy", "Owner")
+                          return _vm.$set(_vm.form, "paidBy", "Other")
                         }
                       }
                     }),
@@ -31346,13 +31442,13 @@ var render = function() {
                         staticClass: "form-check-label",
                         attrs: { for: "owner" }
                       },
-                      [_vm._v("Owner")]
+                      [_vm._v("Other")]
                     )
                   ])
                 ])
               ]),
               _vm._v(" "),
-              _vm.form.paidBy == "Owner"
+              _vm.form.paidBy == "Other"
                 ? _c("div", { staticClass: "row" }, [
                     _c("label", { attrs: { for: "owner" } }, [_vm._v("Owner")]),
                     _vm._v(" "),
@@ -32048,6 +32144,76 @@ var render = function() {
                         _vm._v(
                           "\n                    " +
                             _vm._s(item) +
+                            "\n                "
+                        )
+                      ]
+                    )
+                  })
+                ],
+                2
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "account" } }, [
+                _vm._v("Xero Account")
+              ]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.form.accountId,
+                      expression: "form.accountId"
+                    }
+                  ],
+                  staticClass: "form-control select2",
+                  attrs: { disabled: _vm.isShow },
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.$set(
+                        _vm.form,
+                        "accountId",
+                        $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      )
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "option",
+                    {
+                      attrs: { selected: "selected", disabled: "" },
+                      domProps: { value: null }
+                    },
+                    [
+                      _vm._v(
+                        "\n                    -Select Account-\n                "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _vm._l(_vm.accountSelections, function(item, index) {
+                    return _c(
+                      "option",
+                      { key: index, domProps: { value: item.id } },
+                      [
+                        _vm._v(
+                          "\n                    " +
+                            _vm._s(item.name) +
                             "\n                "
                         )
                       ]

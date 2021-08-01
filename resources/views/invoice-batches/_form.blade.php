@@ -53,8 +53,9 @@
         </tr>
     </thead>
     <tbody v-for="(detail, index) in form.invoiceBatchDetails.data" is="invoice-batch-detail" :key="detail.id"
-        :detail="detail.invoice" :index="index" :is-edit="isEdit"
-        @remove="form.invoiceBatchDetails.data.splice(index, 1)"></tbody>
+        :detail="detail" :index="index" :is-edit="isEdit" :is-show="isShow"
+        @remove="form.invoiceBatchDetails.data.splice(index, 1)">
+    </tbody>
     <tfoot>
         <tr>
             <td colspan="3" class="text-right">Total</td>

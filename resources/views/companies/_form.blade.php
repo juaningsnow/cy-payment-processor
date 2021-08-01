@@ -9,7 +9,21 @@
 </div>
 <div class="form-group">
     <label for="cashAccount">Xero Cash Account</label>
-    <select class="form-control select2" :disabled="isShow" v-model="form.cashAccountId" style="width: 100%">
+    <select class="form-control select2" :disabled="isShow" id="cashAccountId" v-model="form.cashAccountId"
+        style="width: 100%">
+        <option selected="selected" disabled :value="nullValue">
+            -Select Account-
+        </option>
+        <option v-for="(item, index) in accountSelections" :key="index" :value="item.id">
+            @{{ item.name }} (@{{ item.code }})
+        </option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="cashAccount">Xero Bank Account</label>
+    <select class="form-control select2" :disabled="isShow" id="bankAccountId" v-model="form.bankAccountId"
+        style="width: 100%">
         <option selected="selected" disabled :value="nullValue">
             -Select Account-
         </option>

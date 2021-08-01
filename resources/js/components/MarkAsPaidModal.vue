@@ -31,6 +31,7 @@
                             id="cash"
                             name="radio1"
                             v-model="form.paidBy"
+                            :disabled="!company.cashAccountId"
                             value="Cash"
                         />
                         <label for="cash" class="form-check-label">Cash</label>
@@ -39,19 +40,31 @@
                         <input
                             class="form-check-input"
                             type="radio"
+                            id="bank"
                             name="radio1"
                             v-model="form.paidBy"
-                            value="Owner"
+                            :disabled="!company.bankAccountId"
+                            value="Bank"
+                        />
+                        <label for="bank" class="form-check-label">Bank</label>
+                    </div>
+                    <div class="form-check">
+                        <input
+                            class="form-check-input"
+                            type="radio"
+                            name="radio1"
+                            v-model="form.paidBy"
+                            value="Other"
                             id="owner"
                             :disabled="ownerSelection.length < 1"
                         />
                         <label for="owner" class="form-check-label"
-                            >Owner</label
+                            >Other</label
                         >
                     </div>
                 </div>
             </div>
-            <div class="row" v-if="form.paidBy == 'Owner'">
+            <div class="row" v-if="form.paidBy == 'Other'">
                 <label for="owner">Owner</label>
                 <select
                     class="form-control select2"
@@ -99,6 +112,7 @@ export default {
                 paidBy: "Cash",
                 ownerId: null,
             }),
+            company: null,
             nullValue: null,
             ownerSelection: [],
             ownersInitialized: false,
@@ -111,8 +125,12 @@ export default {
         this.form
             .get(`/api/companies/${this.companyId}?include=companyOwners`)
             .then((response) => {
+                this.company = response.data;
                 this.ownerSelection = response.data.companyOwners.data;
                 this.ownersInitialized = true;
+                if (this.company.cashAccountId == null) {
+                    this.form.paidBy = null;
+                }
                 this.dataInitialized = true;
             });
     },

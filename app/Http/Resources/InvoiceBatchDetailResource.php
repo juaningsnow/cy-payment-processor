@@ -20,6 +20,7 @@ class InvoiceBatchDetailResource extends JsonResource
             'invoiceBatchId' => $this->getInvoiceBatchId(),
             'invoiceBatch' => new InvoiceBatchResource($this->whenLoaded('invoiceBatch')),
             'invoiceId' => $this->invoice_id,
+            'amount' => (float) $this->amount,
             'invoice' => new InvoiceResource($this->whenLoaded('invoice')),
         ];
     }

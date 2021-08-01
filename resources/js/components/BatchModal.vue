@@ -103,7 +103,7 @@
                     v-for="(detail, index) in form.invoiceBatchDetails.data"
                     is="invoice-batch-detail"
                     :key="detail.id"
-                    :detail="detail.invoice"
+                    :detail="detail"
                     :index="index"
                     @remove="form.invoiceBatchDetails.data.splice(index, 1)"
                 ></tbody>
@@ -193,6 +193,7 @@ export default {
                         id: this.counter--,
                         invoiceId: invoice.id,
                         invoice: invoice,
+                        amount: Number(invoice.amountDue),
                     });
                 });
                 resolve();
@@ -231,19 +232,28 @@ export default {
         },
         save() {
             this.allSuppliersHasBankDetails();
-            this.form.post(`/api/invoice-batches`).then((response) => {
-                this.$swal({
-                    title: "Batch Created!",
-                    text: "Invoice Batch has beend saved to database",
-                    type: "success",
-                }).then(() => {
-                    let showUrl = new URL(
-                        `${window.location.origin}/invoice-batches/${response.data.id}`
-                    );
-                    window.location = showUrl;
-                    this.close();
+            this.form
+                .post(`/api/invoice-batches`)
+                .then((response) => {
+                    this.$swal({
+                        title: "Batch Created!",
+                        text: "Invoice Batch has beend saved to database",
+                        type: "success",
+                    }).then(() => {
+                        let showUrl = new URL(
+                            `${window.location.origin}/invoice-batches/${response.data.id}`
+                        );
+                        window.location = showUrl;
+                        this.close();
+                    });
+                })
+                .catch((error) => {
+                    this.$swal({
+                        title: "Error!",
+                        text: error.message,
+                        type: "warning",
+                    });
                 });
-            });
         },
         reloadData() {
             this.dataInitialized = false;
@@ -275,7 +285,7 @@ export default {
         },
         totalAmount() {
             return this.form.invoiceBatchDetails.data.reduce((prev, curr) => {
-                return prev + curr.invoice.amount;
+                return prev + curr.amount;
             }, 0.0);
         },
     },

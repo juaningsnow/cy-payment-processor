@@ -93,7 +93,7 @@ class InvoiceBatch extends BaseModel
     private function computeTotal()
     {
         return $this->getInvoiceBatchDetails()->sum(function ($detail) {
-            return $detail->getInvoice()->getAmount();
+            return $detail->amount;
         });
     }
 

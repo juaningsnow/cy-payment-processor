@@ -64,7 +64,7 @@ class InvoiceBatchTextFileGenerator
         foreach ($supplierIds as $id) {
             $batchDetails = InvoiceBatchDetail::supplierId($id)->where('invoice_batch_id', $batchId)->get();
             $totalAmount = $batchDetails->sum(function ($detail) {
-                return $detail->invoice->amount;
+                return $detail->amount;
             });
             $supplier = Supplier::find($id);
             $data[] = (object)[
@@ -80,7 +80,7 @@ class InvoiceBatchTextFileGenerator
     private static function makeTransactionDetailLine($detail)
     {
         $prefix = "INV";
-        $description = "[{$detail->invoice->invoice_number}] Amt: {$detail->invoice->amount}";
+        $description = "[{$detail->invoice->invoice_number}] Amt: {$detail->amount}";
         $desc = substr(static::rightPaddingGenerator($description, " ", 97), 0, 97);
         $finalOutput = substr($prefix.$desc, 0, 100);
         return $finalOutput;

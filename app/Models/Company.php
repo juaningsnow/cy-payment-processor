@@ -28,6 +28,11 @@ class Company extends BaseModel
         return $this->belongsTo(Account::class, 'cash_account_id');
     }
 
+    public function bankAccount()
+    {
+        return $this->belongsTo(Account::class, 'bank_account_id');
+    }
+
     public function companyOwners()
     {
         return $this->hasMany(CompanyOwner::class, 'company_id');
@@ -61,6 +66,18 @@ class Company extends BaseModel
     {
         $this->cashAccount()->associate($value);
         $this->cash_account_id = $value->id;
+        return $this;
+    }
+
+    public function getBankAccount()
+    {
+        return $this->bankAccount;
+    }
+
+    public function setBankAccount(Account $value)
+    {
+        $this->bankAccount()->associate($value);
+        $this->bank_account_id = $value->id;
         return $this;
     }
 

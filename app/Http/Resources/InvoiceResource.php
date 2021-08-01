@@ -30,6 +30,7 @@ class InvoiceResource extends JsonResource
             'supplier' => new SupplierResource($this->whenLoaded('supplier')),
             'attachments' => new InvoiceXeroAttachmentResourceCollection($this->whenLoaded('invoiceXeroAttachments')),
             'invoicePayments' => new InvoicePaymentResourceCollection($this->whenLoaded('invoicePayments')),
+            'currency' => new CurrencyResource($this->whenLoaded('currency')),
             'showUrl' => route('invoice_show', $this->id),
             'editUrl' => route('invoice_edit', $this->id),
         ];

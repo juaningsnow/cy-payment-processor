@@ -18,6 +18,7 @@ class CompanyResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'cashAccountId' => $this->cash_account_id,
+            'bankAccountId' => $this->bank_account_id,
             'companyBanks' => new CompanyBankResourceCollection($this->whenLoaded('companyBanks')),
             'banks' => new BankResourceCollection($this->whenLoaded('banks')),
             'companyOwners' => new CompanyOwnerResourceCollection($this->whenLoaded('companyOwners')),

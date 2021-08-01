@@ -39,7 +39,7 @@ class InvoiceController extends Controller
             'filterable' => $this->availableFilters,
             'sorter' => 'id',
             'sortAscending' => true,
-            'baseUrl' => '/api/invoices?no_invoice_batch_detail_or_cancelled=1&paid=0&include=supplier',
+            'baseUrl' => '/api/invoices?no_invoice_batch_detail_or_cancelled=1&paid=0&include=supplier,currency',
             'exportBaseUrl' => '/invoices',
             'companyId' => auth()->user()->getActiveCompany()->id,
         ];
@@ -55,7 +55,7 @@ class InvoiceController extends Controller
             'filterable' => $this->availableFilters2,
             'sorter' => 'id',
             'sortAscending' => true,
-            'baseUrl' => '/api/invoices?has_invoice_batch_detail_or_paid=1&include=supplier',
+            'baseUrl' => '/api/invoices?has_invoice_batch_detail_or_paid=1&include=supplier,currency',
             'exportBaseUrl' => '/invoices'
         ];
         return view('invoices.index2', ['title' => 'Invoice', 'indexVariables' => $indexVariables]);

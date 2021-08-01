@@ -92,6 +92,26 @@
             </div>
 
             <div class="form-group">
+                <label for="account">Xero Account</label>
+                <select
+                    class="form-control select2"
+                    :disabled="isShow"
+                    v-model="form.accountId"
+                >
+                    <option selected="selected" disabled :value="null">
+                        -Select Account-
+                    </option>
+                    <option
+                        v-for="(item, index) in accountSelections"
+                        :key="index"
+                        :value="item.id"
+                    >
+                        {{ item.name }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label for="accountNumber">Account Number</label>
                 <input
                     type="text"
@@ -146,6 +166,7 @@ export default {
                 paymentType: "",
                 accountNumber: "",
                 bankId: "",
+                accountId: "",
             }),
             dataInitialized: true,
             purposeSelections: [],
@@ -153,6 +174,8 @@ export default {
             bankSelections: [],
             banksInitialized: false,
             paymentTypes: ["FAST", "GIRO"],
+            accountSelections: [],
+            accountsInitialized: false,
         };
     },
 
@@ -167,7 +190,8 @@ export default {
             return (
                 this.dataInitialized &&
                 this.purposeInitialized &&
-                this.banksInitialized
+                this.banksInitialized &&
+                this.accountsInitialized
             );
         },
     },
@@ -205,16 +229,24 @@ export default {
                 this.bankSelections = banksResponse.data;
                 this.banksInitialized = true;
                 this.form
-                    .get(`/api/purposes?limit=${Number.MAX_SAFE_INTEGER}`)
+                    .get(`/api/accounts?limit=${Number.MAX_SAFE_INTEGER}`)
                     .then((response) => {
-                        this.purposeSelections = response.data;
-                        this.purposeInitialized = true;
-                        this.isEdit = true;
+                        this.accountSelections = response.data;
+                        this.accountsInitialized = true;
                         this.form
-                            .get("/api/suppliers/" + this.supplierId)
+                            .get(
+                                `/api/purposes?limit=${Number.MAX_SAFE_INTEGER}`
+                            )
                             .then((response) => {
-                                this.loadData(response.data);
-                                this.dataInitialized = true;
+                                this.purposeSelections = response.data;
+                                this.purposeInitialized = true;
+                                this.isEdit = true;
+                                this.form
+                                    .get("/api/suppliers/" + this.supplierId)
+                                    .then((response) => {
+                                        this.loadData(response.data);
+                                        this.dataInitialized = true;
+                                    });
                             });
                     });
             });

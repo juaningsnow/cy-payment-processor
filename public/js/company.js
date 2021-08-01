@@ -19810,7 +19810,8 @@ new vue__WEBPACK_IMPORTED_MODULE_6__.default({
       companyOwners: {
         data: []
       },
-      cashAccountId: null
+      cashAccountId: null,
+      bankAccountId: null
     }),
     nullValue: null,
     showBankModal: false,

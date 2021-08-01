@@ -2548,6 +2548,10 @@ __webpack_require__.r(__webpack_exports__);
     isEdit: {
       type: Boolean,
       "default": true
+    },
+    isAdd: {
+      type: Boolean,
+      defailt: true
     }
   },
   data: function data() {
@@ -29413,8 +29417,8 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.detail.supplier.name,
-              expression: "detail.supplier.name"
+              value: _vm.detail.invoice.supplier.name,
+              expression: "detail.invoice.supplier.name"
             }
           ],
           staticClass: "form-control",
@@ -29423,13 +29427,13 @@ var render = function() {
             disabled: _vm.isShow,
             placeholder: "Supplier"
           },
-          domProps: { value: _vm.detail.supplier.name },
+          domProps: { value: _vm.detail.invoice.supplier.name },
           on: {
             input: function($event) {
               if ($event.target.composing) {
                 return
               }
-              _vm.$set(_vm.detail.supplier, "name", $event.target.value)
+              _vm.$set(_vm.detail.invoice.supplier, "name", $event.target.value)
             }
           }
         })
@@ -29445,11 +29449,11 @@ var render = function() {
               typeable: true
             },
             model: {
-              value: _vm.detail.date,
+              value: _vm.detail.invoice.date,
               callback: function($$v) {
-                _vm.$set(_vm.detail, "date", $$v)
+                _vm.$set(_vm.detail.invoice, "date", $$v)
               },
-              expression: "detail.date"
+              expression: "detail.invoice.date"
             }
           })
         ],
@@ -29462,8 +29466,8 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.detail.invoiceNumber,
-              expression: "detail.invoiceNumber"
+              value: _vm.detail.invoice.invoiceNumber,
+              expression: "detail.invoice.invoiceNumber"
             }
           ],
           staticClass: "form-control",
@@ -29472,13 +29476,13 @@ var render = function() {
             disabled: _vm.isShow,
             placeholder: "Invoice Number"
           },
-          domProps: { value: _vm.detail.invoiceNumber },
+          domProps: { value: _vm.detail.invoice.invoiceNumber },
           on: {
             input: function($event) {
               if ($event.target.composing) {
                 return
               }
-              _vm.$set(_vm.detail, "invoiceNumber", $event.target.value)
+              _vm.$set(_vm.detail.invoice, "invoiceNumber", $event.target.value)
             }
           }
         })
@@ -29498,7 +29502,7 @@ var render = function() {
           staticClass: "form-control text-right",
           attrs: {
             type: "number",
-            disabled: _vm.isShow,
+            disabled: !_vm.isEdit,
             placeholder: "Amount"
           },
           domProps: { value: _vm.detail.amount },

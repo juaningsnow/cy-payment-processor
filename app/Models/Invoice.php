@@ -302,7 +302,10 @@ class Invoice extends BaseModel implements HasMedia
         }
 
         if ($this->getPaid()) {
-            return $this->getPaidBy();
+            if($this->getPaidBy() == 'Others'){
+                return "Paid by {$this->companyOwner->name}";
+            }
+            return "Paid by {$this->getPaidBy()}";
         }
     }
 
@@ -347,5 +350,12 @@ class Invoice extends BaseModel implements HasMedia
         return $query->join('suppliers', 'suppliers.id', 'invoices.supplier_id')
             ->select('suppliers.name as supplier_name', 'invoices.*')
             ->orderBy('supplier_name', $direction);
+    }
+
+    public function scopeOrderByCurrencyCode($query, $direction)
+    {
+        return $query->join('currencies', 'currencies.id', 'invoices.currency_id')
+            ->select('currencies.code as currency_code', 'invoices.*')
+            ->orderBy('currency_code', $direction);
     }
 }

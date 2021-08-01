@@ -53,6 +53,7 @@ class CompanyApiController extends ResourceApiController
         $company = new Company;
         $company->name = $request->input('name');
         $company->cash_account_id = $request->input('cashAccountId');
+        $company->bank_account_id = $request->input('bankAccountId');
         $company->setCompanyOwners($this->getCompanyOwners($request));
         $company->save();
         $company->companyOwners()->sync($company->getCompanyOwners());
@@ -78,6 +79,7 @@ class CompanyApiController extends ResourceApiController
         $company = Company::find($id);
         $company->name = $request->input('name');
         $company->cash_account_id = $request->input('cashAccountId');
+        $company->bank_account_id = $request->input('bankAccountId');
         $company->setCompanyOwners($this->getCompanyOwners($request));
         $company->save();
         $company->companyOwners()->sync($company->getCompanyOwners());
