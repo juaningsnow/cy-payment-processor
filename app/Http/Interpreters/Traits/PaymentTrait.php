@@ -15,12 +15,17 @@ trait PaymentTrait
     public function makePayment(Invoice $invoice)
     {
         try {
+            if ($invoice->paid_by == 'Cash') {
+                $accountCode = $invoice->company->cashAccount->code;
+            } else {
+                $accountCode = $invoice->companyOwner->account->code;
+            }
             $body = [
                 'Invoice' => [
                     'InvoiceId' => $invoice->xero_invoice_id
                 ],
                 "Account" => [
-                    "Code" => $invoice->company->getDefaultAccountCode(),
+                    "Code" => $accountCode,
                 ],
                 "Date" => Carbon::now()->toDateString(),
                 "Amount" => $invoice->amount_due,
@@ -30,8 +35,7 @@ trait PaymentTrait
                 'application/json'
             )->put($this->baseUrl.'/Payments');
             $data = json_decode($response->getBody()->getContents());
-            $invoice->xero_payment_id = $data->Payments[0]->PaymentID;
-            $invoice->save();
+            $this->syncPayments($this->getInvoice($invoice->xero_invoice_id, $invoice->company->xero_tenant_id));
         } catch (Exception $e) {
             throw new GeneralApiException($e);
         }
@@ -86,8 +90,32 @@ trait PaymentTrait
                     "InvoiceID" => $attribute->invoice->xero_invoice_id,
                 ],
                 "Details" => $attribute->invoice->invoice_number,
-                "Amount" => $attribute->invoice->amount_due
+                "Amount" => $attribute->amount
             ];
         }, $invoiceBatchDetails);
+    }
+
+    public function getPayment($invoiceId, $tenantId)
+    {
+        $url = $this->baseUrl.'/Payments?where='.urlencode('Invoice.InvoiceId=guid("'.$invoiceId.'")');
+        try {
+            $response = Http::withHeaders($this->getTenantDefaultHeaders($tenantId))->get($url);
+            $data = json_decode($response->getBody()->getContents());
+            return $data;
+        } catch (Exception $e) {
+            throw new GeneralApiException($e);
+        }
+    }
+
+    public function getBatchPayment($batchPaymentId, $tenantId)
+    {
+        $url = $this->baseUrl.'/BatchPayments/'.$batchPaymentId;
+        try {
+            $response = Http::withHeaders($this->getTenantDefaultHeaders($tenantId))->get($url);
+            $data = json_decode($response->getBody()->getContents());
+            return $data;
+        } catch (Exception $e) {
+            throw new GeneralApiException($e);
+        }
     }
 }

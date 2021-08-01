@@ -7,6 +7,7 @@ use App\Http\Resources\InvoiceResource;
 use App\Http\Resources\InvoiceResourceCollection;
 use App\Models\Account;
 use App\Models\Company;
+use App\Models\CompanyOwner;
 use App\Models\Currency;
 use App\Models\Invoice;
 use App\Models\InvoiceBatch;
@@ -90,9 +91,13 @@ class InvoiceApiController extends ResourceApiController
     {
         $invoices = $this->getInvoices($request);
         $paidBy = $request->input('paidBy');
+        $companyOwner = CompanyOwner::find($request->input('ownerId'));
         foreach ($invoices as $invoice) {
             $invoice->setPaid(true);
             $invoice->setPaidBy($paidBy);
+            if($paidBy == 'Owner'){
+                $invoice->setCompanyOwner($companyOwner);
+            }
             $invoice->save();
         }
         return $this->getResourceCollection(collect($invoices));
@@ -112,6 +117,7 @@ class InvoiceApiController extends ResourceApiController
         $xero = resolve(XeroInterpreter::class);
         $xeroInvoice = $xero->getInvoice($invoice->xero_invoice_id, $company->xero_tenant_id);
         $xero->syncAttachments($xeroInvoice);
+        $xero->($xeroInvoice);
         return response('success', 200);
     }
 
@@ -135,6 +141,7 @@ class InvoiceApiController extends ResourceApiController
     {
         $supplier = Supplier::where('xero_contact_Id', $invoice->Contact->ContactID)->first();
         $company = Company::where('xero_tenant_id', $tenantId)->first();
+        $sgd = Currency::where('code', 'SGD')->first();
         if (!$supplier) {
             $supplier = $this->createSupplier($invoice->Contact->ContactID, $tenantId);
         }

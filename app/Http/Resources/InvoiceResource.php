@@ -25,9 +25,11 @@ class InvoiceResource extends JsonResource
             'description' => $this->getDescription(),
             'status' => $this->getStatus(),
             'paidBy' => $this->getPaidBy(),
+            'xeroUrl' => $this->getXeroUrl(),
             'media' => new MediaResourceCollection($this->whenLoaded('media')),
             'supplier' => new SupplierResource($this->whenLoaded('supplier')),
             'attachments' => new InvoiceXeroAttachmentResourceCollection($this->whenLoaded('invoiceXeroAttachments')),
+            'invoicePayments' => new InvoicePaymentResourceCollection($this->whenLoaded('invoicePayments')),
             'showUrl' => route('invoice_show', $this->id),
             'editUrl' => route('invoice_edit', $this->id),
         ];

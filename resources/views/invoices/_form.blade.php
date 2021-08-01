@@ -34,7 +34,7 @@
     <div class="col-6">
         <div class="form-group">
             <label for="amount">Amount</label>
-            <input type="number" :disabled="isShow" class="form-control" placeholder="Name" v-model="form.amount">
+            <input type="number" :disabled="isShow" class="form-control" placeholder="Name" v-model="form.total">
         </div>
     </div>
 </div>

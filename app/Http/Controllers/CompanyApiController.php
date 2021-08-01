@@ -39,11 +39,12 @@ class CompanyApiController extends ResourceApiController
         return new CompanyResourceCollection($items);
     }
 
-    public function refreshCurrencies($id,Request $request)
+    public function refreshCurrencies($id, Request $request)
     {
         $company = Company::find($id);
         $xeroInterpreter = resolve(XeroInterpreter::class);
         $xeroInterpreter->seedCurrencies($company);
+        $xeroInterpreter->refreshAccounts($company);
         return response('success', 200);
     }
 
@@ -149,6 +150,7 @@ class CompanyApiController extends ResourceApiController
         $company->xero_connection_id = null;
         $company->auth_event_id = null;
         $company->xero_tenant_id = null;
+        $company->xero_short_code = null;
         $company->save();
         $this->deleteCompanyData($company->id);
         return response('success', 200);

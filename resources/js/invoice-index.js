@@ -3,6 +3,7 @@ import Index from "./components/Index.vue";
 import { Form } from "./components/Form";
 import InvoiceModal from "./components/InvoiceModal.vue";
 import BatchModal from "./components/BatchModal.vue";
+import MarkAsPaidModal from "./components/MarkAsPaidModal.vue";
 import VueSweetalert2 from "vue-sweetalert2";
 Vue.use(VueSweetalert2);
 Vue.filter("numeric", function (value, decimals = 2) {
@@ -20,7 +21,7 @@ Vue.filter("numeric", function (value, decimals = 2) {
 Vue.config.devtools = true;
 new Vue({
     el: "#index",
-    components: { Index, InvoiceModal, BatchModal },
+    components: { Index, InvoiceModal, BatchModal, MarkAsPaidModal },
     data: {
         form: new Form({
             selected: [],
@@ -36,10 +37,12 @@ new Vue({
         sorter: 'id',
         sortAscending: typeof sortAscending !== "undefined" ? sortAscending : true,
         filters: typeof filters !== "undefined" ? filters : [],
+        companyId: typeof companyId !== "undefined" ? companyId : null,
         showInvoiceModal: false,
         showBatchModal: false,
         selected: [],
         allSelected: false,
+        showMarkAsPaidModal: false,
     },
 
     watch: {
@@ -83,48 +86,6 @@ new Vue({
                         );
                     })
                 }
-            });
-        },
-
-        markAsPaid() {
-            this.form.selected = this.selected;
-            this.$swal({
-                title: "Paid By",
-                input: 'radio',
-                inputOptions: {
-                    'Paid By Cash': 'Cash',
-                    'Paid By Bank': 'Bank',
-                    'Paid By Owner': 'Owner',
-                },
-                type: "info",
-                inputValidator: function (result) {
-                    return new Promise(function (resolve, reject) {
-                        if (result) {
-                            resolve();
-                        } else {
-                            reject('You need to select something!');
-                        }
-                    });
-                },
-                showCancelButton: true,
-            }).then(response => {
-                this.form.paidBy = response.value;
-                this.form.post(`/api/invoices/pay`).then(response => {
-                    this.$swal({
-                        title: "Invoices Updated!",
-                        text: "Invoices has been marked as paid",
-                        type: "success",
-                    }).then(() => {
-                        this.reloadData();
-                        this.close();
-                    });
-                })
-            }).catch(error => {
-                this.$swal({
-                    title: "Error",
-                    text: error,
-                    type: "error",
-                });
             });
         },
 

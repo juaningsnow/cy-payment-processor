@@ -19,6 +19,7 @@ class CreateCompaniesTable extends Migration
             $table->text('xero_connection_id')->nullable();
             $table->text('auth_event_id')->nullable();
             $table->text('xero_tenant_id')->nullable();
+            $table->string('xero_short_code')->nullable();
             $table->foreignId('cash_account_id')->nullable();
             $table->timestamps();
         });

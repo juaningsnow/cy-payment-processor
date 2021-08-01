@@ -11,17 +11,16 @@
                 class="btn btn-success btn-sm">
                 Add To Batch
             </button>
-            <button type="button" v-if="selected.length > 0" @click="markAsPaid" class="btn btn-success btn-sm">
+            <button type="button" v-if="selected.length > 0" @click="showMarkAsPaidModal = true"
+                class="btn btn-success btn-sm">
                 Mark as Paid
             </button>
             <button type="button" v-if="selected.length > 0" @click="deleteAll" class="btn btn-danger btn-sm">
                 Delete Selected
             </button>
-            @if(auth()->user()->isAdmin())
             <button type="button" @click="refreshInvoices" class="btn btn-success btn-sm">
                 Refresh Invoices
             </button>
-            @endif
             <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                     <i class="fas fa-minus"></i>
@@ -101,6 +100,8 @@
             </invoice-modal>
             <batch-modal :selected-invoices="selected" v-if="showBatchModal" @close="showBatchModal = false"
                 @reload-data="reloadData"></batch-modal>
+            <mark-as-paid-modal :selected="selected" v-if="showMarkAsPaidModal" :company-id="companyId"
+                @close="showMarkAsPaidModal = false" @reload-data="reloadData"></mark-as-paid-modal>
         </div>
     </div>
 </div>
@@ -112,6 +113,7 @@
     var exportBaseUrl = indexVariables.exportBaseUrl;
     var filterable = indexVariables.filterable;
     var sorter = indexVariables.sorter;
+    var companyId = indexVariables.companyId;
 </script>
 <script src="{{ mix('js/invoice-index.js') }}"></script>
 @endpush

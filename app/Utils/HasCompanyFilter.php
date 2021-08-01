@@ -22,8 +22,10 @@ trait HasCompanyFilter
         return $this;
     }
 
-    public function scopeFilterByCompany($query, Company $company)
+    public function scopeFilterByCompany($query, Company $companyFilter)
     {
-        return $query->where('company_id', $company->getId());
+        return $query->whereHas('company', function ($company) use ($companyFilter) {
+            return $company->whereId($companyFilter->id);
+        });
     }
 }

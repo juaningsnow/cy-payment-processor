@@ -5,10 +5,12 @@ namespace App\Http\Interpreters;
 use App\Http\Interpreters\Traits\AccountsTrait;
 use App\Http\Interpreters\Traits\ContactsTrait;
 use App\Http\Interpreters\Traits\CurrencyTrait;
+use App\Http\Interpreters\Traits\DateParser;
 use App\Http\Interpreters\Traits\InvoicesTrait;
 use App\Http\Interpreters\Traits\PaymentTrait;
 use App\Models\Account;
 use App\Models\Config;
+use BaseCode\Common\Exceptions\GeneralApiException;
 use Exception;
 use Illuminate\Support\Facades\Http;
 
@@ -19,6 +21,7 @@ class XeroInterpreter
     use AccountsTrait;
     use PaymentTrait;
     use CurrencyTrait;
+    use DateParser;
 
     protected $tokenUrl = 'https://identity.xero.com/connect/token';
     protected $authorizationUrl = 'https://login.xero.com/identity/connect/authorize';
@@ -138,5 +141,17 @@ class XeroInterpreter
         return array_merge($this->getGeneralDefaultHeaders(), [
             'Xero-tenant-id' => $tenantId
         ]);
+    }
+
+    public function getOrganization($tenantId)
+    {
+        $url = $this->baseUrl.'/Organisation';
+        try {
+            $response = Http::withHeaders($this->getTenantDefaultHeaders($tenantId))->get($url);
+            $data = json_decode($response->getBody()->getContents());
+            return $data->Organisations[0];
+        } catch (Exception $e) {
+            throw new GeneralApiException($e);
+        }
     }
 }

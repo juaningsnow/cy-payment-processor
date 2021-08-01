@@ -3,6 +3,7 @@
 namespace App\Http\Interpreters\Traits;
 
 use App\Models\Invoice;
+use App\Models\InvoicePayment;
 use App\Models\InvoiceXeroAttachment;
 use BaseCode\Common\Exceptions\GeneralApiException;
 use Carbon\Carbon;
@@ -203,6 +204,26 @@ trait InvoicesTrait
         if ($processorInvoice) {
             $processorInvoice->invoiceXeroAttachments()->sync($attachments);
         }
+    }
+
+    public function syncPayments($invoice)
+    {
+        $processorInvoice = Invoice::where('xero_invoice_id', $invoice->InvoiceID)->first();
+        $payments = $this->assembleInvoicePayments($invoice->Payments);
+        if ($processorInvoice) {
+            $processorInvoice->invoicePayments()->sync($payments);
+        }
+    }
+
+    private function assembleInvoicePayments($payments)
+    {
+        return collect(array_map(function ($item) {
+            $payment = new InvoicePayment();
+            $payment->date =  $this->parseDate($item->Date);
+            $payment->xero_payment_id = $item->PaymentID;
+            $payment->amount = $item->Amount;
+            return $payment;
+        }, $payments));
     }
 
     private function assembleInvoiceAttachments($invoice)

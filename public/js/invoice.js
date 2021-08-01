@@ -38020,7 +38020,7 @@ new vue__WEBPACK_IMPORTED_MODULE_8__.default({
       var _this3 = this;
 
       this.dataInitialized = false;
-      this.form.get("/api/invoices/" + id + "?include=supplier,media,invoiceXeroAttachments").then(function (response) {
+      this.form.get("/api/invoices/" + id + "?include=invoicePayments,supplier,media,invoiceXeroAttachments").then(function (response) {
         _this3.loadData(response.data);
 
         _this3.dataInitialized = true;

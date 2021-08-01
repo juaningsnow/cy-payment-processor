@@ -20,6 +20,7 @@ class UsersTableSeeder extends Seeder
             'username' => 'admin',
             'email' => 'admin@cy-bm.sg',
             'is_admin' => true,
+            // 'password' => bcrypt('cyPayAdm!nistrator'),
             'password' => bcrypt('admin'),
         ]);
         

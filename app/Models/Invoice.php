@@ -53,6 +53,11 @@ class Invoice extends BaseModel implements HasMedia
         return $this->belongsTo(Supplier::class);
     }
 
+    public function companyOwner()
+    {
+        return $this->belongsTo(CompanyOwner::class, 'company_owner_id');
+    }
+
     public function invoiceBatchDetails()
     {
         return $this->hasMany(InvoiceBatchDetail::class, 'invoice_id');
@@ -63,6 +68,11 @@ class Invoice extends BaseModel implements HasMedia
         return $this->hasMany(InvoiceXeroAttachment::class, 'invoice_id');
     }
 
+    public function invoicePayments()
+    {
+        return $this->hasMany(InvoicePayment::class, 'invoice_id');
+    }
+
     public function currency()
     {
         return $this->belongsTo(Currency::class);
@@ -71,6 +81,18 @@ class Invoice extends BaseModel implements HasMedia
     public function getCurrency()
     {
         return $this->currency;
+    }
+
+    public function getCompanyOwner()
+    {
+        return $this->companyOwner;
+    }
+
+    public function setCompanyOwner(CompanyOwner $value)
+    {
+        $this->companyOwner()->associate($value);
+        $this->company_owner_id = $value->id;
+        return $this;
     }
 
     public function setCurrency(Currency $value)
@@ -113,7 +135,7 @@ class Invoice extends BaseModel implements HasMedia
         if ($this->paid) {
             return $this->total;
         }
-        return $this->invoiceBatchDetails()->sum('amount');
+        return $this->invoicePayments()->sum('amount');
     }
 
     public function scopeNoInvoiceBatchDetail($query, $value = null)
@@ -257,19 +279,28 @@ class Invoice extends BaseModel implements HasMedia
 
     public function computeStatus()
     {
+        if ($this->amount_paid > 0) {
+            if ($this->amount_paid < $this->total) {
+                return StatusList::PARTIALLY_PAID;
+            }
+            if ($this->amount_paid == $this->total) {
+                return StatusList::PAID;
+            }
+        }
         if ($this->hasInvoiceBatchDetails()) {
             if ($this->getInvoiceBatchDetail()->getInvoiceBatch()->getCancelled()) {
                 return StatusList::UNPAID;
             }
             if ($this->getInvoiceBatchDetail()->getInvoiceBatch()->isGenerated() &&
                     !$this->getInvoiceBatchDetail()->getInvoiceBatch()->getCancelled()) {
-                if ($this->paid_amount != $this->total) {
+                if ($this->amount_paid != $this->total) {
                     return StatusList::PARTIALLY_PAID;
                 }
                 return StatusList::GENERATED_AND_PAID;
             }
             return StatusList::BATCHED;
         }
+
         if ($this->getPaid()) {
             return $this->getPaidBy();
         }
@@ -280,6 +311,16 @@ class Invoice extends BaseModel implements HasMedia
         $this->status = $this->computeStatus();
         $this->save();
         return $this->status;
+    }
+
+    public function getXeroUrl()
+    {
+        if (!$this->xero_invoice_id) {
+            return '#';
+        }
+        return "https://go.xero.com/organisationlogin/default.aspx?shortcode=".
+            $this->company->xero_short_code
+        ."&redirecturl=/AccountsPayable/View.aspx?InvoiceID=".$this->xero_invoice_id;
     }
 
     public function scopeDateFrom($query, $date)
@@ -301,7 +342,7 @@ class Invoice extends BaseModel implements HasMedia
         });
     }
 
-    public function scopeOrderBySupplierName($query, $direction = "DESC")
+    public function scopeOrderBySupplierName($query, $direction)
     {
         return $query->join('suppliers', 'suppliers.id', 'invoices.supplier_id')
             ->select('suppliers.name as supplier_name', 'invoices.*')

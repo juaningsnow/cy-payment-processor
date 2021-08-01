@@ -26,10 +26,10 @@ class CreateInvoicesTable extends Migration
             $table->text('description')->nullable();
             $table->string('status')->nullable();
             $table->string('paid_by')->nullable();
+            $table->foreignId('company_owner_id')->nullable();
             $table->foreignId('company_id');
-            $table->boolean('paid')->default(false);
             $table->string('xero_invoice_id')->nullable();
-            $table->string('xero_payment_id')->nullable();
+            $table->boolean('paid')->default(false);
             $table->boolean('archived')->default(false);
             $table->timestamps();
         });

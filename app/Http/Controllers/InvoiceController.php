@@ -40,7 +40,8 @@ class InvoiceController extends Controller
             'sorter' => 'id',
             'sortAscending' => true,
             'baseUrl' => '/api/invoices?no_invoice_batch_detail_or_cancelled=1&paid=0&include=supplier',
-            'exportBaseUrl' => '/invoices'
+            'exportBaseUrl' => '/invoices',
+            'companyId' => auth()->user()->getActiveCompany()->id,
         ];
         return view('invoices.index', ['title' => 'Invoice', 'indexVariables' => $indexVariables]);
     }

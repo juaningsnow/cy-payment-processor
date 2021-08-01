@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Interpreters\Traits\DateParser;
 use App\Http\Interpreters\XeroInterpreter;
 use App\Models\Account;
 use App\Models\Company;
 use App\Models\Config;
 use App\Models\Currency;
 use App\Models\Invoice;
+use App\Models\InvoicePayment;
 use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class XeroController extends Controller
 {
+    use DateParser;
     public function status()
     {
         $xeroInterpreter = resolve(XeroInterpreter::class);
@@ -44,12 +47,17 @@ class XeroController extends Controller
             $tenantDetails = $xeroInterpreter->getTenantConnection($jwtPayload->authentication_event_id);
             $company->xero_connection_id = $tenantDetails->id;
             $company->xero_tenant_id = $tenantDetails->tenantId;
+            $organisation = $xeroInterpreter->getOrganization($tenantDetails->tenantId);
+            $company->xero_short_code = $organisation->ShortCode;
             $company->save();
             if (Account::where('company_id', $company->id)->count() < 1) {
                 $xeroInterpreter->seedAccounts($company);
             }
             $xeroInterpreter->seedCurrencies($company);
             $this->seedXeroInvoices($xeroInterpreter->retrieveAuthorisedInvoices($tenantDetails->tenantId), $tenantDetails->tenantId);
+            $this->seedXeroInvoices($xeroInterpreter->retrievePaidInvoices($tenantDetails->tenantId), $tenantDetails->tenantId);
+            
+            
             return redirect()->route('xero_status');
         }
     }
@@ -77,11 +85,28 @@ class XeroController extends Controller
         $processorInvoice->amount_due = $invoice->AmountDue;
         $processorInvoice->amount_paid = $invoice->AmountPaid;
         $processorInvoice->company_id = $company->id;
-        $processorInvoice->status = $processorInvoice->computeStatus();
         $processorInvoice->xero_invoice_id = $invoice->InvoiceID;
         $processorInvoice->currency_id = $currency->id;
         $processorInvoice->fromXero = true;
+        if ($processorInvoice->total == $processorInvoice->amount_paid) {
+            $processorInvoice->paid = true;
+        }
+        $processorInvoice->status = $processorInvoice->computeStatus();
         $processorInvoice->save();
+        if (property_exists($invoice, 'Payments')) {
+            $processorInvoice->invoicePayments()->sync($this->assembleInvoicePayments($invoice->Payments));
+        }
+    }
+
+    private function assembleInvoicePayments($payments)
+    {
+        return collect(array_map(function ($item) {
+            $payment = new InvoicePayment();
+            $payment->date =  $this->parseDate($item->Date);
+            $payment->xero_payment_id = $item->PaymentID;
+            $payment->amount = $item->Amount;
+            return $payment;
+        }, $payments));
     }
 
     private function createSupplier($contactId, $tenantId)

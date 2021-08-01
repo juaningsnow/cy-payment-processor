@@ -39,4 +39,23 @@ trait AccountsTrait
         }
         return $seeds;
     }
+
+    public function refreshAccounts(Company $company)
+    {
+        Account::where('company_id', $company->id)->delete();
+        $accounts = $this->getCurrencies($company);
+        $seeds = [];
+        foreach ($accounts as $account) {
+            if (property_exists($account, 'Code')) {
+                $seeded = Account::create([
+                    'xero_account_id' => $account->AccountID,
+                    'name' => $account->Name,
+                    'code' => $account->Code,
+                    'company_id' => $company->id
+                ]);
+                $seeds[] = $seeded;
+            }
+        }
+        return $seeds;
+    }
 }

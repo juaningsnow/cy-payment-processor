@@ -15,7 +15,7 @@
                         <a href="{{route('company_edit', $id)}}">
                             <button type="button" class="btn btn-info"><i class="fas fa-edit"></i></button></a>
                         <button type="button" @click="refreshCurrencies" class="btn btn-info">Refresh
-                            Currencies</button>
+                            Currencies and Accounts</button>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                 <i class="fas fa-minus"></i>
