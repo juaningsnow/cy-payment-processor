@@ -66,6 +66,10 @@ export default {
         removeBank(companyBank) {
             this.$emit("remove-bank", companyBank);
         },
+
+        makeDefault(companyBank) {
+            this.$emit("make-default", companyBank);
+        },
     },
 };
 </script>

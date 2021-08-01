@@ -20,6 +20,7 @@ class CompanyBankResource extends JsonResource
             'companyId' => $this->company_id,
             'bank' => new BankResource($this->whenLoaded('bank')),
             'company' => new CompanyResource($this->whenLoaded('company')),
+            'account' => new AccountResource($this->whenLoaded('account')),
             'accountNumber' => $this->account_number,
             'accountId' => $this->account_id,
             'default' => (bool) $this->default,

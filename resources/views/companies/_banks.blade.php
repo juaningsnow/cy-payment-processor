@@ -11,7 +11,7 @@
         </thead>
         <tbody>
             <tr v-for="companyBank in form.companyBanks.data" is="company-bank-row" :company-id="form.id"
-                :company-bank="companyBank" @remove-bank="removeBank" @reload-data="load">
+                :company-bank="companyBank" @remove-bank="removeBank" @make-default="makeDefault" @reload-data="load">
             </tr>
         </tbody>
         <tfoot>

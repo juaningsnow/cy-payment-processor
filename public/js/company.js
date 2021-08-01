@@ -2089,6 +2089,9 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     removeBank: function removeBank(companyBank) {
       this.$emit("remove-bank", companyBank);
+    },
+    makeDefault: function makeDefault(companyBank) {
+      this.$emit("make-default", companyBank);
     }
   }
 });
@@ -19935,7 +19938,7 @@ new vue__WEBPACK_IMPORTED_MODULE_6__.default({
 
       this.dataInitialized = false;
       this.isEdit = true;
-      this.form.get("/api/companies/" + this.form.id + "?include=currencies,companyOwners,companyBanks.bank.account,companyBanks.account,banks").then(function (response) {
+      this.form.get("/api/companies/" + this.form.id + "?include=currencies,companyOwners,companyBanks.bank,companyBanks.account,banks").then(function (response) {
         _this6.loadData(response.data);
 
         _this6.dataInitialized = true;
