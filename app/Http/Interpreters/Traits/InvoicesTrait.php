@@ -209,9 +209,11 @@ trait InvoicesTrait
     public function syncPayments($invoice)
     {
         $processorInvoice = Invoice::where('xero_invoice_id', $invoice->InvoiceID)->first();
-        $payments = $this->assembleInvoicePayments($invoice->Payments);
-        if ($processorInvoice) {
-            $processorInvoice->invoicePayments()->sync($payments);
+        if (property_exists($invoice, 'Payments')) {
+            $payments = $this->assembleInvoicePayments($invoice->Payments);
+            if ($processorInvoice) {
+                $processorInvoice->invoicePayments()->sync($payments);
+            }
         }
     }
 

@@ -95,7 +95,7 @@ class InvoiceApiController extends ResourceApiController
         foreach ($invoices as $invoice) {
             $invoice->setPaid(true);
             $invoice->setPaidBy($paidBy);
-            if($paidBy == 'Owner'){
+            if ($paidBy == 'Owner') {
                 $invoice->setCompanyOwner($companyOwner);
             }
             $invoice->save();

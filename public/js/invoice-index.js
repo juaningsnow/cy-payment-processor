@@ -3298,7 +3298,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       title: "Mark as Paid",
       form: new _Form__WEBPACK_IMPORTED_MODULE_1__.Form({
-        selectedInvoices: [],
+        selected: [],
         paidBy: "Cash",
         ownerId: null
       }),
@@ -3311,7 +3311,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    this.form.selectedInvoices = this.selected;
+    this.form.selected = this.selected;
     this.form.get("/api/companies/".concat(this.companyId, "?include=companyOwners")).then(function (response) {
       _this.ownerSelection = response.data.companyOwners.data;
       _this.ownersInitialized = true;
@@ -3332,7 +3332,7 @@ __webpack_require__.r(__webpack_exports__);
           text: "Invoices has been marked as paid",
           type: "success"
         }).then(function () {
-          _this2.reloadData();
+          _this2.$emit("reload-data");
 
           _this2.close();
         });

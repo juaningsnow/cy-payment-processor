@@ -95,7 +95,7 @@ export default {
         return {
             title: "Mark as Paid",
             form: new Form({
-                selectedInvoices: [],
+                selected: [],
                 paidBy: "Cash",
                 ownerId: null,
             }),
@@ -107,7 +107,7 @@ export default {
     },
 
     created() {
-        this.form.selectedInvoices = this.selected;
+        this.form.selected = this.selected;
         this.form
             .get(`/api/companies/${this.companyId}?include=companyOwners`)
             .then((response) => {
@@ -129,7 +129,7 @@ export default {
                     text: "Invoices has been marked as paid",
                     type: "success",
                 }).then(() => {
-                    this.reloadData();
+                    this.$emit("reload-data");
                     this.close();
                 });
             });
