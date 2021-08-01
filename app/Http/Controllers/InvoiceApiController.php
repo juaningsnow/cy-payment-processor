@@ -117,7 +117,7 @@ class InvoiceApiController extends ResourceApiController
         $xero = resolve(XeroInterpreter::class);
         $xeroInvoice = $xero->getInvoice($invoice->xero_invoice_id, $company->xero_tenant_id);
         $xero->syncAttachments($xeroInvoice);
-        $xero->($xeroInvoice);
+        $xero->syncPayments($xeroInvoice);
         return response('success', 200);
     }
 
