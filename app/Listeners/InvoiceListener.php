@@ -75,7 +75,6 @@ class InvoiceListener
             $processorInvoice->company_id = $company->id;
             $processorInvoice->status = $processorInvoice->computeStatus();
             $processorInvoice->xero_invoice_id = $invoice->InvoiceID;
-            $processorInvoice->xero_payment_id = $invoice->Payments[0]->PaymentID;
             $processorInvoice->paid = true;
             $processorInvoice->paid_by = "Paid on Xero";
             $processorInvoice->fromXero = true;
