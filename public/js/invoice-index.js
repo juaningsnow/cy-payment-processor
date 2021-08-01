@@ -2051,7 +2051,7 @@ __webpack_require__.r(__webpack_exports__);
             id: _this2.counter--,
             invoiceId: invoice.id,
             invoice: invoice,
-            amount: Number(invoice.amountDue)
+            amount: Number(invoice.amountDue) > 0 ? Number(invoice.amountDue) : Number(invoice.total)
           });
         });
 
@@ -2095,24 +2095,27 @@ __webpack_require__.r(__webpack_exports__);
       var _this5 = this;
 
       this.allSuppliersHasBankDetails();
-      this.form.post("/api/invoice-batches").then(function (response) {
-        _this5.$swal({
-          title: "Batch Created!",
-          text: "Invoice Batch has beend saved to database",
-          type: "success"
-        }).then(function () {
-          var showUrl = new URL("".concat(window.location.origin, "/invoice-batches/").concat(response.data.id));
-          window.location = showUrl;
 
-          _this5.close();
+      if (!this.supplierIdToUpdate) {
+        this.form.post("/api/invoice-batches").then(function (response) {
+          _this5.$swal({
+            title: "Batch Created!",
+            text: "Invoice Batch has beend saved to database",
+            type: "success"
+          }).then(function () {
+            var showUrl = new URL("".concat(window.location.origin, "/invoice-batches/").concat(response.data.id));
+            window.location = showUrl;
+
+            _this5.close();
+          });
+        })["catch"](function (error) {
+          _this5.$swal({
+            title: "Error!",
+            text: error.message,
+            type: "warning"
+          });
         });
-      })["catch"](function (error) {
-        _this5.$swal({
-          title: "Error!",
-          text: error.message,
-          type: "warning"
-        });
-      });
+      }
     },
     reloadData: function reloadData() {
       var _this6 = this;
@@ -2951,7 +2954,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -2968,11 +2970,11 @@ __webpack_require__.r(__webpack_exports__);
       type: Boolean,
       "default": true
     },
-    isEdit: {
-      type: Boolean,
-      "default": true
-    },
     isAdd: {
+      type: Boolean,
+      defailt: true
+    },
+    isEdit: {
       type: Boolean,
       defailt: true
     }
@@ -31019,11 +31021,7 @@ var render = function() {
             }
           ],
           staticClass: "form-control text-right",
-          attrs: {
-            type: "number",
-            disabled: !_vm.isEdit,
-            placeholder: "Amount"
-          },
+          attrs: { type: "number", placeholder: "Amount" },
           domProps: { value: _vm.detail.amount },
           on: {
             input: function($event) {

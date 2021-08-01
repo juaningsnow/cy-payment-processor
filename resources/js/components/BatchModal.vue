@@ -193,7 +193,10 @@ export default {
                         id: this.counter--,
                         invoiceId: invoice.id,
                         invoice: invoice,
-                        amount: Number(invoice.amountDue),
+                        amount:
+                            Number(invoice.amountDue) > 0
+                                ? Number(invoice.amountDue)
+                                : Number(invoice.total),
                     });
                 });
                 resolve();
@@ -232,28 +235,30 @@ export default {
         },
         save() {
             this.allSuppliersHasBankDetails();
-            this.form
-                .post(`/api/invoice-batches`)
-                .then((response) => {
-                    this.$swal({
-                        title: "Batch Created!",
-                        text: "Invoice Batch has beend saved to database",
-                        type: "success",
-                    }).then(() => {
-                        let showUrl = new URL(
-                            `${window.location.origin}/invoice-batches/${response.data.id}`
-                        );
-                        window.location = showUrl;
-                        this.close();
+            if (!this.supplierIdToUpdate) {
+                this.form
+                    .post(`/api/invoice-batches`)
+                    .then((response) => {
+                        this.$swal({
+                            title: "Batch Created!",
+                            text: "Invoice Batch has beend saved to database",
+                            type: "success",
+                        }).then(() => {
+                            let showUrl = new URL(
+                                `${window.location.origin}/invoice-batches/${response.data.id}`
+                            );
+                            window.location = showUrl;
+                            this.close();
+                        });
+                    })
+                    .catch((error) => {
+                        this.$swal({
+                            title: "Error!",
+                            text: error.message,
+                            type: "warning",
+                        });
                     });
-                })
-                .catch((error) => {
-                    this.$swal({
-                        title: "Error!",
-                        text: error.message,
-                        type: "warning",
-                    });
-                });
+            }
         },
         reloadData() {
             this.dataInitialized = false;

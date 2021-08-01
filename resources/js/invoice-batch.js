@@ -177,7 +177,6 @@ new Vue({
         exportTextFile() {
             let path = new URL(`${window.location.origin}/invoice-batches/${id}/generate`);
             window.open(path);
-            window.location = `${window.location.origin}/invoice-batches/${id}`;
         },
     },
 

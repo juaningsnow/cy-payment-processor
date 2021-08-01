@@ -98,6 +98,7 @@ trait InvoicesTrait
             ],
             "DateString" => $date->toDateTimeLocalString(),
             "DueDateString" => $date->toDateTimeLocalString(),
+            "CurrencyCode" => $invoice->getCurrency()->code,
             "InvoiceNumber" => $invoice->invoice_number,
             "LineItems" => [[
                 "Description" => $invoice->description ? $invoice->description : '.',

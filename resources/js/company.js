@@ -159,7 +159,7 @@ new Vue({
             this.isEdit = true;
             this.form
                 .get(
-                    "/api/companies/" + this.form.id + "?include=currencies,companyOwners,companyBanks.bank,companyBanks.account,banks"
+                    "/api/companies/" + this.form.id + "?include=currencies,companyOwners,companyBanks.bank.account,companyBanks.account,banks"
                 ).then(response => {
                     this.loadData(response.data);
                     this.dataInitialized = true;

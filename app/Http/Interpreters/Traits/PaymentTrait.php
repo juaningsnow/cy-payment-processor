@@ -43,7 +43,7 @@ trait PaymentTrait
 
     public function makeBatchPayment(InvoiceBatch $invoiceBatch)
     {
-        $accountId = Account::where('code', $invoiceBatch->company->getDefaultAccountCode())->first()->xero_account_id;
+        $accountId = Account::where('code', $invoiceBatch->company->getDefaultAccountCode())->where('company_id', $invoiceBatch->company->id)->first()->xero_account_id;
         $payToSupplier = $invoiceBatch->supplier()->exists() ? $invoiceBatch->supplier : null;
         try {
             $body = [

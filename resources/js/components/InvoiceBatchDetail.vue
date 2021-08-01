@@ -31,7 +31,6 @@
                 <input
                     type="number"
                     class="form-control text-right"
-                    :disabled="isShow"
                     placeholder="Amount"
                     v-model.number="detail.amount"
                 />
@@ -79,6 +78,10 @@ export default {
             default: true,
         },
         isAdd: {
+            type: Boolean,
+            defailt: true,
+        },
+        isEdit: {
             type: Boolean,
             defailt: true,
         },

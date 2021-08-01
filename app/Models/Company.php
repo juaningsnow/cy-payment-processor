@@ -81,10 +81,10 @@ class Company extends BaseModel
         return $this;
     }
 
-    // public function getDefaultAccountCode()
-    // {
-    //     return $this->companyBanks()->where('default', true)->first()->xero_account_code;
-    // }
+    public function getDefaultAccountCode()
+    {
+        return $this->getDefaultBank()->account->code;
+    }
 
     public function getDefaultBank()
     {

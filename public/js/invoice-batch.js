@@ -2528,7 +2528,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -2545,11 +2544,11 @@ __webpack_require__.r(__webpack_exports__);
       type: Boolean,
       "default": true
     },
-    isEdit: {
-      type: Boolean,
-      "default": true
-    },
     isAdd: {
+      type: Boolean,
+      defailt: true
+    },
+    isEdit: {
       type: Boolean,
       defailt: true
     }
@@ -29500,11 +29499,7 @@ var render = function() {
             }
           ],
           staticClass: "form-control text-right",
-          attrs: {
-            type: "number",
-            disabled: !_vm.isEdit,
-            placeholder: "Amount"
-          },
+          attrs: { type: "number", placeholder: "Amount" },
           domProps: { value: _vm.detail.amount },
           on: {
             input: function($event) {
@@ -45454,7 +45449,6 @@ new vue__WEBPACK_IMPORTED_MODULE_8__.default({
     exportTextFile: function exportTextFile() {
       var path = new URL("".concat(window.location.origin, "/invoice-batches/").concat(id, "/generate"));
       window.open(path);
-      window.location = "".concat(window.location.origin, "/invoice-batches/").concat(id);
     }
   },
   created: function created() {
