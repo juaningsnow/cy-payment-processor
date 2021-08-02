@@ -208,68 +208,93 @@ export default {
         },
         analyzeSuppliers() {
             return new Promise((resolve, reject) => {
-                this.form.invoiceBatchDetails.data.forEach((detail, index) => {
-                    if (
-                        !detail.invoice.supplier.bankId ||
-                        !detail.invoice.supplier.accountNumber
-                    ) {
-                        this.invoiceBatchDetailIndexForSupplierUpdate = index;
-                        this.supplierIdToUpdate = detail.invoice.supplier.id;
-                    }
-                });
-                resolve();
-            });
-        },
-        allSuppliersHasBankDetails() {
-            this.analyzeSuppliers().then(() => {
-                if (this.supplierIdToUpdate) {
-                    this.$swal({
-                        title: "Missing data!",
-                        text: "Need to Update Supplier Bank Details",
-                        type: "warning",
-                    }).then(() => {
-                        this.showSupplierModal = true;
-                    });
+                if (!this.form.supplierId) {
+                    this.form.invoiceBatchDetails.data.forEach(
+                        (detail, index) => {
+                            if (
+                                !detail.invoice.supplier.bankId ||
+                                !detail.invoice.supplier.accountNumber
+                            ) {
+                                this.invoiceBatchDetailIndexForSupplierUpdate =
+                                    index;
+                                this.supplierIdToUpdate =
+                                    detail.invoice.supplier.id;
+                            }
+                        }
+                    );
+                    resolve();
+                } else {
+                    this.form
+                        .get(`/api/suppliers/${this.form.supplierId}`)
+                        .then((response) => {
+                            if (
+                                !response.data.bankId ||
+                                !response.data.accountNumber
+                            ) {
+                                this.supplierIdToUpdate = response.data.id;
+                            }
+                        });
+                    resolve();
                 }
             });
         },
-        save() {
-            this.allSuppliersHasBankDetails();
-            if (!this.supplierIdToUpdate) {
-                this.form
-                    .post(`/api/invoice-batches`)
-                    .then((response) => {
+        allSuppliersHasBankDetails() {
+            return new Promise((resolve, reject) => {
+                this.analyzeSuppliers().then(() => {
+                    if (this.supplierIdToUpdate) {
                         this.$swal({
-                            title: "Batch Created!",
-                            text: "Invoice Batch has beend saved to database",
-                            type: "success",
-                        }).then(() => {
-                            let showUrl = new URL(
-                                `${window.location.origin}/invoice-batches/${response.data.id}`
-                            );
-                            window.location = showUrl;
-                            this.close();
-                        });
-                    })
-                    .catch((error) => {
-                        this.$swal({
-                            title: "Error!",
-                            text: error.message,
+                            title: "Missing data!",
+                            text: "Need to Update Supplier Bank Details",
                             type: "warning",
+                        }).then(() => {
+                            this.showSupplierModal = true;
                         });
-                    });
-            }
+                    }
+                    resolve();
+                });
+            });
+        },
+        save() {
+            this.allSuppliersHasBankDetails().then(() => {
+                if (!this.supplierIdToUpdate) {
+                    this.form
+                        .post(`/api/invoice-batches`)
+                        .then((response) => {
+                            this.$swal({
+                                title: "Batch Created!",
+                                text: "Invoice Batch has beend saved to database",
+                                type: "success",
+                            }).then(() => {
+                                let showUrl = new URL(
+                                    `${window.location.origin}/invoice-batches/${response.data.id}`
+                                );
+                                window.location = showUrl;
+                                this.close();
+                            });
+                        })
+                        .catch((error) => {
+                            this.$swal({
+                                title: "Error!",
+                                text: error.message,
+                                type: "warning",
+                            });
+                        });
+                }
+            });
         },
         reloadData() {
             this.dataInitialized = false;
             this.form
                 .get(`/api/suppliers/${this.supplierIdToUpdate}`)
                 .then((response) => {
-                    this.form.invoiceBatchDetails.data[
-                        this.invoiceBatchDetailIndexForSupplierUpdate
-                    ].invoice.supplier = response.data;
+                    if (this.invoiceBatchDetailIndexForSupplierUpdate) {
+                        this.form.invoiceBatchDetails.data[
+                            this.invoiceBatchDetailIndexForSupplierUpdate
+                        ].invoice.supplier = response.data;
+                        this.invoiceBatchDetailIndexForSupplierUpdate = null;
+                    }
+
                     this.supplierIdToUpdate = null;
-                    this.invoiceBatchDetailIndexForSupplierUpdate = null;
                     this.dataInitialized = true;
                 });
         },
