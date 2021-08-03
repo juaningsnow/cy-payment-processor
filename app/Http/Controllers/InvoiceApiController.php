@@ -214,7 +214,7 @@ class InvoiceApiController extends ResourceApiController
         $invoice->setSupplier($supplier);
         $invoice->setDate(new DateTime($request->input('date')));
         $invoice->setInvoiceNumber($request->input('invoiceNumber'));
-        $invoice->setAmount($request->input('total'));
+        $invoice->total = $request->input('total');
         $invoice->setDescription($request->input('description'));
         $invoice->currency_id = $request->input('currencyId');
         $invoice->triggerXero = true;
