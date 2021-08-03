@@ -47,6 +47,7 @@ trait AccountsTrait
         $accounts = $this->getCurrencies($company);
         $seeds = [];
         foreach ($accounts as $account) {
+            dd($account);
             if (property_exists($account, 'Code')) {
                 $seeded = Account::create([
                     'xero_account_id' => $account->AccountID,
