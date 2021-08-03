@@ -161,13 +161,13 @@ class CompanyApiController extends ResourceApiController
 
     private function deleteCompanyData($companyId)
     {
+        InvoiceBatch::where('company_id', $companyId)->delete();
+
         Invoice::where('company_id', $companyId)->get()->each(function ($invoice) {
             $invoice->fromXero = true;
             $invoice->delete();
         });
-
-        InvoiceBatch::where('company_id', $companyId)->delete();
-
+        
         Account::where('company_id', $companyId)->delete();
 
         Currency::where('company_id', $companyId)->delete();

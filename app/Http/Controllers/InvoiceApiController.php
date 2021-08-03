@@ -139,7 +139,7 @@ class InvoiceApiController extends ResourceApiController
 
     private function createInvoice($invoice, $tenantId)
     {
-        $supplier = Supplier::where('xero_contact_Id', $invoice->Contact->ContactID)->first();
+        $supplier = Supplier::where('xero_contact_id', $invoice->Contact->ContactID)->first();
         $company = Company::where('xero_tenant_id', $tenantId)->first();
         $sgd = Currency::where('code', 'SGD')->first();
         if (!$supplier) {
