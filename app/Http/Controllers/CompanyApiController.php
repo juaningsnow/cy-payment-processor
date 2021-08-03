@@ -13,6 +13,7 @@ use App\Models\CompanyOwner;
 use App\Models\Currency;
 use App\Models\Invoice;
 use App\Models\InvoiceBatch;
+use App\Models\InvoicePayment;
 use BaseCode\Common\Controllers\ResourceApiController;
 use BaseCode\Common\Exceptions\GeneralApiException;
 use Illuminate\Http\Request;
