@@ -21,6 +21,7 @@ class Invoice extends BaseModel implements HasMedia
     protected $table = 'invoices';
 
     public $fromXero = false;
+    public $triggerXero = false;
 
     protected static function booted()
     {
@@ -36,13 +37,18 @@ class Invoice extends BaseModel implements HasMedia
             $model->amount_paid = $model->computePaidAmount();
             $model->amount_due = $model->total - $model->amount_paid;
             if (!$model->fromXero) {
-                $xeroInterpreter->updateInvoice($model);
-                if (!$model->xero_payment_id && $model->paid) {
-                    if ($model->companyOwner()->exists()) {
-                        $xeroInterpreter->makePayment($model);
+                if ($model->triggerXero) {
+                    $xeroInterpreter->updateInvoice($model);
+                    if (!$model->xero_payment_id && $model->paid) {
+                        if ($model->companyOwner()->exists()) {
+                            $xeroInterpreter->makePayment($model);
+                        }
                     }
                 }
             }
+        });
+
+        static::updated(function ($model) use ($xeroInterpreter) {
         });
 
         static::deleting(function ($model) use ($xeroInterpreter) {

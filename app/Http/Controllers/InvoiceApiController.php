@@ -98,6 +98,7 @@ class InvoiceApiController extends ResourceApiController
             if ($paidBy == 'Owner') {
                 $invoice->setCompanyOwner($companyOwner);
             }
+            $invoice->triggerXero = true;
             $invoice->save();
         }
         return $this->getResourceCollection(collect($invoices));
@@ -215,6 +216,7 @@ class InvoiceApiController extends ResourceApiController
         $invoice->setAmount($request->input('total'));
         $invoice->setDescription($request->input('description'));
         $invoice->currency_id = $request->input('currencyId');
+        $invoice->triggerXero = true;
         $invoice->save();
         return $this->getResource($invoice);
     }

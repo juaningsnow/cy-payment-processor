@@ -57,7 +57,6 @@ class XeroController extends Controller
             $this->seedXeroInvoices($xeroInterpreter->retrieveAuthorisedInvoices($tenantDetails->tenantId), $tenantDetails->tenantId);
             $this->seedXeroInvoices($xeroInterpreter->retrievePaidInvoices($tenantDetails->tenantId), $tenantDetails->tenantId);
             
-            
             return redirect()->route('xero_status');
         }
     }
