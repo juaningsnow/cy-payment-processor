@@ -81,7 +81,7 @@ new Vue({
         },
         totalAmount() {
             return this.form.invoiceBatchDetails.data.reduce((prev, curr) => {
-                return prev + curr.invoice.amount;
+                return prev + curr.amount;
             }, 0.0);
         },
     },
@@ -174,9 +174,26 @@ new Vue({
                 });
         },
 
+        validateData() {
+            return new Promise((resolve, reject) => {
+                this.form.get(`/api/invoice-batches/validate-export`).then(response => {
+                    resolve();
+                }).catch(error => {
+                    this.$swal({
+                        title: "Notice!",
+                        text: error.message,
+                        type: "error"
+                    });
+                    reject();
+                });
+            })
+        },
+
         exportTextFile() {
-            let path = new URL(`${window.location.origin}/invoice-batches/${id}/generate`);
-            window.open(path);
+            this.validateData().then(() => {
+                let path = new URL(`${window.location.origin}/invoice-batches/${id}/generate`);
+                window.open(path);
+            })
         },
     },
 

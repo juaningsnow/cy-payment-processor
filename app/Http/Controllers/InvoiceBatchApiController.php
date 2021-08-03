@@ -97,4 +97,16 @@ class InvoiceBatchApiController extends ResourceApiController
         $invoiceBatch->delete();
         return response('success', 200);
     }
+
+    public function validateForExport(Request $request)
+    {
+        if (!$request->user()->getActiveCompany()->getDefaultBank()) {
+            throw new GeneralApiException('User company does not have a default Bank!');
+        }
+        if (!$request->user()->getActiveCompany()->getDefaultBank()->account) {
+            throw new GeneralApiException('Company Default Bank does not have an account yet!');
+        }
+
+        return response('success', 200);
+    }
 }

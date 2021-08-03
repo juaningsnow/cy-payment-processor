@@ -16,8 +16,10 @@ class CreateCompanyOwnersTable extends Migration
         Schema::create('company_owners', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('company_id');
-            $table->foreignId('account_id');
+            $table->bigInteger('company_id')->unsigned();
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->bigInteger('account_id')->unsigned();
+            $table->foreign('account_id')->references('id')->on('accounts')->onDelete('cascade');
             $table->timestamps();
         });
     }

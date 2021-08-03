@@ -126,7 +126,7 @@
 </template>
 <script>
 import ModalWindow from "./ModalWindow";
-import InvoiceBatchDetail from "./InvoiceBatchDetail";
+import InvoiceBatchDetail from "./InvoiceBatchDetail2";
 import SupplierModal from "./SupplierModal.vue";
 import { Form } from "./Form";
 import moment from "moment";
@@ -219,6 +219,7 @@ export default {
                                     index;
                                 this.supplierIdToUpdate =
                                     detail.invoice.supplier.id;
+                                reject();
                             }
                         }
                     );
@@ -232,26 +233,31 @@ export default {
                                 !response.data.accountNumber
                             ) {
                                 this.supplierIdToUpdate = response.data.id;
+                                reject();
+                            } else {
+                                resolve();
                             }
                         });
-                    resolve();
                 }
             });
         },
         allSuppliersHasBankDetails() {
             return new Promise((resolve, reject) => {
-                this.analyzeSuppliers().then(() => {
-                    if (this.supplierIdToUpdate) {
-                        this.$swal({
-                            title: "Missing data!",
-                            text: "Need to Update Supplier Bank Details",
-                            type: "warning",
-                        }).then(() => {
-                            this.showSupplierModal = true;
-                        });
-                    }
-                    resolve();
-                });
+                this.analyzeSuppliers()
+                    .then(() => {
+                        resolve();
+                    })
+                    .catch((error) => {
+                        if (this.supplierIdToUpdate) {
+                            this.$swal({
+                                title: "Missing data!",
+                                text: "Need to Update Supplier Bank Details",
+                                type: "warning",
+                            }).then(() => {
+                                this.showSupplierModal = true;
+                            });
+                        }
+                    });
             });
         },
         save() {

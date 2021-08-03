@@ -6,6 +6,7 @@ use App\Models\Supplier;
 use BaseCode\Common\Exceptions\GeneralApiException;
 use Exception;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 trait ContactsTrait
 {
@@ -14,7 +15,12 @@ trait ContactsTrait
         try {
             $response = Http::withHeaders($this->getTenantDefaultHeaders($tenantId))->get($this->baseUrl.'/Contacts/'.$contactId);
             $data = json_decode($response->getBody()->getContents());
-            return $data->Contacts[0];
+            if (property_exists($data, 'Contacts')) {
+                return $data->Contacts[0];
+            } else {
+                Log::info($data);
+                return null;
+            }
         } catch (Exception $e) {
             throw new GeneralApiException($e);
         }

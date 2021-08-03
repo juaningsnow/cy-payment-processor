@@ -46,11 +46,14 @@ new Vue({
             invoiceNumber: "",
             amount: 0.0,
             description: "",
+            currencyId: null,
         }),
         csrfToken: $('input[name="_token"]').val(),
         myFiles: [],
         supplierSelections: [],
         suppliersInitialized: false,
+        currencySelections: [],
+        currencyInitialized: false,
         dataInitialized: true,
         isShow: false,
         showInvoiceAttachmentModal: false,
@@ -67,7 +70,7 @@ new Vue({
 
     computed: {
         initializationComplete() {
-            return this.dataInitialized && this.suppliersInitialized;
+            return this.dataInitialized && this.suppliersInitialized && this.currencyInitialized;
         },
     },
 
@@ -132,6 +135,10 @@ new Vue({
         this.form.get(`/api/suppliers?limit=${Number.MAX_SAFE_INTEGER}`).then(response => {
             this.supplierSelections = response.data;
             this.suppliersInitialized = true;
+            this.form.get(`/api/currencies?limit=${Number.MAX_SAFE_INTEGER}`).then(response => {
+                this.currencySelections = response.data;
+                this.currencyInitialized = true;
+            });
         })
         this.isShow = typeof isShow !== "undefined" ? isShow : false;
     },

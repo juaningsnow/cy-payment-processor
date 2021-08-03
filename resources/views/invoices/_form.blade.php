@@ -45,4 +45,17 @@
             <input type="text" :disabled="isShow" class="form-control" placeholder="Remarks" v-model="form.description">
         </div>
     </div>
+    <div class="col-6">
+        <div class="form-group">
+            <label for="currency">Currency</label>
+            <select class="form-control select2" v-model="form.currencyId" style="width: 100%" :disabled="isShow">
+                <option selected="selected" disabled :value="null">
+                    -Select Currency-
+                </option>
+                <option v-for="(item, index) in currencySelections" :key="index" :value="item.id">
+                    @{{ item.code }}
+                </option>
+            </select>
+        </div>
+    </div>
 </div>

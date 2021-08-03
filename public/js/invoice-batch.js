@@ -2528,6 +2528,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -29411,31 +29418,45 @@ var render = function() {
   return _c("tbody", [
     _c("tr", [
       _c("td", [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.detail.invoice.supplier.name,
-              expression: "detail.invoice.supplier.name"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            disabled: _vm.isShow,
-            placeholder: "Supplier"
-          },
-          domProps: { value: _vm.detail.invoice.supplier.name },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+        _vm.isShow
+          ? _c("span", [
+              _c("a", { attrs: { href: _vm.detail.invoice.showUrl } }, [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(_vm.detail.invoice.supplier.name) +
+                    "\n                "
+                )
+              ])
+            ])
+          : _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.detail.invoice.supplier.name,
+                  expression: "detail.invoice.supplier.name"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                type: "text",
+                disabled: _vm.isShow,
+                placeholder: "Supplier"
+              },
+              domProps: { value: _vm.detail.invoice.supplier.name },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(
+                    _vm.detail.invoice.supplier,
+                    "name",
+                    $event.target.value
+                  )
+                }
               }
-              _vm.$set(_vm.detail.invoice.supplier, "name", $event.target.value)
-            }
-          }
-        })
+            })
       ]),
       _vm._v(" "),
       _c(
@@ -29499,7 +29520,11 @@ var render = function() {
             }
           ],
           staticClass: "form-control text-right",
-          attrs: { type: "number", placeholder: "Amount" },
+          attrs: {
+            type: "number",
+            placeholder: "Amount",
+            disabled: _vm.isShow
+          },
           domProps: { value: _vm.detail.amount },
           on: {
             input: function($event) {
@@ -29523,7 +29548,7 @@ var render = function() {
             "button",
             {
               staticClass: "btn btn-danger btn-sm",
-              attrs: { type: "button", disabled: !_vm.isEdit },
+              attrs: { type: "button", disabled: _vm.isShow },
               on: { click: _vm.remove }
             },
             [_c("i", { staticClass: "fas fa-times" })]
@@ -29740,7 +29765,7 @@ var render = function() {
                         _c("td", [_vm._v(_vm._s(item.date))]),
                         _vm._v(" "),
                         _c("td", { staticClass: "text-right" }, [
-                          _vm._v(_vm._s(_vm._f("numeric")(item.amount)))
+                          _vm._v(_vm._s(_vm._f("numeric")(item.total)))
                         ])
                       ]
                     )
@@ -45351,7 +45376,7 @@ new vue__WEBPACK_IMPORTED_MODULE_8__.default({
     },
     totalAmount: function totalAmount() {
       return this.form.invoiceBatchDetails.data.reduce(function (prev, curr) {
-        return prev + curr.invoice.amount;
+        return prev + curr.amount;
       }, 0.0);
     }
   },
@@ -45446,23 +45471,42 @@ new vue__WEBPACK_IMPORTED_MODULE_8__.default({
         _this5.dataInitialized = true;
       });
     },
+    validateData: function validateData() {
+      var _this6 = this;
+
+      return new Promise(function (resolve, reject) {
+        _this6.form.get("/api/invoice-batches/validate-export").then(function (response) {
+          resolve();
+        })["catch"](function (error) {
+          _this6.$swal({
+            title: "Notice!",
+            text: error.message,
+            type: "error"
+          });
+
+          reject();
+        });
+      });
+    },
     exportTextFile: function exportTextFile() {
-      var path = new URL("".concat(window.location.origin, "/invoice-batches/").concat(id, "/generate"));
-      window.open(path);
+      this.validateData().then(function () {
+        var path = new URL("".concat(window.location.origin, "/invoice-batches/").concat(id, "/generate"));
+        window.open(path);
+      });
     }
   },
   created: function created() {
-    var _this6 = this;
+    var _this7 = this;
 
     this.form.get("/api/suppliers").then(function (response) {
-      _this6.supplierSelections = response.data;
-      _this6.suppliersInitialized = true;
+      _this7.supplierSelections = response.data;
+      _this7.suppliersInitialized = true;
 
       if (id != null) {
-        _this6.dataInitialized = false;
-        _this6.isEdit = true;
+        _this7.dataInitialized = false;
+        _this7.isEdit = true;
 
-        _this6.load(id);
+        _this7.load(id);
       }
     });
     this.isShow = typeof isShow !== "undefined" ? isShow : false;
@@ -45472,14 +45516,14 @@ new vue__WEBPACK_IMPORTED_MODULE_8__.default({
       this.form.get("/api/invoice-batches/".concat(this.getUrlParams("source_invoice_batch_id"), "?include=invoiceBatchDetails.invoice.supplier")).then(function (response) {
         if (response.data.cancelled) {
           response.data.invoiceBatchDetails.data.forEach(function (data) {
-            _this6.form.invoiceBatchDetails.data.push({
-              id: _this6.counter--,
+            _this7.form.invoiceBatchDetails.data.push({
+              id: _this7.counter--,
               invoiceId: data.invoice.id,
               invoice: data.invoice
             });
           });
         } else {
-          _this6.$swal({
+          _this7.$swal({
             title: "Notice!",
             text: "The Batch you want to copy has not yet been cancelled.",
             type: "success"

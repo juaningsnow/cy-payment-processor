@@ -83,12 +83,7 @@ class InvoiceBatchController extends Controller
         if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
             return redirect()->route('xero_status');
         }
-        if (!auth()->user()->getActiveCompany()->getDefaultBank()) {
-            throw new GeneralApiException('User company does not have a default Bank!');
-        }
-        if (!auth()->user()->getActiveCompany()->getDefaultBank()->account) {
-            throw new GeneralApiException('Company Default Bank does not have an account yet!');
-        }
+       
         $batch = InvoiceBatch::find($id);
         $batch->setGenerated(true);
         $batch->save();

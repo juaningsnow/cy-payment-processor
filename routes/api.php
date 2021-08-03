@@ -105,6 +105,7 @@ Route::prefix('accounts')->group(function () {
 
 Route::prefix('invoice-batches')->group(function () {
     Route::get('/', [InvoiceBatchApiController::class, 'index']);
+    Route::get('/validate-export', [InvoiceBatchApiController::class, 'validateForExport']);
     Route::get('{id}', [InvoiceBatchApiController::class, 'show']);
     Route::post('/', [InvoiceBatchApiController::class, 'store']);
     Route::patch('{id}', [InvoiceBatchApiController::class, 'update']);

@@ -56,7 +56,7 @@
                         <td>{{ item.invoiceNumber }}</td>
                         <td>{{ item.supplier.name }}</td>
                         <td>{{ item.date }}</td>
-                        <td class="text-right">{{ item.amount | numeric }}</td>
+                        <td class="text-right">{{ item.total | numeric }}</td>
                     </tr>
                 </tbody>
             </table>

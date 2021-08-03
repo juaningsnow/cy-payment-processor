@@ -37960,12 +37960,15 @@ new vue__WEBPACK_IMPORTED_MODULE_8__.default({
       date: null,
       invoiceNumber: "",
       amount: 0.0,
-      description: ""
+      description: "",
+      currencyId: null
     }),
     csrfToken: $('input[name="_token"]').val(),
     myFiles: [],
     supplierSelections: [],
     suppliersInitialized: false,
+    currencySelections: [],
+    currencyInitialized: false,
     dataInitialized: true,
     isShow: false,
     showInvoiceAttachmentModal: false
@@ -37980,7 +37983,7 @@ new vue__WEBPACK_IMPORTED_MODULE_8__.default({
   },
   computed: {
     initializationComplete: function initializationComplete() {
-      return this.dataInitialized && this.suppliersInitialized;
+      return this.dataInitialized && this.suppliersInitialized && this.currencyInitialized;
     }
   },
   methods: {
@@ -38051,6 +38054,11 @@ new vue__WEBPACK_IMPORTED_MODULE_8__.default({
     this.form.get("/api/suppliers?limit=".concat(Number.MAX_SAFE_INTEGER)).then(function (response) {
       _this5.supplierSelections = response.data;
       _this5.suppliersInitialized = true;
+
+      _this5.form.get("/api/currencies?limit=".concat(Number.MAX_SAFE_INTEGER)).then(function (response) {
+        _this5.currencySelections = response.data;
+        _this5.currencyInitialized = true;
+      });
     });
     this.isShow = typeof isShow !== "undefined" ? isShow : false;
   }

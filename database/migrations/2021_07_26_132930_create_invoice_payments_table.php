@@ -16,7 +16,8 @@ class CreateInvoicePaymentsTable extends Migration
         Schema::create('invoice_payments', function (Blueprint $table) {
             $table->id();
             $table->date('date');
-            $table->foreignId('invoice_id');
+            $table->bigInteger('invoice_id')->unsigned();
+            $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
             $table->string('xero_payment_id');
             $table->decimal('amount', 15, 2);
             $table->timestamps();

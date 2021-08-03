@@ -34,6 +34,9 @@ class InvoiceBatch extends BaseModel
             if($model->cancelled){
                 $xeroInterpreter->cancelBatchPayment($model);
             }
+            $model->invoiceBatchDetails->each(function($detail)use($xeroInterpreter){
+                $xeroInterpreter->syncProcessorInvoiceData($detail->invoice);
+            });
         });
 
         static::deleting(function ($model) use ($xeroInterpreter) {

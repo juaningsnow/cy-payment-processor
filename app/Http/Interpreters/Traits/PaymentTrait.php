@@ -44,7 +44,6 @@ trait PaymentTrait
     public function makeBatchPayment(InvoiceBatch $invoiceBatch)
     {
         $accountId = Account::where('code', $invoiceBatch->company->getDefaultAccountCode())->where('company_id', $invoiceBatch->company->id)->first()->xero_account_id;
-        // dd(Account::where('code', $invoiceBatch->company->getDefaultAccountCode())->where('company_id', $invoiceBatch->company->id)->first());
         $payToSupplier = $invoiceBatch->supplier()->exists() ? $invoiceBatch->supplier : null;
         try {
             $body = [
@@ -60,12 +59,8 @@ trait PaymentTrait
                 'application/json'
             )->put($this->baseUrl.'/BatchPayments');
             $data = json_decode($response->getBody()->getContents());
-            if (property_exists($data, 'Status')) {
-                if ($data->Status == 'OK') {
-                    $invoiceBatch->xero_batch_payment_id = $data->BatchPayments[0]->BatchPaymentID;
-                    $invoiceBatch->save();
-                }
-            }
+            $invoiceBatch->xero_batch_payment_id = $data->BatchPayments[0]->BatchPaymentID;
+            $invoiceBatch->save();
         } catch (Exception $e) {
             throw new GeneralApiException($e);
         }

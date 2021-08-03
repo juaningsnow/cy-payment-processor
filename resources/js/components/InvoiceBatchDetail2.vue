@@ -38,7 +38,6 @@
                     type="number"
                     class="form-control text-right"
                     placeholder="Amount"
-                    :disabled="isShow"
                     v-model.number="detail.amount"
                 />
             </td>

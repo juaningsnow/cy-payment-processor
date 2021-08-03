@@ -198,6 +198,15 @@ trait InvoicesTrait
         }
     }
 
+    public function syncProcessorInvoiceData(Invoice $invoice)
+    {
+        $xeroInvoice = $this->getInvoice($invoice->xero_invoice_id, $invoice->company->xero_tenant_id);
+        if($xeroInvoice){
+            $this->syncAttachments($xeroInvoice);
+            $this->syncPayments($xeroInvoice);
+        }
+    }
+
     public function syncAttachments($invoice)
     {
         $processorInvoice = Invoice::where('xero_invoice_id', $invoice->InvoiceID)->first();

@@ -18,7 +18,7 @@ class CreateCompanyBanksTable extends Migration
             $table->bigInteger('company_id')->unsigned()->nullable();
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->bigInteger('bank_id')->unsigned()->nullable();
-            $table->foreign('bank_id')->references('id')->on('banks');
+            $table->foreign('bank_id')->references('id')->on('banks')->onDelete('cascade');
             $table->string('account_number');
             $table->boolean('default')->default(false);
             $table->foreignId('account_id')->nullable();

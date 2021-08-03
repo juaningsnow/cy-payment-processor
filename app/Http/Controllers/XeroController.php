@@ -122,18 +122,19 @@ class XeroController extends Controller
         if (property_exists($contact, 'EmailAddress')) {
             $email = $contact->EmailAddress;
         }
-
-        $company = Company::where('xero_tenant_id', $tenantId)->first();
-        $supplier = new Supplier();
-        $supplier->fromXero = true;
-        $supplier->name = $contact->Name;
-        $supplier->payment_type = "FAST";
-        $supplier->email = $email;
-        $supplier->xero_contact_id = $contact->ContactID;
-        $supplier->company_id = $company->id;
-        $supplier->account_id = $account ? $account->id : null;
-        $supplier->fromXero = true;
-        $supplier->save();
-        return $supplier;
+        if ($contact) {
+            $company = Company::where('xero_tenant_id', $tenantId)->first();
+            $supplier = new Supplier();
+            $supplier->fromXero = true;
+            $supplier->name = $contact->Name;
+            $supplier->payment_type = "FAST";
+            $supplier->email = $email;
+            $supplier->xero_contact_id = $contact->ContactID;
+            $supplier->company_id = $company->id;
+            $supplier->account_id = $account ? $account->id : null;
+            $supplier->fromXero = true;
+            $supplier->save();
+            return $supplier;
+        }
     }
 }

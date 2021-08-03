@@ -45,8 +45,18 @@ class InvoiceBatchRequest extends FormRequest
                 $detail = InvoiceBatchDetail::find($item['id']);
             }
             $invoice = Invoice::find($item['invoiceId']);
+            $amount = 0;
+            if ($item['amount'] > 0) {
+                $amount = $item['amount'];
+            } else {
+                if ($invoice->amount_due > 0) {
+                    $amount = $invoice->amount_due;
+                } else {
+                    $amount = $invoice->total;
+                }
+            }
             $detail->setInvoice($invoice);
-            $detail->amount = $item['amount'];
+            $detail->amount = $amount;
             return $detail;
         }, $this->input('invoiceBatchDetails.data'));
         $this->checkIfAllCurrenciesAreSgd($details);
@@ -71,7 +81,13 @@ class InvoiceBatchRequest extends FormRequest
                 $detail = InvoiceBatchDetail::find($item['id']);
             }
             $invoice = Invoice::find($item['id']);
+            if ($invoice->amount_due > 0) {
+                $amount = $invoice->amount_due;
+            } else {
+                $amount = $invoice->total;
+            }
             $detail->setInvoice($invoice);
+            $detail->amount = $amount;
             return $detail;
         }, $this->input('selected'));
     }
