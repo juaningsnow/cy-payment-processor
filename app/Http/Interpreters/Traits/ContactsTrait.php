@@ -15,8 +15,13 @@ trait ContactsTrait
         try {
             $response = Http::withHeaders($this->getTenantDefaultHeaders($tenantId))->get($this->baseUrl.'/Contacts/'.$contactId);
             $data = json_decode($response->getBody()->getContents());
-            if (property_exists($data, 'Contacts')) {
-                return $data->Contacts[0];
+            if (is_object($data)) {
+                if (property_exists($data, 'Contacts')) {
+                    return $data->Contacts[0];
+                } else {
+                    Log::info($data);
+                    return null;
+                }
             } else {
                 Log::info($data);
                 return null;
