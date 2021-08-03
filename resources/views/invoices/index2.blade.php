@@ -4,10 +4,6 @@
 <div id="index" v-cloak>
     <div class="card">
         <div class="card-header">
-            <button type="button" v-if="selected.length > 0" @click="showBatchModal = true"
-                class="btn btn-success btn-sm">
-                Add To Batch
-            </button>
             <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                     <i class="fas fa-minus"></i>
@@ -60,7 +56,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="item in items" v-if="!isLoading" @click="addOrRemoveToSelected(item)">
+                        <tr v-for="item in items" v-if="!isLoading">
                             <td>@{{item.invoiceNumber}}</td>
                             <td>@{{item.supplier.name}}</td>
                             <td>@{{item.date}}</td>
