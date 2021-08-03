@@ -51,7 +51,6 @@ trait PaymentTrait
                     "AccountID" => $accountId,
                 ],
                 "Date" => Carbon::now()->toDateString(),
-                "Details" => $invoiceBatch->name,
                 "Payments" => $this->assembleInvoiceBatchDetailForBatchPayment($invoiceBatch->invoiceBatchDetails->all(), $payToSupplier)
             ];
             $response = Http::withHeaders($this->getTenantDefaultHeaders($invoiceBatch->company->xero_tenant_id))->withBody(
@@ -93,7 +92,6 @@ trait PaymentTrait
                 "Invoice" => [
                     "InvoiceID" => $attribute->invoice->xero_invoice_id,
                 ],
-                "Details" => $attribute->invoice->invoice_number,
                 "Amount" => $attribute->amount
             ];
         }, $invoiceBatchDetails);
