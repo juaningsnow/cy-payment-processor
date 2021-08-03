@@ -51,7 +51,7 @@ trait PaymentTrait
                     "AccountID" => $accountId,
                 ],
                 "Date" => Carbon::now()->toDateString(),
-                "Details" => $invoiceBatch->batch_name,
+                "Details" => $invoiceBatch->name,
                 "Payments" => $this->assembleInvoiceBatchDetailForBatchPayment($invoiceBatch->invoiceBatchDetails->all(), $payToSupplier)
             ];
             $response = Http::withHeaders($this->getTenantDefaultHeaders($invoiceBatch->company->xero_tenant_id))->withBody(
@@ -59,8 +59,12 @@ trait PaymentTrait
                 'application/json'
             )->put($this->baseUrl.'/BatchPayments');
             $data = json_decode($response->getBody()->getContents());
-            $invoiceBatch->xero_batch_payment_id = $data->BatchPayments[0]->BatchPaymentID;
-            $invoiceBatch->save();
+            if (is_object($data)) {
+                if (property_exists($data, 'BatchPayments')) {
+                    $invoiceBatch->xero_batch_payment_id = $data->BatchPayments[0]->BatchPaymentID;
+                    $invoiceBatch->save();
+                }
+            }
         } catch (Exception $e) {
             throw new GeneralApiException($e);
         }
