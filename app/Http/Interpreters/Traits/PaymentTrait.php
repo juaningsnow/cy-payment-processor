@@ -59,7 +59,6 @@ trait PaymentTrait
                 'application/json'
             )->put($this->baseUrl.'/BatchPayments');
             $data = json_decode($response->getBody()->getContents());
-            dd($data);
             $invoiceBatch->xero_batch_payment_id = $data->BatchPayments[0]->BatchPaymentID;
             $invoiceBatch->save();
         } catch (Exception $e) {
