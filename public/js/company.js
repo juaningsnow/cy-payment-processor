@@ -19846,7 +19846,7 @@ new vue__WEBPACK_IMPORTED_MODULE_6__.default({
 
       this.form.patch("/api/companies/refresh-currencies/".concat(this.form.id)).then(function (response) {
         _this.$swal({
-          title: "Currencies refreshed!",
+          title: "Currencies and Accounts refreshed!",
           text: "",
           type: "success"
         }).then(function () {

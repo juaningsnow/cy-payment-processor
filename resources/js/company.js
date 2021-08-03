@@ -72,7 +72,7 @@ new Vue({
         refreshCurrencies() {
             this.form.patch(`/api/companies/refresh-currencies/${this.form.id}`).then(response => {
                 this.$swal({
-                    title: "Currencies refreshed!",
+                    title: "Currencies and Accounts refreshed!",
                     text: "",
                     type: "success"
                 }).then(() => window.location = `/companies/${this.form.id}`);

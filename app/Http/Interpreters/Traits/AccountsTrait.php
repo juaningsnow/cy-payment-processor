@@ -16,7 +16,6 @@ trait AccountsTrait
             $response = Http::withHeaders($this->getTenantDefaultHeaders($company->xero_tenant_id))
                 ->get($this->baseUrl.'/Accounts');
             $data = json_decode($response->getBody()->getContents());
-            dd($data);
             return $data->Accounts;
         } catch (Exception $e) {
             throw new GeneralApiException($e);
@@ -28,7 +27,6 @@ trait AccountsTrait
         $accounts = $this->getAccounts($company);
         $seeds = [];
         foreach ($accounts as $account) {
-            dd($account);
             if (property_exists($account, 'Code')) {
                 $seeded = Account::create([
                     'xero_account_id' => $account->AccountID,
@@ -45,10 +43,9 @@ trait AccountsTrait
     public function refreshAccounts(Company $company)
     {
         Account::where('company_id', $company->id)->delete();
-        $accounts = $this->getCurrencies($company);
+        $accounts = $this->getAccounts($company);
         $seeds = [];
         foreach ($accounts as $account) {
-            dd($account);
             if (property_exists($account, 'Code')) {
                 $seeded = Account::create([
                     'xero_account_id' => $account->AccountID,
