@@ -32,18 +32,17 @@ class Invoice extends BaseModel implements HasMedia
             }
         });
 
-        static::updated(function ($model) use ($xeroInterpreter) {
+        static::saving(function ($model) use ($xeroInterpreter) {
+            $model->amount_paid = $model->computePaidAmount();
+            $model->amount_due = $model->total - $model->amount_paid;
             if (!$model->fromXero) {
                 $xeroInterpreter->updateInvoice($model);
                 if (!$model->xero_payment_id && $model->paid) {
-                    $xeroInterpreter->makePayment($model);
+                    if ($model->companyOwner()->exists()) {
+                        $xeroInterpreter->makePayment($model);
+                    }
                 }
             }
-        });
-
-        static::saving(function($model){
-            $model->amount_paid = $model->computePaidAmount();
-            $model->amount_due = $model->total - $model->amount_paid;
         });
 
         static::deleting(function ($model) use ($xeroInterpreter) {
@@ -307,7 +306,7 @@ class Invoice extends BaseModel implements HasMedia
         }
 
         if ($this->getPaid()) {
-            if($this->getPaidBy() == 'Others'){
+            if ($this->getPaidBy() == 'Others') {
                 return "Paid by {$this->companyOwner->name}";
             }
             return "Paid by {$this->getPaidBy()}";

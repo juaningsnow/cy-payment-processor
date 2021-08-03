@@ -214,6 +214,7 @@ class InvoiceApiController extends ResourceApiController
         $invoice->setInvoiceNumber($request->input('invoiceNumber'));
         $invoice->setAmount($request->input('total'));
         $invoice->setDescription($request->input('description'));
+        $invoice->currency_id = $request->input('currencyId');
         $invoice->save();
         return $this->getResource($invoice);
     }

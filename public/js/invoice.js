@@ -38008,7 +38008,7 @@ new vue__WEBPACK_IMPORTED_MODULE_8__.default({
 
       this.form.patch("/api/invoices/refresh-attachments/".concat(this.form.id)).then(function (response) {
         _this2.$swal({
-          title: "attachments refreshed!",
+          title: "Payments and attachments refreshed!",
           text: "Changes saved to database.",
           type: "success"
         }).then(function () {
