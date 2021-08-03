@@ -16,6 +16,7 @@ trait AccountsTrait
             $response = Http::withHeaders($this->getTenantDefaultHeaders($company->xero_tenant_id))
                 ->get($this->baseUrl.'/Accounts');
             $data = json_decode($response->getBody()->getContents());
+            dd($data);
             return $data->Accounts;
         } catch (Exception $e) {
             throw new GeneralApiException($e);
