@@ -48,9 +48,6 @@ class Invoice extends BaseModel implements HasMedia
             }
         });
 
-        static::updated(function ($model) use ($xeroInterpreter) {
-        });
-
         static::deleting(function ($model) use ($xeroInterpreter) {
             if (!$model->fromXero) {
                 $xeroInterpreter->voidInvoice($model);
