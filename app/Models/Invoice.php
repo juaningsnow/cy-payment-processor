@@ -41,6 +41,11 @@ class Invoice extends BaseModel implements HasMedia
             }
         });
 
+        static::saving(function($model){
+            $model->amount_paid = $model->computePaidAmount();
+            $model->amount_due = $model->total - $model->amount_paid;
+        });
+
         static::deleting(function ($model) use ($xeroInterpreter) {
             if (!$model->fromXero) {
                 $xeroInterpreter->voidInvoice($model);
