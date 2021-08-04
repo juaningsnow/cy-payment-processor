@@ -12,7 +12,9 @@ use App\Models\CompanyOwner;
 use App\Models\Currency;
 use App\Models\Invoice;
 use App\Models\InvoiceBatch;
+use App\Models\InvoiceCredit;
 use App\Models\InvoicePayment;
+use App\Models\InvoiceXeroAttachment;
 use App\Models\Supplier;
 use App\Utils\CompanyIndexFilter;
 use BaseCode\Common\Controllers\ResourceApiController;
@@ -151,7 +153,7 @@ class InvoiceApiController extends ResourceApiController
     {
         $supplier = Supplier::where('xero_contact_Id', $invoice->Contact->ContactID)->first();
         $company = Company::where('xero_tenant_id', $tenantId)->first();
-        $currency = Currency::where('code', $invoice->CurrencyCode)->first();
+        $currency = Currency::where('code', $invoice->CurrencyCode)->where('company_id', $company->id)->first();
         if (!$supplier) {
             $supplier = $this->createSupplier($invoice->Contact->ContactID, $tenantId);
         }
@@ -164,7 +166,7 @@ class InvoiceApiController extends ResourceApiController
         $processorInvoice->amount_paid = $invoice->AmountPaid;
         $processorInvoice->company_id = $company->id;
         $processorInvoice->xero_invoice_id = $invoice->InvoiceID;
-        $processorInvoice->currency_id = $currency->id;
+        $processorInvoice->currency_id = $currency ? $currency->id : null;
         $processorInvoice->fromXero = true;
         if ($processorInvoice->total == $processorInvoice->amount_paid) {
             $processorInvoice->paid = true;
@@ -174,6 +176,33 @@ class InvoiceApiController extends ResourceApiController
         if (property_exists($invoice, 'Payments')) {
             $processorInvoice->invoicePayments()->sync($this->assembleInvoicePayments($invoice->Payments));
         }
+        if (property_exists($invoice, 'CreditNotes')) {
+            $processorInvoice->invoiceCredits()->sync($this->assembleInvoiceCredits($invoice->CreditNotes));
+        }
+        if ($invoice->HasAttachments) {
+            $processorInvoice->invoiceXeroAttachments()->sync($this->assembleInvoiceAttachments($invoice));
+        }
+    }
+
+    private function assembleInvoiceCredits($creditNotes)
+    {
+        return collect(array_map(function ($item) {
+            $credit = new InvoiceCredit();
+            $credit->date =  $this->parseDate($item->Date);
+            $credit->xero_credit_id = $item->CreditNoteID;
+            $credit->amount = $item->AppliedAmount;
+            return $credit;
+        }, $creditNotes));
+    }
+
+    private function assembleInvoiceAttachments($invoice)
+    {
+        return array_map(function ($attachment) {
+            return new InvoiceXeroAttachment([
+                'name' => $attachment->FileName,
+                'url' => $attachment->Url
+            ]);
+        }, $invoice->Attachments);
     }
 
     private function assembleInvoicePayments($payments)

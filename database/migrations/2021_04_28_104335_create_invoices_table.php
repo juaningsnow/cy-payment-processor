@@ -17,7 +17,7 @@ class CreateInvoicesTable extends Migration
             $table->id();
             $table->bigInteger('supplier_id')->unsigned();
             $table->foreign('supplier_id')->references('id')->on('suppliers');
-            $table->foreignId('currency_id');
+            $table->foreignId('currency_id')->nullable();
             $table->date('date');
             $table->string('invoice_number');
             $table->decimal('total', 15, 2);
