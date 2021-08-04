@@ -179,7 +179,7 @@ class InvoiceApiController extends ResourceApiController
         if (property_exists($invoice, 'CreditNotes')) {
             $processorInvoice->invoiceCredits()->sync($this->assembleInvoiceCredits($invoice->CreditNotes));
         }
-        if ($invoice->HasAttachments) {
+        if (property_exists($invoice, 'Attachments')) {
             $processorInvoice->invoiceXeroAttachments()->sync($this->assembleInvoiceAttachments($invoice));
         }
     }
