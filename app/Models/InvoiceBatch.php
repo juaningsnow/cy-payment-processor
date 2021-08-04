@@ -17,6 +17,8 @@ class InvoiceBatch extends BaseModel
 
     protected $dates = ['date'];
 
+    public $fromXero = false;
+
     protected static function booted()
     {
         $xeroInterpreter = resolve(XeroInterpreter::class);
@@ -38,10 +40,6 @@ class InvoiceBatch extends BaseModel
                 $xeroInterpreter->syncProcessorInvoiceData($detail->invoice);
                 $detail->invoice->save();
             });
-        });
-
-        static::deleting(function ($model) use ($xeroInterpreter) {
-            $xeroInterpreter->cancelBatchPayment($model);
         });
     }
 
