@@ -118,7 +118,7 @@ class InvoiceBatchTextFileGenerator
     {
         $transactionTypeCode = "10";                                                        //transaction code 2  characters
         $filler1 = static::rightPaddingGenerator(" ", " ", 11);                             //space filler 11 characters
-        $originatingBankCode = substr($user->getActiveCompany()->getDefaultBank()->swift, 0, 11);                           //originating bank code(swift) 11 characters
+        $originatingBankCode = substr($user->getActiveCompany()->getDefaultBank()->bank->swift, 0, 11);                           //originating bank code(swift) 11 characters
         $accountNumber = static::rightPaddingGenerator($user->getActiveCompany()->getDefaultAccountNumber(), " ", 34);     //account number 34 characters
         $filler2 = static::rightPaddingGenerator(" ", " ", 147);                            // 147 space filler
         $clearing = "FAST";                                                                 //Clearing 4 characters(FAST OR GIRO)
@@ -135,7 +135,7 @@ class InvoiceBatchTextFileGenerator
             substr($date, 0, 8);
         return substr(static::rightPaddingGenerator($combinedHeadingLine, " ", 1000), 0, 1000);
     }
-
+    
     private static function rightPaddingGenerator($value, $padding, $length)
     {
         return str_pad($value, $length, $padding, STR_PAD_RIGHT);
