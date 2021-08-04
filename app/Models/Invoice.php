@@ -36,6 +36,9 @@ class Invoice extends BaseModel implements HasMedia
         static::saving(function ($model) use ($xeroInterpreter) {
             $model->amount_paid = $model->computePaidAmount();
             $model->amount_due = $model->total - ($model->amount_paid + $model->computeCreditAmount());
+            if ($model->amount_due < 1) {
+                $model->paid = true;
+            }
             if (!$model->fromXero) {
                 if ($model->triggerXero) {
                     $xeroInterpreter->updateInvoice($model);
