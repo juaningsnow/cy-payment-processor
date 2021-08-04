@@ -11,8 +11,7 @@
                 class="btn btn-success btn-sm">
                 Add To Batch
             </button>
-            <button type="button" v-if="selected.length > 0" @click="showMarkAsPaidModal = true"
-                class="btn btn-success btn-sm">
+            <button type="button" @click="showMarkAsPaidModal = true" class="btn btn-success btn-sm">
                 Mark as Paid
             </button>
             <button type="button" v-if="selected.length > 0" @click="deleteAll" class="btn btn-danger btn-sm">
