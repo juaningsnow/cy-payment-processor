@@ -9,7 +9,9 @@ use App\Models\Company;
 use App\Models\Config;
 use App\Models\Currency;
 use App\Models\Invoice;
+use App\Models\InvoiceCredit;
 use App\Models\InvoicePayment;
+use App\Models\InvoiceXeroAttachment;
 use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -95,17 +97,70 @@ class XeroController extends Controller
         if (property_exists($invoice, 'Payments')) {
             $processorInvoice->invoicePayments()->sync($this->assembleInvoicePayments($invoice->Payments));
         }
+        if (property_exists($invoice, 'CreditNotes')) {
+            $processorInvoice->invoiceCredits()->sync($this->assembleInvoiceCredits($invoice->CreditNotes));
+        }
+        if (property_exists($invoice, 'Attachments')) {
+            $processorInvoice->invoiceXeroAttachments()->sync($this->assembleInvoiceAttachments($invoice));
+        }
     }
 
-    private function assembleInvoicePayments($payments)
+    private function assembleInvoiceCredits($creditNotes)
     {
         return collect(array_map(function ($item) {
-            $payment = new InvoicePayment();
-            $payment->date =  $this->parseDate($item->Date);
-            $payment->xero_payment_id = $item->PaymentID;
-            $payment->amount = $item->Amount;
-            return $payment;
-        }, $payments));
+            $credit = new InvoiceCredit();
+            $credit->date =  $this->parseDate($item->Date);
+            $credit->xero_credit_id = $item->CreditNoteID;
+            $credit->amount = $item->AppliedAmount;
+            return $credit;
+        }, $creditNotes));
+    }
+
+    private function assembleInvoiceAttachments($invoice)
+    {
+        return array_map(function ($attachment) {
+            return new InvoiceXeroAttachment([
+                'name' => $attachment->FileName,
+                'url' => $attachment->Url
+            ]);
+        }, $invoice->Attachments);
+    }
+
+    private function assembleInvoicePayments($invoice)
+    {
+        $allPayments = collect([]);
+        if (property_exists($invoice, 'Payments')) {
+            $payments = collect(array_map(function ($item) {
+                $payment = new InvoicePayment();
+                $payment->date =  $this->parseDate($item->Date);
+                $payment->xero_payment_id = $item->PaymentID;
+                $payment->amount = $item->Amount;
+                return $payment;
+            }, $invoice->Payments));
+        }
+        if (property_exists($invoice, 'Overpayments')) {
+            $overPayments = collect(array_map(function ($item) {
+                $payment = new InvoicePayment();
+                $payment->date =  $this->parseDate($item->Date);
+                $payment->xero_payment_id = $item->PaymentID;
+                $payment->amount = $item->Amount;
+                return $payment;
+            }, $invoice->Overpayments));
+        }
+
+        if (property_exists($invoice, 'Prepayments')) {
+            $prePayments = collect(array_map(function ($item) {
+                $payment = new InvoicePayment();
+                $payment->date =  $this->parseDate($item->Date);
+                $payment->xero_payment_id = $item->PaymentID;
+                $payment->amount = $item->Amount;
+                return $payment;
+            }, $invoice->Prepayments));
+        }
+
+        $allPayments = $payments->merge($overPayments)->merge($prePayments);
+
+        return $allPayments;
     }
 
     private function createSupplier($contactId, $tenantId)

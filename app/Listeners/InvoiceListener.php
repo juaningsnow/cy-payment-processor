@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Http\Interpreters\Traits\DateParser;
 use App\Http\Interpreters\XeroInterpreter;
 use App\Models\Account;
 use App\Models\Company;
@@ -15,6 +16,7 @@ use Carbon\Carbon;
 
 class InvoiceListener
 {
+    use DateParser;
     /**
      * Create the event listener.
      *
@@ -169,7 +171,7 @@ class InvoiceListener
         if (property_exists($invoice, 'CreditNotes')) {
             $processorInvoice->invoiceCredits()->sync($this->assembleInvoiceCredits($invoice->CreditNotes));
         }
-        if ($invoice->HasAttachments) {
+        if (property_exists($invoice, 'Attachments')) {
             $processorInvoice->invoiceXeroAttachments()->sync($this->assembleInvoiceAttachments($invoice));
         }
     }
@@ -193,15 +195,41 @@ class InvoiceListener
         }, $creditNotes));
     }
 
-    private function assembleInvoicePayments($payments)
+    private function assembleInvoicePayments($invoice)
     {
-        return collect(array_map(function ($item) {
-            $payment = new InvoicePayment();
-            $payment->date =  $this->parseDate($item->Date);
-            $payment->xero_payment_id = $item->PaymentID;
-            $payment->amount = $item->Amount;
-            return $payment;
-        }, $payments));
+        $allPayments = collect([]);
+        if (property_exists($invoice, 'Payments')) {
+            $payments = collect(array_map(function ($item) {
+                $payment = new InvoicePayment();
+                $payment->date =  $this->parseDate($item->Date);
+                $payment->xero_payment_id = $item->PaymentID;
+                $payment->amount = $item->Amount;
+                return $payment;
+            }, $invoice->Payments));
+        }
+        if (property_exists($invoice, 'Overpayments')) {
+            $overPayments = collect(array_map(function ($item) {
+                $payment = new InvoicePayment();
+                $payment->date =  $this->parseDate($item->Date);
+                $payment->xero_payment_id = $item->PaymentID;
+                $payment->amount = $item->Amount;
+                return $payment;
+            }, $invoice->Overpayments));
+        }
+
+        if (property_exists($invoice, 'Prepayments')) {
+            $prePayments = collect(array_map(function ($item) {
+                $payment = new InvoicePayment();
+                $payment->date =  $this->parseDate($item->Date);
+                $payment->xero_payment_id = $item->PaymentID;
+                $payment->amount = $item->Amount;
+                return $payment;
+            }, $invoice->Prepayments));
+        }
+
+        $allPayments = $payments->merge($overPayments)->merge($prePayments);
+
+        return $allPayments;
     }
 
     private function assembleInvoiceAttachments($invoice)
