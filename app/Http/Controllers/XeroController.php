@@ -126,7 +126,7 @@ class XeroController extends Controller
         }, $invoice->Attachments);
     }
 
-    private function assembleInvoicePayments($invoice)
+    public function assembleInvoicePayments($invoice)
     {
         $allPayments = collect([]);
         if (property_exists($invoice, 'Payments')) {
@@ -142,23 +142,12 @@ class XeroController extends Controller
             $overPayments = collect(array_map(function ($item) {
                 $payment = new InvoicePayment();
                 $payment->date =  $this->parseDate($item->Date);
-                $payment->xero_payment_id = $item->PaymentID;
-                $payment->amount = $item->Amount;
+                $payment->xero_payment_id = $item->OverpaymentID;
+                $payment->amount = $item->AppliedAmount;
                 return $payment;
             }, $invoice->Overpayments));
         }
-
-        if (property_exists($invoice, 'Prepayments')) {
-            $prePayments = collect(array_map(function ($item) {
-                $payment = new InvoicePayment();
-                $payment->date =  $this->parseDate($item->Date);
-                $payment->xero_payment_id = $item->PaymentID;
-                $payment->amount = $item->Amount;
-                return $payment;
-            }, $invoice->Prepayments));
-        }
-
-        $allPayments = $payments->merge($overPayments)->merge($prePayments);
+        $allPayments = $payments->merge($overPayments);
 
         return $allPayments;
     }
