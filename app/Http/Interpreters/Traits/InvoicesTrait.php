@@ -251,7 +251,7 @@ trait InvoicesTrait
         }, $creditNotes));
     }
 
-    private function assembleInvoicePayments($invoice)
+    public function assembleInvoicePayments($invoice)
     {
         $allPayments = collect([]);
         if (property_exists($invoice, 'Payments')) {
