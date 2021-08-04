@@ -2034,7 +2034,7 @@ __webpack_require__.r(__webpack_exports__);
 
     this.dataInitialized = false;
     this.setDetails().then(function () {
-      _this.form.get("/api/suppliers").then(function (response) {
+      _this.form.get("/api/suppliers?limit=".concat(Number.MAX_SAFE_INTEGER)).then(function (response) {
         _this.supplierSelections = response.data;
         _this.suppliersInitialized = true;
         _this.dataInitialized = true;
@@ -2069,6 +2069,7 @@ __webpack_require__.r(__webpack_exports__);
         if (!_this3.form.supplierId) {
           _this3.form.invoiceBatchDetails.data.forEach(function (detail, index) {
             if (!detail.invoice.supplier.bankId || !detail.invoice.supplier.accountNumber) {
+              console.log(detail);
               _this3.invoiceBatchDetailIndexForSupplierUpdate = index;
               _this3.supplierIdToUpdate = detail.invoice.supplier.id;
               reject();
@@ -2138,11 +2139,8 @@ __webpack_require__.r(__webpack_exports__);
 
       this.dataInitialized = false;
       this.form.get("/api/suppliers/".concat(this.supplierIdToUpdate)).then(function (response) {
-        if (_this6.invoiceBatchDetailIndexForSupplierUpdate) {
-          _this6.form.invoiceBatchDetails.data[_this6.invoiceBatchDetailIndexForSupplierUpdate].invoice.supplier = response.data;
-          _this6.invoiceBatchDetailIndexForSupplierUpdate = null;
-        }
-
+        _this6.form.invoiceBatchDetails.data[_this6.invoiceBatchDetailIndexForSupplierUpdate].invoice.supplier = response.data;
+        _this6.invoiceBatchDetailIndexForSupplierUpdate = null;
         _this6.supplierIdToUpdate = null;
         _this6.dataInitialized = true;
       });

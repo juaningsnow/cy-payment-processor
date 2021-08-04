@@ -177,11 +177,13 @@ export default {
     created() {
         this.dataInitialized = false;
         this.setDetails().then(() => {
-            this.form.get(`/api/suppliers`).then((response) => {
-                this.supplierSelections = response.data;
-                this.suppliersInitialized = true;
-                this.dataInitialized = true;
-            });
+            this.form
+                .get(`/api/suppliers?limit=${Number.MAX_SAFE_INTEGER}`)
+                .then((response) => {
+                    this.supplierSelections = response.data;
+                    this.suppliersInitialized = true;
+                    this.dataInitialized = true;
+                });
         });
     },
 
@@ -215,6 +217,7 @@ export default {
                                 !detail.invoice.supplier.bankId ||
                                 !detail.invoice.supplier.accountNumber
                             ) {
+                                console.log(detail);
                                 this.invoiceBatchDetailIndexForSupplierUpdate =
                                     index;
                                 this.supplierIdToUpdate =
@@ -293,13 +296,10 @@ export default {
             this.form
                 .get(`/api/suppliers/${this.supplierIdToUpdate}`)
                 .then((response) => {
-                    if (this.invoiceBatchDetailIndexForSupplierUpdate) {
-                        this.form.invoiceBatchDetails.data[
-                            this.invoiceBatchDetailIndexForSupplierUpdate
-                        ].invoice.supplier = response.data;
-                        this.invoiceBatchDetailIndexForSupplierUpdate = null;
-                    }
-
+                    this.form.invoiceBatchDetails.data[
+                        this.invoiceBatchDetailIndexForSupplierUpdate
+                    ].invoice.supplier = response.data;
+                    this.invoiceBatchDetailIndexForSupplierUpdate = null;
                     this.supplierIdToUpdate = null;
                     this.dataInitialized = true;
                 });

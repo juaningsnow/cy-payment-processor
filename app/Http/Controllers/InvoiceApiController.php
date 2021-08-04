@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Interpreters\Traits\DateParser;
 use App\Http\Interpreters\XeroInterpreter;
 use App\Http\Resources\InvoiceResource;
 use App\Http\Resources\InvoiceResourceCollection;
@@ -11,6 +12,7 @@ use App\Models\CompanyOwner;
 use App\Models\Currency;
 use App\Models\Invoice;
 use App\Models\InvoiceBatch;
+use App\Models\InvoicePayment;
 use App\Models\Supplier;
 use App\Utils\CompanyIndexFilter;
 use BaseCode\Common\Controllers\ResourceApiController;
@@ -23,6 +25,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class InvoiceApiController extends ResourceApiController
 {
     use CompanyIndexFilter;
+    use DateParser;
     
     const EXPORT_FILE_NAME = 'invoices.xlsx';
 
@@ -129,7 +132,10 @@ class InvoiceApiController extends ResourceApiController
         $company = auth()->user()->getActiveCompany();
         $xero = resolve(XeroInterpreter::class);
         $this->deleteCompanyData($company->id);
+        $xero->seedAccounts($company);
+        $xero->seedCurrencies($company);
         $this->seedXeroInvoices($xero->retrieveAuthorisedInvoices($company->xero_tenant_id), $company->xero_tenant_id);
+        $this->seedXeroInvoices($xero->retrievePaidInvoices($company->xero_tenant_id), $company->xero_tenant_id);
         return response('success', 200);
     }
 
@@ -142,9 +148,9 @@ class InvoiceApiController extends ResourceApiController
 
     private function createInvoice($invoice, $tenantId)
     {
-        $supplier = Supplier::where('xero_contact_id', $invoice->Contact->ContactID)->first();
+        $supplier = Supplier::where('xero_contact_Id', $invoice->Contact->ContactID)->first();
         $company = Company::where('xero_tenant_id', $tenantId)->first();
-        $sgd = Currency::where('code', 'SGD')->first();
+        $currency = Currency::where('code', $invoice->CurrencyCode)->first();
         if (!$supplier) {
             $supplier = $this->createSupplier($invoice->Contact->ContactID, $tenantId);
         }
@@ -156,11 +162,28 @@ class InvoiceApiController extends ResourceApiController
         $processorInvoice->amount_due = $invoice->AmountDue;
         $processorInvoice->amount_paid = $invoice->AmountPaid;
         $processorInvoice->company_id = $company->id;
-        $processorInvoice->status = $processorInvoice->computeStatus();
         $processorInvoice->xero_invoice_id = $invoice->InvoiceID;
-        $processorInvoice->currency_id = $sgd->id;
+        $processorInvoice->currency_id = $currency->id;
         $processorInvoice->fromXero = true;
+        if ($processorInvoice->total == $processorInvoice->amount_paid) {
+            $processorInvoice->paid = true;
+        }
+        $processorInvoice->status = $processorInvoice->computeStatus();
         $processorInvoice->save();
+        if (property_exists($invoice, 'Payments')) {
+            $processorInvoice->invoicePayments()->sync($this->assembleInvoicePayments($invoice->Payments));
+        }
+    }
+
+    private function assembleInvoicePayments($payments)
+    {
+        return collect(array_map(function ($item) {
+            $payment = new InvoicePayment();
+            $payment->date =  $this->parseDate($item->Date);
+            $payment->xero_payment_id = $item->PaymentID;
+            $payment->amount = $item->Amount;
+            return $payment;
+        }, $payments));
     }
 
     private function createSupplier($contactId, $tenantId)
@@ -200,6 +223,14 @@ class InvoiceApiController extends ResourceApiController
         Invoice::where('company_id', $companyId)->get()->each(function ($invoice) {
             $invoice->fromXero = true;
             $invoice->delete();
+        });
+
+        Account::where('company_id', $companyId)->get()->each(function ($account) {
+            $account->delete();
+        });
+
+        Currency::where('company_id', $companyId)->get()->each(function ($currency) {
+            $currency->delete();
         });
     }
 
