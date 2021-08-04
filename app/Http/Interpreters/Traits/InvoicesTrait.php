@@ -3,6 +3,7 @@
 namespace App\Http\Interpreters\Traits;
 
 use App\Models\Invoice;
+use App\Models\InvoiceCredit;
 use App\Models\InvoicePayment;
 use App\Models\InvoiceXeroAttachment;
 use BaseCode\Common\Exceptions\GeneralApiException;
@@ -201,9 +202,10 @@ trait InvoicesTrait
     public function syncProcessorInvoiceData(Invoice $invoice)
     {
         $xeroInvoice = $this->getInvoice($invoice->xero_invoice_id, $invoice->company->xero_tenant_id);
-        if($xeroInvoice){
+        if ($xeroInvoice) {
             $this->syncAttachments($xeroInvoice);
             $this->syncPayments($xeroInvoice);
+            $this->syncCredits($xeroInvoice);
         }
     }
 
@@ -225,6 +227,28 @@ trait InvoicesTrait
                 $processorInvoice->invoicePayments()->sync($payments);
             }
         }
+    }
+
+    public function syncCredits($invoice)
+    {
+        $processorInvoice = Invoice::where('xero_invoice_id', $invoice->InvoiceID)->first();
+        if (property_exists($invoice, 'CreditNotes')) {
+            $credits = $this->assembleInvoiceCredits($invoice->CreditNotes);
+            if ($processorInvoice) {
+                $processorInvoice->invoiceCredits()->sync($credits);
+            }
+        }
+    }
+
+    private function assembleInvoiceCredits($creditNotes)
+    {
+        return collect(array_map(function ($item) {
+            $credit = new InvoiceCredit();
+            $credit->date =  $this->parseDate($item->Date);
+            $credit->xero_credit_id = $item->CreditNoteID;
+            $credit->amount = $item->AppliedAmount;
+            return $credit;
+        }, $creditNotes));
     }
 
     private function assembleInvoicePayments($payments)

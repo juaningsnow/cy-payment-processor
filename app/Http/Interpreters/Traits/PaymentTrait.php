@@ -36,6 +36,7 @@ trait PaymentTrait
             )->put($this->baseUrl.'/Payments');
             $data = json_decode($response->getBody()->getContents());
             $this->syncPayments($this->getInvoice($invoice->xero_invoice_id, $invoice->company->xero_tenant_id));
+            $this->syncCredits($this->getInvoice($invoice->xero_invoice_id, $invoice->company->xero_tenant_id));
         } catch (Exception $e) {
             throw new GeneralApiException($e);
         }
@@ -51,6 +52,7 @@ trait PaymentTrait
                     "AccountID" => $accountId,
                 ],
                 "Date" => Carbon::now()->toDateString(),
+                "IsReconciled" => true,
                 "Payments" => $this->assembleInvoiceBatchDetailForBatchPayment($invoiceBatch->invoiceBatchDetails->all(), $payToSupplier)
             ];
             $response = Http::withHeaders($this->getTenantDefaultHeaders($invoiceBatch->company->xero_tenant_id))->withBody(

@@ -106,7 +106,7 @@ new Vue({
             this.dataInitialized = false;
             this.form
                 .get(
-                    "/api/invoices/" + id + "?include=invoicePayments,supplier,media,invoiceXeroAttachments"
+                    "/api/invoices/" + id + "?include=invoiceCredits,invoicePayments,supplier,media,invoiceXeroAttachments"
                 ).then(response => {
                     this.loadData(response.data);
                     this.dataInitialized = true;

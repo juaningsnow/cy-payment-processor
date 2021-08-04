@@ -35,7 +35,7 @@ class Invoice extends BaseModel implements HasMedia
 
         static::saving(function ($model) use ($xeroInterpreter) {
             $model->amount_paid = $model->computePaidAmount();
-            $model->amount_due = $model->total - $model->amount_paid;
+            $model->amount_due = $model->total - ($model->amount_paid + $this->computeCreditAmount());
             if (!$model->fromXero) {
                 if ($model->triggerXero) {
                     $xeroInterpreter->updateInvoice($model);
@@ -78,6 +78,11 @@ class Invoice extends BaseModel implements HasMedia
     public function invoicePayments()
     {
         return $this->hasMany(InvoicePayment::class, 'invoice_id');
+    }
+
+    public function invoiceCredits()
+    {
+        return $this->hasMany(InvoiceCredit::class, 'invoice_id');
     }
 
     public function currency()
@@ -139,10 +144,12 @@ class Invoice extends BaseModel implements HasMedia
 
     public function computePaidAmount()
     {
-        if ($this->paid) {
-            return $this->total;
-        }
         return $this->invoicePayments()->sum('amount');
+    }
+
+    public function computeCreditAmount()
+    {
+        return $this->invoiceCredits()->sum('amount');
     }
 
     public function scopeNoInvoiceBatchDetail($query, $value = null)

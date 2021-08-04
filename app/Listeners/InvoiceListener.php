@@ -36,6 +36,7 @@ class InvoiceListener
             if ((bool)$invoice->HasAttachments) {
                 $xeroInterpreter->syncAttachments($invoice);
                 $xeroInterpreter->syncPayments($invoice);
+                $xeroInterpreter->syncCredits($invoice);
             }
             if ($invoice->Type == 'ACCPAY') {
                 if ($invoice->Status == "VOIDED") {

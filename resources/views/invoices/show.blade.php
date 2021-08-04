@@ -60,7 +60,7 @@
                                 <invoice-attachment-modal v-show="showInvoiceAttachmentModal" :invoice-id="form.id"
                                     @close="showInvoiceAttachmentModal = false"></invoice-attachment-modal>
                             </div>
-                            <div class="row">
+                            <div class="row" v-if="form.invoicePayments.data.length > 0">
                                 <table class="table table-simple">
                                     <thead>
                                         <tr>
@@ -73,6 +73,28 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for="item in form.invoicePayments.data">
+                                            <td>
+                                                @{{item.date}}
+                                            </td>
+                                            <td>@{{item.amount | numeric}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="row" v-if="form.invoiceCredits.data.length > 0">
+                                <table class="table table-simple">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2" class="text-center">Credits</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="item in form.invoiceCredits.data">
                                             <td>
                                                 @{{item.date}}
                                             </td>
