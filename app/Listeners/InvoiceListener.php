@@ -146,8 +146,7 @@ class InvoiceListener
         $supplier = Supplier::where('xero_contact_Id', $invoice->Contact->ContactID)->first();
         $company = Company::where('xero_tenant_id', $tenantId)->first();
         if ($company) {
-            $currency = Currency::where('code', $invoice->CurrencyCode)->where('company_id', $company->id)->first();
-    
+            $currency = Currency::where('code', $invoice->CurrencyCode)->where('company_id', $company->getId())->first();
             if (!$supplier) {
                 $supplier = $this->createSupplier($invoice->Contact->ContactID, $tenantId);
             }
