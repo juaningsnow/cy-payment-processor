@@ -32,7 +32,7 @@ trait AccountsTrait
                     'xero_account_id' => $account->AccountID,
                     'name' => $account->Name,
                     'code' => $account->Code,
-                    'company_id' => $company->id
+                    'company_id' => $company->getId()
                 ]);
                 $seeds[] = $seeded;
             }
@@ -42,7 +42,7 @@ trait AccountsTrait
 
     public function refreshAccounts(Company $company)
     {
-        Account::where('company_id', $company->id)->delete();
+        Account::where('company_id', $company->getId())->delete();
         $accounts = $this->getAccounts($company);
         $seeds = [];
         foreach ($accounts as $account) {
@@ -51,7 +51,7 @@ trait AccountsTrait
                     'xero_account_id' => $account->AccountID,
                     'name' => $account->Name,
                     'code' => $account->Code,
-                    'company_id' => $company->id
+                    'company_id' => $company->getId()
                 ]);
                 $seeds[] = $seeded;
             }

@@ -24,7 +24,7 @@ trait CurrencyTrait
 
     public function seedCurrencies(Company $company)
     {
-        Currency::where('company_id', $company->id)->delete();
+        Currency::where('company_id', $company->getId())->delete();
         $currencies = $this->getCurrencies($company);
         $seeds = [];
         foreach ($currencies as $currency) {
@@ -32,7 +32,7 @@ trait CurrencyTrait
                 $seeded = Currency::create([
                     'code' => $currency->Code,
                     'description' => $currency->Description,
-                    'company_id' => $company->id
+                    'company_id' => $company->getId()
                 ]);
                 $seeds[] = $seeded;
             }

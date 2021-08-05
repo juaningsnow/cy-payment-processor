@@ -74,7 +74,7 @@ class ContactListener
         $supplier->payment_type = "FAST";
         $supplier->email = $email;
         $supplier->xero_contact_id = $xeroContactId;
-        $supplier->company_id = $company->id;
+        $supplier->company_id = $company->getId();
         $supplier->account_id = $account->id;
         $supplier->save();
     }
@@ -92,7 +92,7 @@ class ContactListener
             $supplier->payment_type = "FAST";
             $supplier->email = $email;
             $supplier->xero_contact_id = $xeroContactId;
-            $supplier->company_id = $company->id;
+            $supplier->company_id = $company->getId();
             $supplier->account_id = $account->id;
             $supplier->save();
         }

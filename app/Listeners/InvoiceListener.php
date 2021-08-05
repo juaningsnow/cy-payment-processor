@@ -79,7 +79,7 @@ class InvoiceListener
                 $processorInvoice->total = $invoice->Total;
                 $processorInvoice->amount_due = $invoice->AmountDue;
                 $processorInvoice->amount_paid = $invoice->AmountPaid;
-                $processorInvoice->company_id = $company->id;
+                $processorInvoice->company_id = $company->getId();
                 $processorInvoice->status = $processorInvoice->computeStatus();
                 $processorInvoice->xero_invoice_id = $invoice->InvoiceID;
                 $processorInvoice->paid = true;
@@ -104,7 +104,7 @@ class InvoiceListener
             $supplier->payment_type = "FAST";
             $supplier->email = $contact->EmailAddress;
             $supplier->xero_contact_id = $contact->ContactID;
-            $supplier->company_id = $company->id;
+            $supplier->company_id = $company->getId();
             $supplier->account_id = $account ? $account->id : null;
             $supplier->fromXero = true;
             $supplier->save();
@@ -130,7 +130,7 @@ class InvoiceListener
                 $processorInvoice->total = $invoice->Total;
                 $processorInvoice->amount_due = $invoice->AmountDue;
                 $processorInvoice->amount_paid = $invoice->AmountPaid;
-                $processorInvoice->company_id = $company->id;
+                $processorInvoice->company_id = $company->getId();
                 $processorInvoice->status = $processorInvoice->computeStatus();
                 $processorInvoice->xero_invoice_id = $invoice->InvoiceID;
                 $processorInvoice->paid = false;
@@ -157,7 +157,7 @@ class InvoiceListener
             $processorInvoice->total = $invoice->Total;
             $processorInvoice->amount_due = $invoice->AmountDue;
             $processorInvoice->amount_paid = $invoice->AmountPaid;
-            $processorInvoice->company_id = $company->id;
+            $processorInvoice->company_id = $company->getId();
             $processorInvoice->xero_invoice_id = $invoice->InvoiceID;
             $processorInvoice->currency_id = $currency ? $currency->id : null;
             $processorInvoice->fromXero = true;

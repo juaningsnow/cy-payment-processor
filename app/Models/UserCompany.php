@@ -32,7 +32,7 @@ class UserCompany extends Model
     public function setCompany(Company $company)
     {
         $this->company()->associate($company);
-        $this->company_id = $company->id;
+        $this->company_id = $company->getId();
         return $this;
     }
 }

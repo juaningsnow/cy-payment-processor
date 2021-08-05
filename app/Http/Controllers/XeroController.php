@@ -52,7 +52,7 @@ class XeroController extends Controller
             $organisation = $xeroInterpreter->getOrganization($tenantDetails->tenantId);
             $company->xero_short_code = $organisation->ShortCode;
             $company->save();
-            if (Account::where('company_id', $company->id)->count() < 1) {
+            if (Account::where('company_id', $company->getId())->count() < 1) {
                 $xeroInterpreter->seedAccounts($company);
             }
             $xeroInterpreter->seedCurrencies($company);
@@ -85,7 +85,7 @@ class XeroController extends Controller
         $processorInvoice->total = $invoice->Total;
         $processorInvoice->amount_due = $invoice->AmountDue;
         $processorInvoice->amount_paid = $invoice->AmountPaid;
-        $processorInvoice->company_id = $company->id;
+        $processorInvoice->company_id = $company->getId();
         $processorInvoice->xero_invoice_id = $invoice->InvoiceID;
         $processorInvoice->currency_id = $currency->id;
         $processorInvoice->fromXero = true;
@@ -173,7 +173,7 @@ class XeroController extends Controller
             $supplier->payment_type = "FAST";
             $supplier->email = $email;
             $supplier->xero_contact_id = $contact->ContactID;
-            $supplier->company_id = $company->id;
+            $supplier->company_id = $company->getId();
             $supplier->account_id = $account ? $account->id : null;
             $supplier->fromXero = true;
             $supplier->save();

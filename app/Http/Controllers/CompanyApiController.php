@@ -155,7 +155,7 @@ class CompanyApiController extends ResourceApiController
         $company->xero_tenant_id = null;
         $company->xero_short_code = null;
         $company->save();
-        $this->deleteCompanyData($company->id);
+        $this->deleteCompanyData($company->getId());
         return response('success', 200);
     }
     

@@ -178,7 +178,7 @@ class InvoiceApiController extends ResourceApiController
         $supplier = Supplier::where('xero_contact_Id', $xeroInvoice->Contact->ContactID)->first();
         $company = Company::where('xero_tenant_id', $tenantId)->first();
         if ($company) {
-            $currency = Currency::where('code', $xeroInvoice->CurrencyCode)->where('company_id', $company->id)->first();
+            $currency = Currency::where('code', $xeroInvoice->CurrencyCode)->where('company_id', $company->getId())->first();
             if (!$supplier) {
                 $supplier = $this->createSupplier($xeroInvoice->Contact->ContactID, $tenantId);
             }
@@ -189,7 +189,7 @@ class InvoiceApiController extends ResourceApiController
             $processorInvoice->total = $xeroInvoice->Total;
             $processorInvoice->amount_due = $xeroInvoice->AmountDue;
             $processorInvoice->amount_paid = $xeroInvoice->AmountPaid;
-            $processorInvoice->company_id = $company->id;
+            $processorInvoice->company_id = $company->getId();
             $processorInvoice->xero_invoice_id = $xeroInvoice->InvoiceID;
             $processorInvoice->currency_id = $currency ? $currency->id : null;
             $processorInvoice->fromXero = true;
@@ -214,7 +214,7 @@ class InvoiceApiController extends ResourceApiController
     {
         $supplier = Supplier::where('xero_contact_Id', $invoice->Contact->ContactID)->first();
         $company = Company::where('xero_tenant_id', $tenantId)->first();
-        $currency = Currency::where('code', $invoice->CurrencyCode)->where('company_id', $company->id)->first();
+        $currency = Currency::where('code', $invoice->CurrencyCode)->where('company_id', $company->getId())->first();
         if (!$supplier) {
             $supplier = $this->createSupplier($invoice->Contact->ContactID, $tenantId);
         }
@@ -225,7 +225,7 @@ class InvoiceApiController extends ResourceApiController
         $processorInvoice->total = $invoice->Total;
         $processorInvoice->amount_due = $invoice->AmountDue;
         $processorInvoice->amount_paid = $invoice->AmountPaid;
-        $processorInvoice->company_id = $company->id;
+        $processorInvoice->company_id = $company->getId();
         $processorInvoice->xero_invoice_id = $invoice->InvoiceID;
         $processorInvoice->currency_id = $currency ? $currency->id : null;
         $processorInvoice->fromXero = true;
@@ -313,7 +313,7 @@ class InvoiceApiController extends ResourceApiController
         $supplier->payment_type = "FAST";
         $supplier->email = $email;
         $supplier->xero_contact_id = $contact->ContactID;
-        $supplier->company_id = $company->id;
+        $supplier->company_id = $company->getId();
         $supplier->account_id = $account ? $account->id : null;
         $supplier->fromXero = true;
         $supplier->save();
