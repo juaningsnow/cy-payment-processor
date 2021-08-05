@@ -73,6 +73,7 @@ trait InvoicesTrait
             )->post($this->baseUrl.'/Invoices');
             $data = json_decode($response->getBody()->getContents());
             $invoice->xero_invoice_id = $data->Invoices[0]->InvoiceID;
+            $invoice->fromXero = true;
             $invoice->save();
         } catch (Exception $e) {
             throw new GeneralApiException($e);

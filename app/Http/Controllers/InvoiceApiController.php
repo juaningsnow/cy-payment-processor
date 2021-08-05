@@ -122,11 +122,11 @@ class InvoiceApiController extends ResourceApiController
         $company = auth()->user()->getActiveCompany();
         $xero = resolve(XeroInterpreter::class);
         $xeroInvoice = $xero->getInvoice($invoice->xero_invoice_id, $company->xero_tenant_id);
+        $invoice->triggerXero = true;
+        $invoice->save();
         $xero->syncAttachments($xeroInvoice);
         $xero->syncPayments($xeroInvoice);
         $xero->syncCredits($xeroInvoice);
-        $invoice->triggerXero = true;
-        $invoice->save();
         return response('success', 200);
     }
 

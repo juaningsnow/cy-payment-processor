@@ -38,7 +38,6 @@ class InvoiceBatch extends BaseModel
             }
             $model->invoiceBatchDetails->each(function ($detail) use ($xeroInterpreter) {
                 $xeroInterpreter->syncProcessorInvoiceData($detail->invoice);
-                $detail->invoice->save();
             });
         });
     }
