@@ -17,4 +17,9 @@ class Account extends Model
         'code',
         'company_id'
     ];
+
+    public function getId()
+    {
+        return $this->id;
+    }
 }

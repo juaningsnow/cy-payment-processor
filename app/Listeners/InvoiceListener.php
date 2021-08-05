@@ -105,7 +105,7 @@ class InvoiceListener
             $supplier->email = $contact->EmailAddress;
             $supplier->xero_contact_id = $contact->ContactID;
             $supplier->company_id = $company->getId();
-            $supplier->account_id = $account ? $account->id : null;
+            $supplier->account_id = $account ? $account->getId() : null;
             $supplier->fromXero = true;
             $supplier->save();
             return $supplier;
