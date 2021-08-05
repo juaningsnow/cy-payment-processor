@@ -38,6 +38,10 @@ class Invoice extends BaseModel implements HasMedia
             $model->amount_due = $model->total - ($model->amount_paid + $model->computeCreditAmount());
             if ($model->amount_due < 1) {
                 $model->paid = true;
+                $model->status = $model->computeStatus();
+            } else {
+                $model->paid = false;
+                $model->status = $model->computeStatus();
             }
             if (!$model->fromXero) {
                 if ($model->triggerXero) {
