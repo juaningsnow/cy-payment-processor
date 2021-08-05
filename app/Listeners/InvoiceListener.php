@@ -145,34 +145,37 @@ class InvoiceListener
     {
         $supplier = Supplier::where('xero_contact_Id', $invoice->Contact->ContactID)->first();
         $company = Company::where('xero_tenant_id', $tenantId)->first();
-        $currency = Currency::where('code', $invoice->CurrencyCode)->where('company_id', $company->id)->first();
-        if (!$supplier) {
-            $supplier = $this->createSupplier($invoice->Contact->ContactID, $tenantId);
-        }
-        $processorInvoice = new Invoice();
-        $processorInvoice->supplier_id = $supplier->id;
-        $processorInvoice->date = new Carbon($invoice->DateString);
-        $processorInvoice->invoice_number = $invoice->InvoiceNumber;
-        $processorInvoice->total = $invoice->Total;
-        $processorInvoice->amount_due = $invoice->AmountDue;
-        $processorInvoice->amount_paid = $invoice->AmountPaid;
-        $processorInvoice->company_id = $company->id;
-        $processorInvoice->xero_invoice_id = $invoice->InvoiceID;
-        $processorInvoice->currency_id = $currency ? $currency->id : null;
-        $processorInvoice->fromXero = true;
-        if ($processorInvoice->total == $processorInvoice->amount_paid) {
-            $processorInvoice->paid = true;
-        }
-        $processorInvoice->status = $processorInvoice->computeStatus();
-        $processorInvoice->save();
-        if (property_exists($invoice, 'Payments')) {
-            $processorInvoice->invoicePayments()->sync($this->assembleInvoicePayments($invoice->Payments));
-        }
-        if (property_exists($invoice, 'CreditNotes')) {
-            $processorInvoice->invoiceCredits()->sync($this->assembleInvoiceCredits($invoice->CreditNotes));
-        }
-        if (property_exists($invoice, 'Attachments')) {
-            $processorInvoice->invoiceXeroAttachments()->sync($this->assembleInvoiceAttachments($invoice));
+        if ($company) {
+            $currency = Currency::where('code', $invoice->CurrencyCode)->where('company_id', $company->id)->first();
+    
+            if (!$supplier) {
+                $supplier = $this->createSupplier($invoice->Contact->ContactID, $tenantId);
+            }
+            $processorInvoice = new Invoice();
+            $processorInvoice->supplier_id = $supplier->id;
+            $processorInvoice->date = new Carbon($invoice->DateString);
+            $processorInvoice->invoice_number = $invoice->InvoiceNumber;
+            $processorInvoice->total = $invoice->Total;
+            $processorInvoice->amount_due = $invoice->AmountDue;
+            $processorInvoice->amount_paid = $invoice->AmountPaid;
+            $processorInvoice->company_id = $company->id;
+            $processorInvoice->xero_invoice_id = $invoice->InvoiceID;
+            $processorInvoice->currency_id = $currency ? $currency->id : null;
+            $processorInvoice->fromXero = true;
+            if ($processorInvoice->total == $processorInvoice->amount_paid) {
+                $processorInvoice->paid = true;
+            }
+            $processorInvoice->status = $processorInvoice->computeStatus();
+            $processorInvoice->save();
+            if (property_exists($invoice, 'Payments')) {
+                $processorInvoice->invoicePayments()->sync($this->assembleInvoicePayments($invoice->Payments));
+            }
+            if (property_exists($invoice, 'CreditNotes')) {
+                $processorInvoice->invoiceCredits()->sync($this->assembleInvoiceCredits($invoice->CreditNotes));
+            }
+            if (property_exists($invoice, 'Attachments')) {
+                $processorInvoice->invoiceXeroAttachments()->sync($this->assembleInvoiceAttachments($invoice));
+            }
         }
     }
 

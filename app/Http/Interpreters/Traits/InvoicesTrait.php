@@ -310,4 +310,16 @@ trait InvoicesTrait
             throw new GeneralApiException($e);
         }
     }
+
+    public function retrieveVoidedInvoices($tenantId)
+    {
+        $url = $this->baseUrl.'/Invoices?where='.urlencode('Status="VOIDED" AND Type="ACCPAY"');
+        try {
+            $response = Http::withHeaders($this->getTenantDefaultHeaders($tenantId))->get($url);
+            $data = json_decode($response->getBody()->getContents());
+            return $data->Invoices;
+        } catch (Exception $e) {
+            throw new GeneralApiException($e);
+        }
+    }
 }
