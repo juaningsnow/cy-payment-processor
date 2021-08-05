@@ -93,22 +93,24 @@ class InvoiceListener
     private function createSupplier($contact, $tenantId)
     {
         $account = null;
+        $company = Company::where('xero_tenant_id', $tenantId)->first();
         if (property_exists($contact, 'PurchasesDefaultAccountCode')) {
             $account = Account::where('code', $contact->PurchasesDefaultAccountCode)->first();
         }
-        if (property_exists($contact, 'Name')) {
-            $company = Company::where('xero_tenant_id', $tenantId)->first();
-            $supplier = new Supplier();
-            $supplier->fromXero = true;
-            $supplier->name = $contact->Name;
-            $supplier->payment_type = "FAST";
-            $supplier->email = $contact->EmailAddress;
-            $supplier->xero_contact_id = $contact->ContactID;
-            $supplier->company_id = $company->getId();
-            $supplier->account_id = $account ? $account->getId() : null;
-            $supplier->fromXero = true;
-            $supplier->save();
-            return $supplier;
+        if ($company) {
+            if (property_exists($contact, 'Name')) {
+                $supplier = new Supplier();
+                $supplier->fromXero = true;
+                $supplier->name = $contact->Name;
+                $supplier->payment_type = "FAST";
+                $supplier->email = $contact->EmailAddress;
+                $supplier->xero_contact_id = $contact->ContactID;
+                $supplier->company_id = $company->getId();
+                $supplier->account_id = $account ? $account->getId() : null;
+                $supplier->fromXero = true;
+                $supplier->save();
+                return $supplier;
+            }
         }
     }
 
