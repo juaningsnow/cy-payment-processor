@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountApiController;
 use App\Http\Controllers\BankApiController;
 use App\Http\Controllers\CompanyApiController;
+use App\Http\Controllers\CreditNoteApiController;
 use App\Http\Controllers\CurrencyApiController;
 use App\Http\Controllers\InvoiceApiController;
 use App\Http\Controllers\InvoiceBatchApiController;
@@ -76,14 +77,11 @@ Route::prefix('companies')->group(function () {
 Route::prefix('invoices')->group(function () {
     Route::get('/', [InvoiceApiController::class, 'index']);
     Route::get('{id}', [InvoiceApiController::class, 'show']);
-    // Route::get('/download-xero-attachment/{id}', [InvoiceApiController::class, 'downloadXeroAttachment']);
     Route::post('/', [InvoiceApiController::class, 'storeMultipleInvoice']);
     Route::post('/pay', [InvoiceApiController::class, 'markAsPaid']);
     Route::post('{id}/upload', [InvoiceApiController::class, 'uploadAttachment']);
     Route::post('/refresh-invoices', [InvoiceApiController::class, 'refreshInvoices']);
-    // Route::post('{id}/attachment', [InvoiceApiController::class, 'addAttachment']);
     Route::post('destroy-multiple', [InvoiceApiController::class, 'destroyMultiple']);
-    // Route::patch('remove-attachment/{id}', [InvoiceApiController::class, 'removeAttachment']);
     Route::patch('{id}', [InvoiceApiController::class, 'update']);
     Route::patch('refresh-attachments/{id}', [InvoiceApiController::class, 'refreshAttachments']);
     Route::delete('{id}', [InvoiceApiController::class, 'destroy']);
@@ -116,4 +114,12 @@ Route::prefix('invoice-batches')->group(function () {
 
 Route::prefix('invoice-batch-details')->group(function () {
     Route::get('/', [InvoiceBatchDetailApiController::class, 'index']);
+});
+
+Route::prefix('credit-notes')->group(function () {
+    Route::get('/', [CreditNoteApiController::class, 'index']);
+    Route::get('{id}', [CreditNoteApiController::class, 'show']);
+    Route::post('/refresh-credit-notes', [CreditNoteApiController::class, 'refreshCreditNotes']);
+    Route::patch('{id}', [CreditNoteApiController::class, 'update']);
+    Route::patch('sync/{id}', [CreditNoteApiController::class, 'syncXero']);
 });

@@ -62,5 +62,13 @@ new Vue({
                 })
             });
         },
+
+        refreshCreditNotes() {
+            this.form.post(`/api/credit-notes/refresh-credit-notes`).then(response => {
+                this.form.successModal('Credit Notes has been refreshed').then(() =>
+                    window.location = `/credit-notes`
+                );
+            });
+        },
     }
 });

@@ -98,9 +98,8 @@ class InvoiceApiController extends ResourceApiController
         $paidBy = $request->input('paidBy');
         $companyOwner = CompanyOwner::find($request->input('ownerId'));
         foreach ($invoices as $invoice) {
-            $invoice->setPaid(true);
             $invoice->setPaidBy($paidBy);
-            if ($paidBy == 'Owner') {
+            if ($paidBy == 'Other') {
                 $invoice->setCompanyOwner($companyOwner);
             }
             $invoice->triggerXero = true;
@@ -122,7 +121,6 @@ class InvoiceApiController extends ResourceApiController
         $company = auth()->user()->getActiveCompany();
         $xero = resolve(XeroInterpreter::class);
         $xeroInvoice = $xero->getInvoice($invoice->xero_invoice_id, $company->xero_tenant_id);
-        $invoice->triggerXero = true;
         $invoice->save();
         $xero->syncAttachments($xeroInvoice);
         $xero->syncPayments($xeroInvoice);

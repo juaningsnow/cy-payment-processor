@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CreditNoteController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\DownloadMediaController;
 use App\Http\Controllers\HomeController;
@@ -63,6 +64,11 @@ Route::prefix('companies')->group(function () {
     Route::get('/create', [CompanyController::class, 'create'])->name('company_create');
     Route::get('/{id}', [CompanyController::class, 'show'])->name('company_show');
     Route::get('/{id}/edit', [CompanyController::class, 'edit'])->name('company_edit');
+});
+
+Route::prefix('credit-notes')->group(function () {
+    Route::get('/', [CreditNoteController::class, 'index'])->name('credit-notes');
+    Route::get('/{id}', [CreditNoteController::class, 'show'])->name('credit-note_show');
 });
 
 // Route::prefix('currencies')->group(function () {

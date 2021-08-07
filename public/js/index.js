@@ -22447,6 +22447,15 @@ new vue__WEBPACK_IMPORTED_MODULE_3__.default({
           type: "warning"
         });
       });
+    },
+    refreshCreditNotes: function refreshCreditNotes() {
+      var _this2 = this;
+
+      this.form.post("/api/credit-notes/refresh-credit-notes").then(function (response) {
+        _this2.form.successModal('Credit Notes has been refreshed').then(function () {
+          return window.location = "/credit-notes";
+        });
+      });
     }
   }
 });

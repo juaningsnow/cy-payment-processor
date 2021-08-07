@@ -17,7 +17,6 @@ class WebhookApiController extends Controller
     //
     public function xeroWebhooks(Request $request)
     {
-        Log::info(json_encode($request->all()));
         foreach ($request->all()['events'] as $event) {
             if (($event['eventType'] == "CREATE" || $event['eventType'] == "Create") && $event['eventCategory'] == "INVOICE") {
                 InvoiceCreated::dispatch(
