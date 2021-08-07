@@ -20,12 +20,13 @@ class CreditNote extends BaseModel
 
     protected static function booted()
     {
-        // $xeroInterpreter = resolve(XeroInterpreter::class);
-        // static::saving(function ($model) use ($xeroInterpreter) {
-        //     if ($model->triggerXero) {
-        //         // $xeroInterpreter->updateCreditNote($model);
-        //     }
-        // });
+        $xeroInterpreter = resolve(XeroInterpreter::class);
+        static::saving(function ($model) use ($xeroInterpreter) {
+            if ($model->triggerXero) {
+                // $xeroInterpreter->updateCreditNote($model);
+            }
+            $model->applied_amount = $model->computeAppliedAmount();
+        });
     }
 
     public function supplier()
