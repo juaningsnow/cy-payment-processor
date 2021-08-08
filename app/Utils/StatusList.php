@@ -22,4 +22,8 @@ class StatusList
     const INVOICE_STATUS_LIST = [
         self::UNPAID, self::GENERATED, self::BATCHED, self::PAID
     ];
+
+    const CREDIT_NOTE_STATUS_LIST = [
+        'PAID', 'AUTHORISED'
+    ];
 }

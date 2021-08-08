@@ -29,6 +29,11 @@ class CreditNote extends BaseModel
         });
     }
 
+    public function scopePaidAndAuthorised($query)
+    {
+        return $query->where('status', 'AUTHORISED')->where('status', 'PAID');
+    }
+
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);

@@ -16,7 +16,7 @@
         <div class="card-body">
             <index ref="index" :filterable="filterable" :export-base-url="exportBaseUrl" :base-url="baseUrl"
                 :sorter="sorter" :sort-ascending="sortAscending" v-on:update-loading="(val) => isLoading = val"
-                v-on:update-items="(val) => items = val">
+                :filters="filters" v-on:update-items="(val) => items = val">
                 <table class="table">
                     <thead>
                         <tr>
@@ -77,6 +77,7 @@
     var filterable = indexVariables.filterable;
     var sorter = indexVariables.sorter;
     var companyId = indexVariables.companyId;
+    var filters = indexVariables.filters;
 </script>
 <script src="{{ mix('js/index.js') }}"></script>
 @endpush
