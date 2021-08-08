@@ -12,6 +12,11 @@ class CreditNoteController extends Controller
         ['id' => 'date', 'text' => "Date", 'type' => "Date"]
     ];
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         if (!auth()->user()->getActiveCompany()->isXeroConnected()) {

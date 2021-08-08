@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 class XeroController extends Controller
 {
     use DateParser;
+ 
     public function status()
     {
         $xeroInterpreter = resolve(XeroInterpreter::class);

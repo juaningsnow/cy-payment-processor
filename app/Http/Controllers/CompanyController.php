@@ -11,6 +11,11 @@ class CompanyController extends Controller
         ['id' => 'name', 'text' => 'Name'],
     ];
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
