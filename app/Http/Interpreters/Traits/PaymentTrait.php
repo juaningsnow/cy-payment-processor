@@ -18,25 +18,27 @@ trait PaymentTrait
             if ($invoice->paid_by == 'Cash') {
                 $accountCode = $invoice->company->cashAccount->code;
             } else {
-                $accountCode = $invoice->companyOwner->account->code;
+                $accountCode = $invoice->companyOwner ? $invoice->companyOwner->account->code : null;
             }
-            $body = [
-                'Invoice' => [
-                    'InvoiceId' => $invoice->xero_invoice_id
-                ],
-                "Account" => [
-                    "Code" => $accountCode,
-                ],
-                "Date" => Carbon::now()->toDateString(),
-                "Amount" => $invoice->amount_due,
-            ];
-            $response = Http::withHeaders($this->getTenantDefaultHeaders($invoice->company->xero_tenant_id))->withBody(
-                json_encode($body),
-                'application/json'
-            )->put($this->baseUrl.'/Payments');
-            $data = json_decode($response->getBody()->getContents());
-            $this->syncPayments($this->getInvoice($invoice->xero_invoice_id, $invoice->company->xero_tenant_id));
-            $this->syncCredits($this->getInvoice($invoice->xero_invoice_id, $invoice->company->xero_tenant_id));
+            if ($accountCode) {
+                $body = [
+                    'Invoice' => [
+                        'InvoiceId' => $invoice->xero_invoice_id
+                    ],
+                    "Account" => [
+                        "Code" => $accountCode,
+                    ],
+                    "Date" => Carbon::now()->toDateString(),
+                    "Amount" => $invoice->amount_due,
+                ];
+                $response = Http::withHeaders($this->getTenantDefaultHeaders($invoice->company->xero_tenant_id))->withBody(
+                    json_encode($body),
+                    'application/json'
+                )->put($this->baseUrl.'/Payments');
+                $data = json_decode($response->getBody()->getContents());
+                $this->syncPayments($this->getInvoice($invoice->xero_invoice_id, $invoice->company->xero_tenant_id));
+                $this->syncCredits($this->getInvoice($invoice->xero_invoice_id, $invoice->company->xero_tenant_id));
+            }
         } catch (Exception $e) {
             throw new GeneralApiException($e);
         }
