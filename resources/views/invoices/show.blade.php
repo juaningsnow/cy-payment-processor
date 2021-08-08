@@ -15,7 +15,8 @@
                         <a v-if="!form.isGenerated" href="{{route('invoice_edit', $id)}}">
                             <button type="button" class="btn btn-info"><i class="fas fa-edit"></i></button></a>
 
-                        <button type="button" @click="refreshAttachments" class="btn btn-info">Sync Xero Data</button>
+                        <button type="button" @click="refreshAttachments" class="btn btn-info">Sync Xero Data to
+                            retrieve file</button>
                         <a target="_blank" :href="form.xeroUrl">
                             <button type="button" class="btn btn-info">Open in Xero</button></a>
                         <div class="card-tools">

@@ -169,7 +169,7 @@ class InvoiceListener
             $processorInvoice->status = $processorInvoice->computeStatus();
             $processorInvoice->save();
             if (property_exists($invoice, 'Payments')) {
-                $processorInvoice->invoicePayments()->sync($this->assembleInvoicePayments($invoice->Payments));
+                $processorInvoice->invoicePayments()->sync($this->assembleInvoicePayments($invoice));
             }
             if (property_exists($invoice, 'CreditNotes')) {
                 $processorInvoice->invoiceCredits()->sync($this->assembleInvoiceCredits($invoice->CreditNotes));

@@ -24,6 +24,7 @@ mix.copy('node_modules/admin-lte/node_modules/select2/dist/js/select2.full.js', 
     .js(`resources/js/user.js`, "public/js")
     .js(`resources/js/xero.js`, "public/js")
     .js(`resources/js/creditnotes.js`, "public/js")
+    .js(`resources/js/nav.js`, "public/js")
     // .js(`resources/js/summary.js`, "public/js")
     .sass('resources/sass/app.scss', 'public/css')
     .vue()

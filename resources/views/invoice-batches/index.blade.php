@@ -12,7 +12,7 @@
         </div>
         <div class="card-body">
             <index :filterable="filterable" :export-base-url="exportBaseUrl" :base-url="baseUrl" :sorter="sorter"
-                :sort-ascending="sortAscending" v-on:update-loading="(val) => isLoading = val"
+                :sort-ascending="sortAscending" v-on:update-loading="(val) => isLoading = val" :filters="filters"
                 v-on:update-items="(val) => items = val">
                 <table class="table">
                     <thead>
@@ -83,6 +83,7 @@
     var exportBaseUrl = indexVariables.exportBaseUrl;
     var filterable = indexVariables.filterable;
     var sorter = indexVariables.sorter;
+    var filters = indexVariables.filters;
 </script>
 <script src="{{ mix('js/index.js') }}"></script>
 @endpush

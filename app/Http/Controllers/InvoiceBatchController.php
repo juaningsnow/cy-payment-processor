@@ -7,11 +7,15 @@ use App\Models\InvoiceBatch;
 use App\Utils\InvoiceBatchTextFileGenerator;
 use App\Utils\StatusList;
 use BaseCode\Common\Exceptions\GeneralApiException;
+use BaseCode\Common\Utils\UriParserHelper;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class InvoiceBatchController extends Controller
 {
+    use UriParserHelper;
+
     private $availableFilters = [
         ['id' => 'batch_name', 'text' => 'Batch #'],
         ['id' => 'date', 'text' => "Date", 'type' => "Date"],
@@ -35,15 +39,17 @@ class InvoiceBatchController extends Controller
         return view('invoice-batches.create', ['title' => "Batch Create", 'id' => null]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
             return redirect()->route('xero_status');
         }
+        $filters = $this->getFilterArraysFromRequest($request, 'field');
         $indexVariables = [
             'filterable' => $this->availableFilters,
             'sorter' => 'batch_name',
             'sortAscending' => true,
+            'filters' => $filters,
             'baseUrl' => '/api/invoice-batches',
             'exportBaseUrl' => '/invoice-batches'
         ];

@@ -180,6 +180,11 @@ class InvoiceBatch extends BaseModel
         return "Not Yet Generated";
     }
 
+    public function scopeNotYetGenerated($query)
+    {
+        return $query->where('status', 'Not Yet Generated');
+    }
+
     public function getStatus()
     {
         $this->status = $this->computeStatus();

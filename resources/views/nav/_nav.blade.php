@@ -1,4 +1,4 @@
-<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+<ul id="nav" class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
     <!-- Add icons to the links using the .nav-icon class
         with font-awesome or any other icon font library -->
     <li class="nav-header">Navigation</li>
@@ -17,6 +17,10 @@
             <p>
                 Invoices
             </p>
+            <span v-if="invoiceCount > 0" class="badge badge-danger navbar-badge font-weight-bold"
+                style="font-size:12px;">
+                @{{invoiceCount}}
+            </span>
         </a>
     </li>
     <li class="nav-item">
@@ -25,14 +29,22 @@
             <p>
                 Credit Notes
             </p>
+            <span v-if="creditNoteCount > 0" class="badge badge-danger navbar-badge font-weight-bold"
+                style="font-size:12px;">
+                @{{creditNoteCount}}
+            </span>
         </a>
     </li>
     <li class="nav-item">
-        <a href="{{route('invoice-batches')}}" class="nav-link">
+        <a href="{{route('invoice-batches', ['status' => 'Not Yet Generated'])}}" class="nav-link">
             <i class="nav-icon fas fa-list"></i>
             <p>
                 Invoice Batches
             </p>
+            <span v-if="invoiceBatchCount > 0" class="badge badge-danger navbar-badge font-weight-bold"
+                style="font-size:12px;">
+                @{{invoiceBatchCount}}
+            </span>
         </a>
     </li>
     <li class="nav-item">
@@ -106,3 +118,6 @@
         </ul>
     </li>
 </ul>
+@push('scripts')
+<script src="{{ mix('js/nav.js') }}"></script>
+@endpush

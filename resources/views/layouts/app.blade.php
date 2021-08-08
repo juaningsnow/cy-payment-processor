@@ -53,7 +53,7 @@
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
       <a href="{{ route('dashboard')}}" class="brand-link">
-        <span class="brand-text font-weight-light">CY Industries</span>
+        <span class="brand-text font-weight-light">{{ucwords(auth()->user()->getActiveCompany()->name)}}</span>
       </a>
 
       <!-- Sidebar -->
