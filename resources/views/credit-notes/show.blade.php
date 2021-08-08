@@ -17,7 +17,7 @@
 
                         <button type="button" @click="syncXeroData" class="btn btn-info">Sync Xero Data</button>
                         <a target="_blank" :href="form.xeroUrl">
-                            <button type="button" class="btn btn-info">Open in Xero</button></a>
+                            <button type="button" class="btn btn-info">Open in Xero To Allocate Credit</button></a>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                 <i class="fas fa-minus"></i>
@@ -52,7 +52,7 @@
                                     <tbody v-else>
                                         <tr>
                                             <td class="text-center" colspan="3">
-                                                No Allocation, Allocate on Xero
+                                                No Allocation,Open in Xero to Allocate credit
                                             </td>
                                         </tr>
                                     </tbody>
