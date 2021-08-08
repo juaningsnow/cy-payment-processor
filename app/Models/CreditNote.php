@@ -31,7 +31,7 @@ class CreditNote extends BaseModel
 
     public function scopePaidAndAuthorised($query)
     {
-        return $query->where('status', 'AUTHORISED')->where('status', 'PAID');
+        return $query->where('status', 'AUTHORISED')->orWhere('status', 'PAID');
     }
 
     public function supplier()

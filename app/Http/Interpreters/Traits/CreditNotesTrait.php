@@ -30,7 +30,7 @@ trait CreditNotesTrait
     public function getCreditNotes(Company $company)
     {
         try {
-            $url = $this->baseUrl."/CreditNotes?where=".urlencode('Type="ACCPAYCREDIT" AND Status="AUTHORISED"');
+            $url = $this->baseUrl."/CreditNotes?where=".urlencode('Type="ACCPAYCREDIT"');
             $response = Http::withHeaders($this->getTenantDefaultHeaders($company->xero_tenant_id))
                 ->get($url);
             $data = json_decode($response->getBody()->getContents());
