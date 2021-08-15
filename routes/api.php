@@ -79,6 +79,7 @@ Route::prefix('invoices')->group(function () {
     Route::get('{id}', [InvoiceApiController::class, 'show']);
     Route::post('/', [InvoiceApiController::class, 'storeMultipleInvoice']);
     Route::post('/pay', [InvoiceApiController::class, 'markAsPaid']);
+    Route::post('/mark-as-paid', [InvoiceApiController::class, 'markInvoiceAsPaid']);
     Route::post('{id}/upload', [InvoiceApiController::class, 'uploadAttachment']);
     Route::post('/refresh-invoices', [InvoiceApiController::class, 'refreshInvoices']);
     Route::post('destroy-multiple', [InvoiceApiController::class, 'destroyMultiple']);
@@ -106,6 +107,7 @@ Route::prefix('invoice-batches')->group(function () {
     Route::get('/validate-export', [InvoiceBatchApiController::class, 'validateForExport']);
     Route::get('{id}', [InvoiceBatchApiController::class, 'show']);
     Route::post('/', [InvoiceBatchApiController::class, 'store']);
+    Route::post('/add', [InvoiceBatchApiController::class, 'addInvoice']);
     Route::patch('{id}', [InvoiceBatchApiController::class, 'update']);
     Route::patch('add-invoices/{id}', [InvoiceBatchApiController::class, 'addInvoices']);
     Route::patch('cancel/{id}', [InvoiceBatchApiController::class, 'cancel']);

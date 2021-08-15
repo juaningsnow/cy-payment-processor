@@ -13,8 +13,8 @@
                 <div v-else>
                     <div class="card-header">
                         <a href="{{route('company_edit', $id)}}">
-                            <button type="button" class="btn btn-info"><i class="fas fa-edit"></i></button></a>
-                        <button type="button" @click="refreshCurrencies" class="btn btn-info">Refresh
+                            <button type="button" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button></a>
+                        <button type="button" @click="refreshCurrencies" class="btn btn-info btn-sm">Refresh
                             Currencies and Accounts</button>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">

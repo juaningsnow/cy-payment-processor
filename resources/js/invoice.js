@@ -7,6 +7,8 @@ import Datepicker from 'vuejs-datepicker';
 import vueFilePond, { setOptions } from "vue-filepond";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import InvoiceAttachmentModal from "./components/InvoiceAttachmentModal.vue";
+import MarkAsPaidModal from "./components/MarkSingleInvoiceAsPaidModal.vue";
+import AddToBatchModal from "./components/AddToBatchModal.vue";
 
 const FilePond = vueFilePond(
     FilePondPluginImagePreview
@@ -35,7 +37,9 @@ new Vue({
         DeleteButton,
         Datepicker,
         FilePond,
-        InvoiceAttachmentModal
+        MarkAsPaidModal,
+        InvoiceAttachmentModal,
+        AddToBatchModal
     },
 
     data: {
@@ -54,9 +58,12 @@ new Vue({
         suppliersInitialized: false,
         currencySelections: [],
         currencyInitialized: false,
+        selected: [],
         dataInitialized: true,
         isShow: false,
         showInvoiceAttachmentModal: false,
+        showMarkAsPaidModal: false,
+        showAddToBatchModal: false,
     },
 
     watch: {
@@ -101,6 +108,9 @@ new Vue({
 
         loadData(data) {
             this.form = new Form(data);
+            this.selected = [
+                this.form
+            ];
         },
         reloadData(id) {
             this.dataInitialized = false;

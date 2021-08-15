@@ -13,11 +13,12 @@
                 <div v-else>
                     <div class="card-header">
                         <a v-if="!form.isGenerated" href="{{route('invoice_edit', $id)}}">
-                            <button type="button" class="btn btn-info"><i class="fas fa-edit"></i></button></a>
+                            <button type="button" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button></a>
 
                         <button type="button" @click="syncXeroData" class="btn btn-info">Sync Xero Data</button>
                         <a target="_blank" :href="form.xeroUrl">
-                            <button type="button" class="btn btn-info">Open in Xero To Allocate Credit</button></a>
+                            <button type="button" class="btn btn-info btn-sm">Open in Xero To Allocate
+                                Credit</button></a>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                 <i class="fas fa-minus"></i>

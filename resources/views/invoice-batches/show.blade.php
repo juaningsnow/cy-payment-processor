@@ -24,9 +24,9 @@
                         <div class="card-tools">
                             <div class="btn-group">
                                 <button type="button" v-if="!form.cancelled && form.generated" title="Cancel"
-                                    @click="cancel" class="btn btn-danger">Cancel</button>
+                                    @click="cancel" class="btn btn-danger btn-sm">Cancel</button>
                                 <button type="button" title="Export Text File" @click="exportTextFile"
-                                    class="btn btn-success">Generate</button>
+                                    class="btn btn-success btn-sm">Generate</button>
                             </div>
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                 <i class="fas fa-minus"></i>

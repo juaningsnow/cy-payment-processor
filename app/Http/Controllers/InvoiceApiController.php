@@ -92,6 +92,20 @@ class InvoiceApiController extends ResourceApiController
         return response('success', 200);
     }
 
+    public function markInvoiceAsPaid(Request $request)
+    {
+        $invoice = Invoice::find($request->input('invoiceId'));
+        $paidBy = $request->input('paidBy');
+        $companyOwner = CompanyOwner::find($request->input('ownerId'));
+        $invoice->setPaidBy($paidBy);
+        if ($paidBy == 'Other') {
+            $invoice->setCompanyOwner($companyOwner);
+        }
+        $invoice->triggerXero = true;
+        $invoice->save();
+        return $this->getResource($invoice);
+    }
+
     public function markAsPaid(Request $request)
     {
         $invoices = $this->getInvoices($request);

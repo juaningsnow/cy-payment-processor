@@ -17,7 +17,7 @@ class InvoiceResource extends JsonResource
         return [
             'id' => $this->getId(),
             'supplierId' => $this->getSupplierId(),
-            'date' => $this->getDate(),
+            'date' => $this->getDate()->toFormattedDateString(),
             'invoiceNumber' => $this->getInvoiceNumber(),
             'total' => $this->total,
             'amountDue' => $this->amount_due,
@@ -26,6 +26,8 @@ class InvoiceResource extends JsonResource
             'status' => $this->getStatus(),
             'paidBy' => $this->getPaidBy(),
             'xeroUrl' => $this->getXeroUrl(),
+            'companyId' => $this->company_id,
+            'canAddToBatchOrBePaid' => $this->canAddToBatchOrBePaid(),
             'currencyId' => $this->currency_id,
             'media' => new MediaResourceCollection($this->whenLoaded('media')),
             'supplier' => new SupplierResource($this->whenLoaded('supplier')),

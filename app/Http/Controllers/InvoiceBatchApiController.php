@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\InvoiceBatchRequest;
 use App\Http\Resources\InvoiceBatchResource;
 use App\Http\Resources\InvoiceBatchResourceCollection;
+use App\Models\Invoice;
 use App\Models\InvoiceBatch;
+use App\Models\InvoiceBatchDetail;
 use App\Models\Supplier;
 use App\Utils\BatchNumberGenerator;
 use App\Utils\CompanyIndexFilter;
@@ -13,6 +15,7 @@ use BaseCode\Common\Controllers\ResourceApiController;
 use BaseCode\Common\Exceptions\GeneralApiException;
 use DateTime;
 use Illuminate\Http\Request;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 
 class InvoiceBatchApiController extends ResourceApiController
 {
@@ -51,6 +54,32 @@ class InvoiceBatchApiController extends ResourceApiController
         $invoiceBatch->setName($request->input('name'));
         $invoiceBatch->save();
         $invoiceBatch->invoiceBatchDetails()->sync($invoiceBatch->getInvoiceBatchDetails());
+        return $this->getResource($invoiceBatch);
+    }
+
+    public function addInvoice(Request $request)
+    {
+        $request->validate([
+            'invoiceBatchId' => 'required',
+            'amount' => 'required|numeric',
+            'invoiceId' => 'required',
+        ]);
+        $invoice = Invoice::find($request->input('invoiceId'));
+        $invoiceBatch = InvoiceBatch::find($request->input('invoiceBatchId'));
+        $invoiceBatchDetail = new InvoiceBatchDetail();
+        if ($request->input('amount') > 0) {
+            $amount = $request->input('amount');
+        } else {
+            if ($invoice->amount_due > 0) {
+                $amount = $invoice->amount_due;
+            } else {
+                $amount = $invoice->total;
+            }
+        }
+        $invoiceBatchDetail->setInvoice($invoice);
+        $invoiceBatchDetail->setInvoiceBatch($invoiceBatch);
+        $invoiceBatchDetail->amount = $amount;
+        $invoiceBatchDetail->save();
         return $this->getResource($invoiceBatch);
     }
 

@@ -28,7 +28,7 @@ trait PaymentTrait
                     "Account" => [
                         "Code" => $accountCode,
                     ],
-                    "Date" => Carbon::now()->toDateString(),
+                    "Date" => $invoice->getDate()->toDateString(),
                     "Amount" => $invoice->amount_due,
                 ];
                 $response = Http::withHeaders($this->getTenantDefaultHeaders($invoice->company->xero_tenant_id))->withBody(
@@ -53,7 +53,7 @@ trait PaymentTrait
                 "Account" => [
                     "AccountID" => $accountId,
                 ],
-                "Date" => Carbon::now()->toDateString(),
+                "Date" => $invoiceBatch->getDate()->toDateString(),
                 "IsReconciled" => true,
                 "Payments" => $this->assembleInvoiceBatchDetailForBatchPayment($invoiceBatch->invoiceBatchDetails->all(), $payToSupplier)
             ];

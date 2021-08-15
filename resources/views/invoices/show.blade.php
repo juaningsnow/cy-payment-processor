@@ -13,13 +13,20 @@
                 <div v-else>
                     <div class="card-header">
                         <a v-if="!form.isGenerated" href="{{route('invoice_edit', $id)}}">
-                            <button type="button" class="btn btn-info"><i class="fas fa-edit"></i></button></a>
+                            <button type="button" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button></a>
 
-                        <button type="button" @click="refreshAttachments" class="btn btn-info">Sync Xero Data to
+                        <button type="button" @click="refreshAttachments" class="btn btn-info btn-sm">Sync Xero Data to
                             retrieve file</button>
                         <a target="_blank" :href="form.xeroUrl">
-                            <button type="button" class="btn btn-info">Open in Xero</button></a>
+                            <button type="button" class="btn btn-info btn-sm">Open in Xero</button></a>
+
                         <div class="card-tools">
+                            <button type="button" @click="showMarkAsPaidModal = true" class="btn btn-success btn-sm">
+                                Mark as Paid
+                            </button>
+                            <button type="button" @click="showAddToBatchModal = true" class="btn btn-success btn-sm">
+                                Add to Batch
+                            </button>
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                 <i class="fas fa-minus"></i>
                             </button>
@@ -104,11 +111,13 @@
                                     </tbody>
                                 </table>
                             </div>
-
-
                         </div>
                     </form>
                 </div>
+                <mark-as-paid-modal :invoice-id="form.id" v-if="showMarkAsPaidModal" :company-id="form.companyId"
+                    @close="showMarkAsPaidModal = false" @reload-data="reloadData"></mark-as-paid-modal>
+                <add-to-batch-modal :invoice-id="form.id" v-if="showAddToBatchModal"
+                    @close="showAddToBatchModal = false" @reload-data="reloadData"></add-to-batch-modal>
             </div>
         </div>
     </div>

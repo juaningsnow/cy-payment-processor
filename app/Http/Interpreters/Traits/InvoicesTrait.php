@@ -91,6 +91,8 @@ trait InvoicesTrait
             throw new GeneralApiException("Supplier does not exists in xero!");
         }
 
+        $xeroInvoice = $this->getInvoice($invoice->xero_invoice_id, $invoice->company->xero_tenant_id);
+
         $date = new Carbon($invoice->date);
         $body = [
             'InvoiceID' => $invoice->xero_invoice_id,
@@ -102,14 +104,7 @@ trait InvoicesTrait
             "DueDateString" => $date->toDateTimeLocalString(),
             "CurrencyCode" => $invoice->getCurrency()->code,
             "InvoiceNumber" => $invoice->invoice_number,
-            "LineItems" => [[
-                "Description" => $invoice->description ? $invoice->description : '.',
-                "Quantity" => '1',
-                "TaxType" => "NONE",
-                "UnitAmount" => $invoice->total,
-                "LineAmount" => $invoice->total,
-                "AccountCode" =>  $invoice->supplier->account ? $invoice->supplier->account->code : null,
-            ]],
+            "LineItems" => $xeroInvoice->LineItems,
             "Status" => "AUTHORISED",
         ];
         try {

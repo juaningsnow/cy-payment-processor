@@ -14117,20 +14117,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 vue__WEBPACK_IMPORTED_MODULE_1__.default.config.devtools = true;
-vue__WEBPACK_IMPORTED_MODULE_1__.default.filter("numeric", function (value) {
-  var decimals = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
-
-  if (isNaN(Number(value))) {
-    return value;
-  }
-
-  var formatter = new Intl.NumberFormat("en-US", {
-    style: "decimal",
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals
-  });
-  return formatter.format(value);
-});
 new vue__WEBPACK_IMPORTED_MODULE_1__.default({
   el: "#nav",
   data: {

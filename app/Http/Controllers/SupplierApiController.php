@@ -72,7 +72,8 @@ class SupplierApiController extends ResourceApiController
             'paymentType' => 'required',
             'accountNumber' => 'required',
             'email' => 'required|email',
-            'bankId' => 'required'
+            'bankId' => 'required',
+            'accountId' => 'required',
         ]);
         $bank = Bank::find($request->input('bankId'));
         $purpose = Purpose::find($request->input('purposeId'));

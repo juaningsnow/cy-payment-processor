@@ -22,6 +22,10 @@ class Invoice extends BaseModel implements HasMedia
 
     public $fromXero = false;
     public $triggerXero = false;
+    
+    protected $dates = [
+        'date',
+    ];
 
     protected static function booted()
     {
@@ -326,6 +330,11 @@ class Invoice extends BaseModel implements HasMedia
             }
             return "Paid by {$this->getPaidBy()}";
         }
+    }
+
+    public function canAddToBatchOrBePaid()
+    {
+        return $this->getAmountDue() > 0 ? true : false;
     }
 
     public function getStatus()
