@@ -16,7 +16,7 @@ new Vue({
         axios.get(`/api/invoices?no_invoice_batch_detail_or_cancelled=1&paid=0`).then(response => {
             this.invoiceCount = response.data.meta.total;
         });
-        axios.get(`/api/credit-notes?status='AUTHORISED'`).then(response => {
+        axios.get(`/api/credit-notes?include=supplier,currency&paid_and_authorised=1`).then(response => {
             this.creditNoteCount = response.data.meta.total;
         });
         axios.get(`/api/invoice-batches?not-yet-generated=1`).then(response => {
