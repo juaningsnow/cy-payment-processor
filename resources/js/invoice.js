@@ -2,19 +2,20 @@ import Vue from 'vue';
 import { Form } from "./components/Form";
 import SaveButton from "./components/SaveButton";
 import DeleteButton from "./components/DeleteButton";
-import VueSweetalert2 from "vue-sweetalert2";
 import Datepicker from 'vuejs-datepicker';
 import vueFilePond, { setOptions } from "vue-filepond";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import InvoiceAttachmentModal from "./components/InvoiceAttachmentModal.vue";
 import MarkAsPaidModal from "./components/MarkSingleInvoiceAsPaidModal.vue";
 import AddToBatchModal from "./components/AddToBatchModal.vue";
+import BatchModal from "./components/BatchModal.vue";
+import VueSweetalert2 from "vue-sweetalert2";
+Vue.use(VueSweetalert2);
 
 const FilePond = vueFilePond(
     FilePondPluginImagePreview
 );
 
-Vue.use(VueSweetalert2);
 
 Vue.config.devtools = true;
 Vue.filter("numeric", function (value, decimals = 2) {
@@ -39,7 +40,8 @@ new Vue({
         FilePond,
         MarkAsPaidModal,
         InvoiceAttachmentModal,
-        AddToBatchModal
+        AddToBatchModal,
+        BatchModal
     },
 
     data: {
@@ -64,6 +66,8 @@ new Vue({
         showInvoiceAttachmentModal: false,
         showMarkAsPaidModal: false,
         showAddToBatchModal: false,
+        showBatchModal: false,
+        selected: [],
     },
 
     watch: {
@@ -88,7 +92,7 @@ new Vue({
         },
         update() {
             this.form.patch("/api/invoices/" + this.form.id).then(response => {
-                this.$swal({
+                Swal.fire({
                     title: "Invoice updated!",
                     text: "Changes saved to database.",
                     type: "success"
@@ -96,9 +100,26 @@ new Vue({
             });
         },
 
+        addToBatch() {
+            Swal.fire({
+                title: 'Do you want to create a new Batch?',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: `Yes`,
+                denyButtonText: `No`,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    this.showBatchModal = true;
+                } else if (result.isDenied) {
+                    this.showAddToBatchModal = true;
+                }
+            })
+        },
+
         refreshAttachments() {
             this.form.patch(`/api/invoices/refresh-attachments/${this.form.id}`).then(response => {
-                this.$swal({
+                Swal.fire({
                     title: "Payments and attachments refreshed!",
                     text: "Changes saved to database.",
                     type: "success"
@@ -125,7 +146,7 @@ new Vue({
 
         removeFile(id) {
             this.form.patch(`/api/invoices/remove-attachment/${id}`).then(response => {
-                this.$swal({
+                Swal.fire({
                     title: "File Deleted!",
                     text: "Changes saved to database.",
                     type: "success"

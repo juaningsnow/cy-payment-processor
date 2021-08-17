@@ -21,10 +21,12 @@
                             <button type="button" class="btn btn-info btn-sm">Open in Xero</button></a>
 
                         <div class="card-tools">
-                            <button type="button" @click="showMarkAsPaidModal = true" class="btn btn-success btn-sm">
+                            <button type="button" v-if="form.amountDue > 0" @click="showMarkAsPaidModal = true"
+                                class="btn btn-success btn-sm">
                                 Mark as Paid
                             </button>
-                            <button type="button" @click="showAddToBatchModal = true" class="btn btn-success btn-sm">
+                            <button type="button" v-if="form.amountDue > 0" @click="addToBatch"
+                                class="btn btn-success btn-sm">
                                 Add to Batch
                             </button>
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -118,12 +120,15 @@
                     @close="showMarkAsPaidModal = false" @reload-data="reloadData"></mark-as-paid-modal>
                 <add-to-batch-modal :invoice-id="form.id" v-if="showAddToBatchModal"
                     @close="showAddToBatchModal = false" @reload-data="reloadData"></add-to-batch-modal>
+                <batch-modal :selected-invoices="selected" v-if="showBatchModal" @close="showBatchModal = false"
+                    @reload-data="reloadData"></batch-modal>
             </div>
         </div>
     </div>
 </div>
 @endsection
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script type="text/javascript">
     var id = {!! json_encode($id) !!};
     var isShow = true;

@@ -41,6 +41,20 @@
 <div class="row">
     <div class="col-6">
         <div class="form-group">
+            <label for="amount">Amound Due</label>
+            <input type="number" disabled class="form-control" v-model="form.amountDue">
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="form-group">
+            <label for="amount">AmountPaid</label>
+            <input type="number" disabled class="form-control" v-model="form.amountPaid">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div class="form-group">
             <label for="description">Remarks</label>
             <input type="text" :disabled="isShow" class="form-control" placeholder="Remarks" v-model="form.description">
         </div>
