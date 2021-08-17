@@ -100,8 +100,7 @@ new Vue({
         },
 
         reloadData() {
-            this.selected = [];
-            this.$refs.index.reloadIndex();
+            window.location = '/invoices';
         },
         setSorter(sorter) {
             if (sorter == this.sorter) this.sortAscending = !this.sortAscending;

@@ -50,6 +50,28 @@
                 </select>
             </div>
         </div>
+        <template slot="footer">
+            <button
+                class="btn btn-success"
+                @click="save"
+                :disabled="form.isBusy"
+            >
+                <div v-if="form.isSaving">
+                    <i class="fas fa-circle-notch fa-spin"></i> Saving...
+                </div>
+                <div v-if="!form.isSaving">
+                    <i class="fa fa-save"></i>
+                </div>
+            </button>
+            <button
+                type="button"
+                class="btn btn-secondary"
+                :disabled="form.isBusy"
+                @click="close"
+            >
+                Close
+            </button>
+        </template>
     </modal-window>
 </template>
 <script>
@@ -83,13 +105,17 @@ export default {
 
     created() {
         this.form.invoiceId = this.invoiceId;
-        this.form
-            .get(`/api/invoice-batches?not-yet-generated=1`)
-            .then((response) => {
-                this.invoiceBatchSelection = response.data;
-                this.invoiceBatchInitialized = true;
-                this.dataInitialized = true;
-            });
+        this.form.get(`/api/invoices/${this.invoiceId}`).then((response) => {
+            console.log(response);
+            this.form.amount = response.data.amountDue;
+            this.form
+                .get(`/api/invoice-batches?not-yet-generated=1`)
+                .then((response) => {
+                    this.invoiceBatchSelection = response.data;
+                    this.invoiceBatchInitialized = true;
+                    this.dataInitialized = true;
+                });
+        });
     },
 
     methods: {

@@ -1901,6 +1901,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -1931,10 +1953,15 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.form.invoiceId = this.invoiceId;
-    this.form.get("/api/invoice-batches?not-yet-generated=1").then(function (response) {
-      _this.invoiceBatchSelection = response.data;
-      _this.invoiceBatchInitialized = true;
-      _this.dataInitialized = true;
+    this.form.get("/api/invoices/".concat(this.invoiceId)).then(function (response) {
+      console.log(response);
+      _this.form.amount = response.data.amountDue;
+
+      _this.form.get("/api/invoice-batches?not-yet-generated=1").then(function (response) {
+        _this.invoiceBatchSelection = response.data;
+        _this.invoiceBatchInitialized = true;
+        _this.dataInitialized = true;
+      });
     });
   },
   methods: {
@@ -2139,6 +2166,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _ModalWindow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ModalWindow */ "./resources/js/components/ModalWindow.vue");
 /* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Form */ "./resources/js/components/Form.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -23186,8 +23235,42 @@ var render = function() {
               ])
             ],
             2
-          )
-    ]
+          ),
+      _vm._v(" "),
+      _c("template", { slot: "footer" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-success",
+            attrs: { disabled: _vm.form.isBusy },
+            on: { click: _vm.save }
+          },
+          [
+            _vm.form.isSaving
+              ? _c("div", [
+                  _c("i", { staticClass: "fas fa-circle-notch fa-spin" }),
+                  _vm._v(" Saving...\n            ")
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            !_vm.form.isSaving
+              ? _c("div", [_c("i", { staticClass: "fa fa-save" })])
+              : _vm._e()
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-secondary",
+            attrs: { type: "button", disabled: _vm.form.isBusy },
+            on: { click: _vm.close }
+          },
+          [_vm._v("\n            Close\n        ")]
+        )
+      ])
+    ],
+    2
   )
 }
 var staticRenderFns = []
@@ -23600,8 +23683,42 @@ var render = function() {
                 : _vm._e()
             ],
             2
-          )
-    ]
+          ),
+      _vm._v(" "),
+      _c("template", { slot: "footer" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-success",
+            attrs: { disabled: _vm.form.isBusy },
+            on: { click: _vm.save }
+          },
+          [
+            _vm.form.isSaving
+              ? _c("div", [
+                  _c("i", { staticClass: "fas fa-circle-notch fa-spin" }),
+                  _vm._v(" Saving...\n            ")
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            !_vm.form.isSaving
+              ? _c("div", [_c("i", { staticClass: "fa fa-save" })])
+              : _vm._e()
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-secondary",
+            attrs: { type: "button", disabled: _vm.form.isBusy },
+            on: { click: _vm.close }
+          },
+          [_vm._v("\n            Close\n        ")]
+        )
+      ])
+    ],
+    2
   )
 }
 var staticRenderFns = []

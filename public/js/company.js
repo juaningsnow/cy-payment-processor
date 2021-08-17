@@ -1934,6 +1934,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -6619,8 +6641,42 @@ var render = function() {
               ])
             ],
             2
-          )
-    ]
+          ),
+      _vm._v(" "),
+      _c("template", { slot: "footer" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-success",
+            attrs: { disabled: _vm.form.isBusy },
+            on: { click: _vm.save }
+          },
+          [
+            _vm.form.isSaving
+              ? _c("div", [
+                  _c("i", { staticClass: "fas fa-circle-notch fa-spin" }),
+                  _vm._v(" Saving...\n            ")
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            !_vm.form.isSaving
+              ? _c("div", [_c("i", { staticClass: "fa fa-save" })])
+              : _vm._e()
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-secondary",
+            attrs: { type: "button", disabled: _vm.form.isBusy },
+            on: { click: _vm.close }
+          },
+          [_vm._v("\n            Close\n        ")]
+        )
+      ])
+    ],
+    2
   )
 }
 var staticRenderFns = []

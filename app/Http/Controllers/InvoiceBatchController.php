@@ -91,8 +91,6 @@ class InvoiceBatchController extends Controller
         }
        
         $batch = InvoiceBatch::find($id);
-        $batch->setGenerated(true);
-        $batch->save();
         $fileText = InvoiceBatchTextFileGenerator::generate($batch, auth()->user());
         $currentDateTime = Carbon::now();
         $myName = "{$batch->batch_name}{$currentDateTime->format('dmYHis')}.txt";

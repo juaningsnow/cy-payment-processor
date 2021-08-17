@@ -1,4 +1,4 @@
-<ul id="nav" class="nav nav-pills nav-sidebar flex-column" v-cloak data-widget="treeview" role="menu"
+<ul id="nav" class="nav nav-pills nav-sidebar flex-column" v-cloak ref="nav" data-widget="treeview" role="menu"
     data-accordion="false">
     <!-- Add icons to the links using the .nav-icon class
         with font-awesome or any other icon font library -->

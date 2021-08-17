@@ -176,7 +176,7 @@ new Vue({
 
         validateData() {
             return new Promise((resolve, reject) => {
-                this.form.get(`/api/invoice-batches/validate-export`).then(response => {
+                this.form.post(`/api/invoice-batches/validate-export`).then(response => {
                     resolve();
                 }).catch(error => {
                     this.$swal({
@@ -189,10 +189,19 @@ new Vue({
             })
         },
 
-        exportTextFile() {
-            this.validateData().then(() => {
+        openNewPage() {
+            return new Promise((resolve, reject) => {
                 let path = new URL(`${window.location.origin}/invoice-batches/${id}/generate`);
                 window.open(path);
+                resolve();
+            })
+        },
+
+        exportTextFile() {
+            this.validateData().then(() => {
+                this.openNewPage().then(() => {
+                    window.location = '/invoice-batches/' + this.form.id;
+                })
             })
         },
     },

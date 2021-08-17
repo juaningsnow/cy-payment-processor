@@ -45479,7 +45479,7 @@ new vue__WEBPACK_IMPORTED_MODULE_8__.default({
       var _this6 = this;
 
       return new Promise(function (resolve, reject) {
-        _this6.form.get("/api/invoice-batches/validate-export").then(function (response) {
+        _this6.form.post("/api/invoice-batches/validate-export").then(function (response) {
           resolve();
         })["catch"](function (error) {
           _this6.$swal({
@@ -45492,25 +45492,35 @@ new vue__WEBPACK_IMPORTED_MODULE_8__.default({
         });
       });
     },
-    exportTextFile: function exportTextFile() {
-      this.validateData().then(function () {
+    openNewPage: function openNewPage() {
+      return new Promise(function (resolve, reject) {
         var path = new URL("".concat(window.location.origin, "/invoice-batches/").concat(id, "/generate"));
         window.open(path);
+        resolve();
+      });
+    },
+    exportTextFile: function exportTextFile() {
+      var _this7 = this;
+
+      this.validateData().then(function () {
+        _this7.openNewPage().then(function () {
+          window.location = '/invoice-batches/' + _this7.form.id;
+        });
       });
     }
   },
   created: function created() {
-    var _this7 = this;
+    var _this8 = this;
 
     this.form.get("/api/suppliers").then(function (response) {
-      _this7.supplierSelections = response.data;
-      _this7.suppliersInitialized = true;
+      _this8.supplierSelections = response.data;
+      _this8.suppliersInitialized = true;
 
       if (id != null) {
-        _this7.dataInitialized = false;
-        _this7.isEdit = true;
+        _this8.dataInitialized = false;
+        _this8.isEdit = true;
 
-        _this7.load(id);
+        _this8.load(id);
       }
     });
     this.isShow = typeof isShow !== "undefined" ? isShow : false;
@@ -45520,14 +45530,14 @@ new vue__WEBPACK_IMPORTED_MODULE_8__.default({
       this.form.get("/api/invoice-batches/".concat(this.getUrlParams("source_invoice_batch_id"), "?include=invoiceBatchDetails.invoice.supplier")).then(function (response) {
         if (response.data.cancelled) {
           response.data.invoiceBatchDetails.data.forEach(function (data) {
-            _this7.form.invoiceBatchDetails.data.push({
-              id: _this7.counter--,
+            _this8.form.invoiceBatchDetails.data.push({
+              id: _this8.counter--,
               invoiceId: data.invoice.id,
               invoice: data.invoice
             });
           });
         } else {
-          _this7.$swal({
+          _this8.$swal({
             title: "Notice!",
             text: "The Batch you want to copy has not yet been cancelled.",
             type: "success"

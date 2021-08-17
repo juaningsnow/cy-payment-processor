@@ -122,6 +122,28 @@
                 :supplier-id="supplierIdToUpdate"
             ></supplier-modal>
         </div>
+        <template slot="footer">
+            <button
+                class="btn btn-success"
+                @click="save"
+                :disabled="form.isBusy"
+            >
+                <div v-if="form.isSaving">
+                    <i class="fas fa-circle-notch fa-spin"></i> Saving...
+                </div>
+                <div v-if="!form.isSaving">
+                    <i class="fa fa-save"></i>
+                </div>
+            </button>
+            <button
+                type="button"
+                class="btn btn-secondary"
+                :disabled="form.isBusy"
+                @click="close"
+            >
+                Close
+            </button>
+        </template>
     </modal-window>
 </template>
 <script>
