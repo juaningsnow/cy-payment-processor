@@ -50,7 +50,7 @@
                                     <a :href="item.editUrl"><button type="button" class="btn btn-info"><i
                                                 class="fas fa-edit"></i></button></a>
                                     <button type="button" class="btn btn-danger"
-                                        @click="destroy(`/api/users/${item.id}`,`/users`)"><i
+                                        @click="destroy(`/api/user-management/${item.id}`,`/users`)"><i
                                             class="fas fa-trash"></i></button>
                                 </div>
                             </td>
