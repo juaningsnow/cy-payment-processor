@@ -7,8 +7,7 @@
             <button type="button" @click="showInvoiceModal = true" class="btn btn-success btn-sm"><i class="fa fa-plus"
                     aria-hidden="true"></i>
                 Invoice </button>
-            <button type="button" v-if="selected.length > 0" @click="showBatchModal = true"
-                class="btn btn-success btn-sm">
+            <button type="button" v-if="selected.length > 0" @click="addToBatch" class="btn btn-success btn-sm">
                 Add To Batch
             </button>
             <button type="button" @click="showMarkAsPaidModal = true" class="btn btn-success btn-sm">
@@ -107,11 +106,14 @@
                 @reload-data="reloadData"></batch-modal>
             <mark-as-paid-modal :selected="selected" v-if="showMarkAsPaidModal" :company-id="companyId"
                 @close="showMarkAsPaidModal = false" @reload-data="reloadData"></mark-as-paid-modal>
+            <add-multiple-to-batch-modal :selected-invoices="selected" v-if="showAddToBatchModal"
+                @close="showAddToBatchModal = false" @reload-data="reloadData"></add-multiple-to-batch-modal>
         </div>
     </div>
 </div>
 @endsection
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script type="text/javascript">
     var indexVariables = {!! json_encode($indexVariables) !!};
     var baseUrl = indexVariables.baseUrl;

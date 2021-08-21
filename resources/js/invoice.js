@@ -100,6 +100,20 @@ new Vue({
             });
         },
 
+        destroy() {
+            this.form.deleteWithConfirmation(`/api/invoices/${this.form.id}`).then(response => {
+                this.form.successModal('Invoice has been deleted').then(() =>
+                    window.location = `/invoices`
+                );
+            }).catch(error => {
+                this.$swal({
+                    title: "Warning!",
+                    text: error.message,
+                    type: "warning"
+                })
+            });
+        },
+
         addToBatch() {
             Swal.fire({
                 title: 'Do you want to create a new Batch?',

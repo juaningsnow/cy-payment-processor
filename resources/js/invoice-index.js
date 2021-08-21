@@ -4,6 +4,7 @@ import { Form } from "./components/Form";
 import InvoiceModal from "./components/InvoiceModal.vue";
 import BatchModal from "./components/BatchModal.vue";
 import MarkAsPaidModal from "./components/MarkAsPaidModal.vue";
+import AddMultipleToBatchModal from "./components/AddMultipleToBatchModal.vue";
 import VueSweetalert2 from "vue-sweetalert2";
 Vue.use(VueSweetalert2);
 Vue.filter("numeric", function (value, decimals = 2) {
@@ -21,7 +22,7 @@ Vue.filter("numeric", function (value, decimals = 2) {
 Vue.config.devtools = true;
 new Vue({
     el: "#index",
-    components: { Index, InvoiceModal, BatchModal, MarkAsPaidModal },
+    components: { AddMultipleToBatchModal, Index, InvoiceModal, BatchModal, MarkAsPaidModal },
     data: {
         form: new Form({
             selected: [],
@@ -40,6 +41,7 @@ new Vue({
         companyId: typeof companyId !== "undefined" ? companyId : null,
         showInvoiceModal: false,
         showBatchModal: false,
+        showAddToBatchModal: false,
         selected: [],
         allSelected: false,
         showMarkAsPaidModal: false,
@@ -122,6 +124,23 @@ new Vue({
                     window.location = redirectUrl
                 );
             });
+        },
+
+        addToBatch() {
+            Swal.fire({
+                title: 'Do you want to create a new Batch?',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: `Yes`,
+                denyButtonText: `No`,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    this.showBatchModal = true;
+                } else if (result.isDenied) {
+                    this.showAddToBatchModal = true;
+                }
+            })
         },
 
         deleteAll() {

@@ -34,6 +34,11 @@ class CreditNote extends BaseModel
         return $query->where('status', 'AUTHORISED')->orWhere('status', 'PAID');
     }
 
+    public function scopeAuthorised($query)
+    {
+        return $query->where('status', 'AUTHORISED');
+    }
+
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);

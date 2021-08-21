@@ -29,6 +29,8 @@
                                 class="btn btn-success btn-sm">
                                 Add to Batch
                             </button>
+                            <button type="button" class="btn btn-danger btn-sm" @click="destroy"><i
+                                    class="fas fa-trash"></i></button>
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                 <i class="fas fa-minus"></i>
                             </button>

@@ -1834,6 +1834,309 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/AddMultipleToBatchModal.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/AddMultipleToBatchModal.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _ModalWindow__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ModalWindow */ "./resources/js/components/ModalWindow.vue");
+/* harmony import */ var _Form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Form */ "./resources/js/components/Form.js");
+/* harmony import */ var _InvoiceBatchDetail2__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./InvoiceBatchDetail2 */ "./resources/js/components/InvoiceBatchDetail2.vue");
+/* harmony import */ var _SupplierModal_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SupplierModal.vue */ "./resources/js/components/SupplierModal.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  components: {
+    ModalWindow: _ModalWindow__WEBPACK_IMPORTED_MODULE_0__.default,
+    InvoiceBatchDetail: _InvoiceBatchDetail2__WEBPACK_IMPORTED_MODULE_2__.default,
+    SupplierModal: _SupplierModal_vue__WEBPACK_IMPORTED_MODULE_3__.default
+  },
+  props: {
+    selectedInvoices: {
+      type: Array,
+      "default": []
+    },
+    isShow: {
+      type: Boolean,
+      "default": false
+    }
+  },
+  data: function data() {
+    return {
+      title: "Add to Batch",
+      form: new _Form__WEBPACK_IMPORTED_MODULE_1__.Form({
+        invoiceBatchId: null,
+        invoiceBatchDetails: {
+          data: []
+        },
+        total: 0
+      }),
+      counter: -1,
+      nullValue: null,
+      invoiceBatchSelection: [],
+      invoiceBatchInitialized: false,
+      supplierIdToUpdate: null,
+      invoiceBatchDetailIndexForSupplierUpdate: null,
+      showSupplierModal: false,
+      dataInitialized: true
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    this.form.invoiceId = this.invoiceId;
+    this.setDetails().then(function () {
+      _this.form.get("/api/invoice-batches?not-yet-generated=1").then(function (response) {
+        _this.invoiceBatchSelection = response.data;
+        _this.invoiceBatchInitialized = true;
+        _this.dataInitialized = true;
+      });
+    });
+  },
+  methods: {
+    setDetails: function setDetails() {
+      var _this2 = this;
+
+      return new Promise(function (resolve, reject) {
+        _this2.selectedInvoices.forEach(function (invoice) {
+          _this2.form.invoiceBatchDetails.data.push({
+            id: _this2.counter--,
+            invoiceId: invoice.id,
+            invoice: invoice,
+            amount: Number(invoice.amountDue) > 0 ? Number(invoice.amountDue) : Number(invoice.total)
+          });
+        });
+
+        resolve();
+      });
+    },
+    close: function close() {
+      this.$emit("close");
+      this.form.reset();
+    },
+    analyzeSuppliers: function analyzeSuppliers() {
+      var _this3 = this;
+
+      return new Promise(function (resolve, reject) {
+        if (!_this3.form.supplierId) {
+          _this3.form.invoiceBatchDetails.data.forEach(function (detail, index) {
+            if (!detail.invoice.supplier.bankId || !detail.invoice.supplier.accountNumber) {
+              console.log(detail);
+              _this3.invoiceBatchDetailIndexForSupplierUpdate = index;
+              _this3.supplierIdToUpdate = detail.invoice.supplier.id;
+              reject();
+            }
+          });
+
+          resolve();
+        } else {
+          _this3.form.get("/api/suppliers/".concat(_this3.form.supplierId)).then(function (response) {
+            if (!response.data.bankId || !response.data.accountNumber) {
+              _this3.supplierIdToUpdate = response.data.id;
+              reject();
+            } else {
+              resolve();
+            }
+          });
+        }
+      });
+    },
+    allSuppliersHasBankDetails: function allSuppliersHasBankDetails() {
+      var _this4 = this;
+
+      return new Promise(function (resolve, reject) {
+        _this4.analyzeSuppliers().then(function () {
+          resolve();
+        })["catch"](function (error) {
+          if (_this4.supplierIdToUpdate) {
+            _this4.$swal({
+              title: "Missing data!",
+              text: "Need to Update Supplier Bank Details",
+              type: "warning"
+            }).then(function () {
+              _this4.showSupplierModal = true;
+            });
+          }
+        });
+      });
+    },
+    save: function save() {
+      var _this5 = this;
+
+      this.allSuppliersHasBankDetails().then(function () {
+        if (!_this5.supplierIdToUpdate) {
+          _this5.form.post("/api/invoice-batches/details-add").then(function (response) {
+            _this5.$swal({
+              title: "Added to Batch!",
+              text: "Invoices has been added to batch",
+              type: "success"
+            }).then(function () {
+              var showUrl = new URL("".concat(window.location.origin, "/invoice-batches/").concat(response.data.id));
+              window.location = showUrl;
+
+              _this5.close();
+            });
+          })["catch"](function (error) {
+            _this5.$swal({
+              title: "Error!",
+              text: error.message,
+              type: "warning"
+            });
+          });
+        }
+      });
+    },
+    reloadData: function reloadData() {
+      var _this6 = this;
+
+      this.dataInitialized = false;
+      this.form.get("/api/suppliers/".concat(this.supplierIdToUpdate)).then(function (response) {
+        _this6.form.invoiceBatchDetails.data[_this6.invoiceBatchDetailIndexForSupplierUpdate].invoice.supplier = response.data;
+        _this6.invoiceBatchDetailIndexForSupplierUpdate = null;
+        _this6.supplierIdToUpdate = null;
+        _this6.dataInitialized = true;
+      });
+    }
+  },
+  watch: {
+    initializationComplete: function initializationComplete(val) {
+      this.form.isInitializing = !val;
+    },
+    totalAmount: function totalAmount(val) {
+      this.form.total = val;
+    }
+  },
+  computed: {
+    initializationComplete: function initializationComplete() {
+      return this.dataInitialized && this.invoiceBatchInitialized;
+    },
+    totalAmount: function totalAmount() {
+      return this.form.invoiceBatchDetails.data.reduce(function (prev, curr) {
+        return prev + curr.amount;
+      }, 0.0);
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/BatchModal.vue?vue&type=script&lang=js&":
 /*!*****************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/BatchModal.vue?vue&type=script&lang=js& ***!
@@ -29342,6 +29645,45 @@ if (typeof window !== 'undefined' && window.Sweetalert2){  window.Sweetalert2.ve
 
 /***/ }),
 
+/***/ "./resources/js/components/AddMultipleToBatchModal.vue":
+/*!*************************************************************!*\
+  !*** ./resources/js/components/AddMultipleToBatchModal.vue ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _AddMultipleToBatchModal_vue_vue_type_template_id_91ea5e78___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AddMultipleToBatchModal.vue?vue&type=template&id=91ea5e78& */ "./resources/js/components/AddMultipleToBatchModal.vue?vue&type=template&id=91ea5e78&");
+/* harmony import */ var _AddMultipleToBatchModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AddMultipleToBatchModal.vue?vue&type=script&lang=js& */ "./resources/js/components/AddMultipleToBatchModal.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _AddMultipleToBatchModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _AddMultipleToBatchModal_vue_vue_type_template_id_91ea5e78___WEBPACK_IMPORTED_MODULE_0__.render,
+  _AddMultipleToBatchModal_vue_vue_type_template_id_91ea5e78___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/AddMultipleToBatchModal.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/BatchModal.vue":
 /*!************************************************!*\
   !*** ./resources/js/components/BatchModal.vue ***!
@@ -29888,6 +30230,22 @@ component.options.__file = "resources/js/components/TextFilter.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/AddMultipleToBatchModal.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/AddMultipleToBatchModal.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddMultipleToBatchModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AddMultipleToBatchModal.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/AddMultipleToBatchModal.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddMultipleToBatchModal_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./resources/js/components/BatchModal.vue?vue&type=script&lang=js&":
 /*!*************************************************************************!*\
   !*** ./resources/js/components/BatchModal.vue?vue&type=script&lang=js& ***!
@@ -30109,6 +30467,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TextFilter_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TextFilter.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/TextFilter.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TextFilter_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
+/***/ "./resources/js/components/AddMultipleToBatchModal.vue?vue&type=template&id=91ea5e78&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/AddMultipleToBatchModal.vue?vue&type=template&id=91ea5e78& ***!
+  \********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddMultipleToBatchModal_vue_vue_type_template_id_91ea5e78___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddMultipleToBatchModal_vue_vue_type_template_id_91ea5e78___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddMultipleToBatchModal_vue_vue_type_template_id_91ea5e78___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./AddMultipleToBatchModal.vue?vue&type=template&id=91ea5e78& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/AddMultipleToBatchModal.vue?vue&type=template&id=91ea5e78&");
+
 
 /***/ }),
 
@@ -30346,6 +30721,262 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TextFilter_vue_vue_type_template_id_2af94930___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TextFilter_vue_vue_type_template_id_2af94930___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TextFilter.vue?vue&type=template&id=2af94930& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/TextFilter.vue?vue&type=template&id=2af94930&");
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/AddMultipleToBatchModal.vue?vue&type=template&id=91ea5e78&":
+/*!***********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/AddMultipleToBatchModal.vue?vue&type=template&id=91ea5e78& ***!
+  \***********************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "modal-window",
+    {
+      attrs: { title: _vm.title, form: _vm.form, size: "xl" },
+      on: { close: _vm.close, save: _vm.save }
+    },
+    [
+      !_vm.initializationComplete
+        ? _c(
+            "div",
+            {
+              staticClass: "row align-items-center",
+              staticStyle: { height: "100px" }
+            },
+            [
+              _c("div", { staticClass: "col-12 text-center h4" }, [
+                _c("i", { staticClass: "fas fa-circle-notch fa-spin" }),
+                _vm._v(" Initializing...\n        ")
+              ])
+            ]
+          )
+        : _c(
+            "div",
+            [
+              Object.keys(_vm.form.errors.errors).length
+                ? _c("div", {
+                    staticClass: "alert alert-danger",
+                    attrs: { role: "alert" }
+                  })
+                : _vm._e(),
+              _vm._v(" "),
+              _vm._l(_vm.form.errors.errors, function(error, index) {
+                return _c(
+                  "small",
+                  {
+                    key: index,
+                    staticClass: "form-text form-control-feedback"
+                  },
+                  [_vm._v(_vm._s(error[0]))]
+                )
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c("label", { attrs: { for: "owner" } }, [_vm._v("Batch")]),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.invoiceBatchId,
+                        expression: "form.invoiceBatchId"
+                      }
+                    ],
+                    staticClass: "form-control select2",
+                    staticStyle: { width: "100%" },
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.form,
+                          "invoiceBatchId",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      }
+                    }
+                  },
+                  [
+                    _c(
+                      "option",
+                      {
+                        attrs: { selected: "selected", disabled: "" },
+                        domProps: { value: _vm.nullValue }
+                      },
+                      [
+                        _vm._v(
+                          "\n                    -Select Batch-\n                "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm._l(_vm.invoiceBatchSelection, function(item, index) {
+                      return _c(
+                        "option",
+                        { key: index, domProps: { value: item.id } },
+                        [
+                          _vm._v(
+                            "\n                    " +
+                              _vm._s(item.batchName) +
+                              "(" +
+                              _vm._s(item.name) +
+                              ")\n                "
+                          )
+                        ]
+                      )
+                    })
+                  ],
+                  2
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "row" },
+                [
+                  _c(
+                    "table",
+                    { staticClass: "table" },
+                    [
+                      _c("thead", [
+                        _c("tr", [
+                          _c("th", [_vm._v("Supplier")]),
+                          _vm._v(" "),
+                          _c("th", [_vm._v("Date")]),
+                          _vm._v(" "),
+                          _c("th", [_vm._v("Invoice Number")]),
+                          _vm._v(" "),
+                          _c("th", [_vm._v("Amount")]),
+                          _vm._v(" "),
+                          !_vm.isShow ? _c("th", [_vm._v("Actions")]) : _vm._e()
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _vm._l(_vm.form.invoiceBatchDetails.data, function(
+                        detail,
+                        index
+                      ) {
+                        return _c("invoice-batch-detail", {
+                          key: detail.id,
+                          tag: "tbody",
+                          attrs: { detail: detail, index: index },
+                          on: {
+                            remove: function($event) {
+                              return _vm.form.invoiceBatchDetails.data.splice(
+                                index,
+                                1
+                              )
+                            }
+                          }
+                        })
+                      }),
+                      _vm._v(" "),
+                      _c("tfoot", [
+                        _c("tr", [
+                          _c(
+                            "td",
+                            {
+                              staticClass: "text-right",
+                              attrs: { colspan: "3" }
+                            },
+                            [_vm._v("Total")]
+                          ),
+                          _vm._v(" "),
+                          _c("td", { staticClass: "text-right" }, [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(_vm._f("numeric")(_vm.totalAmount)) +
+                                "\n                        "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("td")
+                        ])
+                      ])
+                    ],
+                    2
+                  ),
+                  _vm._v(" "),
+                  _vm.showSupplierModal
+                    ? _c("supplier-modal", {
+                        attrs: { "supplier-id": _vm.supplierIdToUpdate },
+                        on: {
+                          "reload-data": _vm.reloadData,
+                          close: function($event) {
+                            _vm.showSupplierModal = false
+                          }
+                        }
+                      })
+                    : _vm._e()
+                ],
+                1
+              )
+            ],
+            2
+          ),
+      _vm._v(" "),
+      _c("template", { slot: "footer" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-success",
+            attrs: { disabled: _vm.form.isBusy },
+            on: { click: _vm.save }
+          },
+          [
+            _vm.form.isSaving
+              ? _c("div", [
+                  _c("i", { staticClass: "fas fa-circle-notch fa-spin" }),
+                  _vm._v(" Saving...\n            ")
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            !_vm.form.isSaving
+              ? _c("div", [_c("i", { staticClass: "fa fa-save" })])
+              : _vm._e()
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-secondary",
+            attrs: { type: "button", disabled: _vm.form.isBusy },
+            on: { click: _vm.close }
+          },
+          [_vm._v("\n            Close\n        ")]
+        )
+      ])
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
 
 
 /***/ }),
@@ -47708,13 +48339,14 @@ var __webpack_exports__ = {};
   !*** ./resources/js/invoice-index.js ***!
   \***************************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _components_Index_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/Index.vue */ "./resources/js/components/Index.vue");
 /* harmony import */ var _components_Form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Form */ "./resources/js/components/Form.js");
 /* harmony import */ var _components_InvoiceModal_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/InvoiceModal.vue */ "./resources/js/components/InvoiceModal.vue");
 /* harmony import */ var _components_BatchModal_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/BatchModal.vue */ "./resources/js/components/BatchModal.vue");
 /* harmony import */ var _components_MarkAsPaidModal_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/MarkAsPaidModal.vue */ "./resources/js/components/MarkAsPaidModal.vue");
-/* harmony import */ var vue_sweetalert2__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-sweetalert2 */ "./node_modules/vue-sweetalert2/src/index.js");
+/* harmony import */ var _components_AddMultipleToBatchModal_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/AddMultipleToBatchModal.vue */ "./resources/js/components/AddMultipleToBatchModal.vue");
+/* harmony import */ var vue_sweetalert2__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-sweetalert2 */ "./node_modules/vue-sweetalert2/src/index.js");
 
 
 
@@ -47722,8 +48354,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_6__.default.use(vue_sweetalert2__WEBPACK_IMPORTED_MODULE_5__.default);
-vue__WEBPACK_IMPORTED_MODULE_6__.default.filter("numeric", function (value) {
+
+vue__WEBPACK_IMPORTED_MODULE_7__.default.use(vue_sweetalert2__WEBPACK_IMPORTED_MODULE_6__.default);
+vue__WEBPACK_IMPORTED_MODULE_7__.default.filter("numeric", function (value) {
   var decimals = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
 
   if (isNaN(Number(value))) {
@@ -47737,10 +48370,11 @@ vue__WEBPACK_IMPORTED_MODULE_6__.default.filter("numeric", function (value) {
   });
   return formatter.format(value);
 });
-vue__WEBPACK_IMPORTED_MODULE_6__.default.config.devtools = true;
-new vue__WEBPACK_IMPORTED_MODULE_6__.default({
+vue__WEBPACK_IMPORTED_MODULE_7__.default.config.devtools = true;
+new vue__WEBPACK_IMPORTED_MODULE_7__.default({
   el: "#index",
   components: {
+    AddMultipleToBatchModal: _components_AddMultipleToBatchModal_vue__WEBPACK_IMPORTED_MODULE_5__.default,
     Index: _components_Index_vue__WEBPACK_IMPORTED_MODULE_0__.default,
     InvoiceModal: _components_InvoiceModal_vue__WEBPACK_IMPORTED_MODULE_2__.default,
     BatchModal: _components_BatchModal_vue__WEBPACK_IMPORTED_MODULE_3__.default,
@@ -47764,6 +48398,7 @@ new vue__WEBPACK_IMPORTED_MODULE_6__.default({
     companyId: typeof companyId !== "undefined" ? companyId : null,
     showInvoiceModal: false,
     showBatchModal: false,
+    showAddToBatchModal: false,
     selected: [],
     allSelected: false,
     showMarkAsPaidModal: false
@@ -47850,14 +48485,32 @@ new vue__WEBPACK_IMPORTED_MODULE_6__.default({
         });
       });
     },
-    deleteAll: function deleteAll() {
+    addToBatch: function addToBatch() {
       var _this4 = this;
+
+      Swal.fire({
+        title: 'Do you want to create a new Batch?',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        denyButtonText: "No"
+      }).then(function (result) {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          _this4.showBatchModal = true;
+        } else if (result.isDenied) {
+          _this4.showAddToBatchModal = true;
+        }
+      });
+    },
+    deleteAll: function deleteAll() {
+      var _this5 = this;
 
       this.form.selected = this.selected;
       this.form.confirm().then(function (response) {
         if (response.value) {
-          _this4.form.post("/api/invoices/destroy-multiple").then(function (response) {
-            _this4.form.successModal('Items has been removed').then(function () {
+          _this5.form.post("/api/invoices/destroy-multiple").then(function (response) {
+            _this5.form.successModal('Items has been removed').then(function () {
               return window.location = "/invoices";
             });
           });

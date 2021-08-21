@@ -125,6 +125,10 @@ class InvoiceApiController extends ResourceApiController
     public function destroy($id)
     {
         $invoice = Invoice::find($id);
+        if($invoice->invoicePayments()->exists()){
+            throw new GeneralApiException('This invoice has Payment Record.');
+        }
+        $invoice->triggerXero = true;
         $invoice->delete();
         return response('success', 200);
     }

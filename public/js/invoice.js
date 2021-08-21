@@ -62513,8 +62513,23 @@ new vue__WEBPACK_IMPORTED_MODULE_11__.default({
         });
       });
     },
-    addToBatch: function addToBatch() {
+    destroy: function destroy() {
       var _this = this;
+
+      this.form.deleteWithConfirmation("/api/invoices/".concat(this.form.id)).then(function (response) {
+        _this.form.successModal('Invoice has been deleted').then(function () {
+          return window.location = "/invoices";
+        });
+      })["catch"](function (error) {
+        _this.$swal({
+          title: "Warning!",
+          text: error.message,
+          type: "warning"
+        });
+      });
+    },
+    addToBatch: function addToBatch() {
+      var _this2 = this;
 
       Swal.fire({
         title: 'Do you want to create a new Batch?',
@@ -62525,9 +62540,9 @@ new vue__WEBPACK_IMPORTED_MODULE_11__.default({
       }).then(function (result) {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          _this.showBatchModal = true;
+          _this2.showBatchModal = true;
         } else if (result.isDenied) {
-          _this.showAddToBatchModal = true;
+          _this2.showAddToBatchModal = true;
         }
       });
     },
@@ -62547,17 +62562,17 @@ new vue__WEBPACK_IMPORTED_MODULE_11__.default({
       this.selected = [this.form];
     },
     reloadData: function reloadData(id) {
-      var _this2 = this;
+      var _this3 = this;
 
       this.dataInitialized = false;
       this.form.get("/api/invoices/" + id + "?include=invoiceCredits,invoicePayments,supplier,media,invoiceXeroAttachments").then(function (response) {
-        _this2.loadData(response.data);
+        _this3.loadData(response.data);
 
-        _this2.dataInitialized = true;
+        _this3.dataInitialized = true;
       });
     },
     removeFile: function removeFile(id) {
-      var _this3 = this;
+      var _this4 = this;
 
       this.form.patch("/api/invoices/remove-attachment/".concat(id)).then(function (response) {
         Swal.fire({
@@ -62565,13 +62580,13 @@ new vue__WEBPACK_IMPORTED_MODULE_11__.default({
           text: "Changes saved to database.",
           type: "success"
         }).then(function () {
-          _this3.reloadData(_this3.form.id);
+          _this4.reloadData(_this4.form.id);
         });
       });
     }
   },
   created: function created() {
-    var _this4 = this;
+    var _this5 = this;
 
     if (id != null) {
       this.isEdit = true;
@@ -62579,12 +62594,12 @@ new vue__WEBPACK_IMPORTED_MODULE_11__.default({
     }
 
     this.form.get("/api/suppliers?limit=".concat(Number.MAX_SAFE_INTEGER)).then(function (response) {
-      _this4.supplierSelections = response.data;
-      _this4.suppliersInitialized = true;
+      _this5.supplierSelections = response.data;
+      _this5.suppliersInitialized = true;
 
-      _this4.form.get("/api/currencies?limit=".concat(Number.MAX_SAFE_INTEGER)).then(function (response) {
-        _this4.currencySelections = response.data;
-        _this4.currencyInitialized = true;
+      _this5.form.get("/api/currencies?limit=".concat(Number.MAX_SAFE_INTEGER)).then(function (response) {
+        _this5.currencySelections = response.data;
+        _this5.currencyInitialized = true;
       });
     });
     this.isShow = typeof isShow !== "undefined" ? isShow : false;

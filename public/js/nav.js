@@ -14179,7 +14179,7 @@ new vue__WEBPACK_IMPORTED_MODULE_1__.default({
     axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/invoices?no_invoice_batch_detail_or_cancelled=1&paid=0").then(function (response) {
       _this.invoiceCount = response.data.meta.total;
     });
-    axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/credit-notes?include=supplier,currency&paid_and_authorised=1").then(function (response) {
+    axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/credit-notes?include=supplier,currency&authorised=1").then(function (response) {
       _this.creditNoteCount = response.data.meta.total;
     });
     axios__WEBPACK_IMPORTED_MODULE_0___default().get("/api/invoice-batches?not-yet-generated=1").then(function (response) {

@@ -83,6 +83,17 @@ class InvoiceBatchApiController extends ResourceApiController
         return $this->getResource($invoiceBatch);
     }
 
+    public function addMoreInvoices(InvoiceBatchRequest $request)
+    {
+        $newInvoices = $request->getInvoiceBatchDetails();
+        $invoiceBatch = InvoiceBatch::find($request->input('invoiceBatchId'));
+        $updatedInvoices = array_merge($invoiceBatch->getInvoiceBatchDetails()->all(), $newInvoices);
+        $invoiceBatch->setInvoiceBatchDetails($updatedInvoices);
+        $invoiceBatch->save();
+        $invoiceBatch->invoiceBatchDetails()->sync($invoiceBatch->getInvoiceBatchDetails());
+        return $this->getResource($invoiceBatch);
+    }
+
     public function update($id, InvoiceBatchRequest $request)
     {
         $invoiceBatch = InvoiceBatch::find($id);
