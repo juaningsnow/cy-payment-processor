@@ -12,9 +12,6 @@
                 </div>
                 <div v-else>
                     <div class="card-header">
-                        <a v-if="!form.isGenerated" href="{{route('invoice_edit', $id)}}">
-                            <button type="button" class="btn btn-info btn-sm"><i class="fas fa-edit"></i></button></a>
-
                         <button type="button" @click="syncXeroData" class="btn btn-info">Sync Xero Data</button>
                         <a target="_blank" :href="form.xeroUrl">
                             <button type="button" class="btn btn-info btn-sm">Open in Xero To Allocate
