@@ -33,7 +33,6 @@
                 <label for="name">Name</label>
                 <input
                     type="text"
-                    :disabled="isShow"
                     class="form-control"
                     placeholder="Name"
                     v-model="form.name"
@@ -44,7 +43,6 @@
                 <label for="email">Email</label>
                 <input
                     type="text"
-                    :disabled="isShow"
                     class="form-control"
                     placeholder="Email"
                     v-model="form.email"
@@ -53,11 +51,7 @@
 
             <div class="form-group">
                 <label for="paymentType">Purpose</label>
-                <select
-                    class="form-control select2"
-                    :disabled="isShow"
-                    v-model="form.purposeId"
-                >
+                <select class="form-control select2" v-model="form.purposeId">
                     <option selected="selected" disabled :value="null">
                         -Select Purpose-
                     </option>
@@ -73,11 +67,7 @@
 
             <div class="form-group">
                 <label for="paymentType">Payment Type</label>
-                <select
-                    class="form-control select2"
-                    :disabled="isShow"
-                    v-model="form.paymentType"
-                >
+                <select class="form-control select2" v-model="form.paymentType">
                     <option selected="selected" disabled :value="null">
                         -Select Payment Type-
                     </option>
@@ -93,11 +83,7 @@
 
             <div class="form-group">
                 <label for="account">Xero Account</label>
-                <select
-                    class="form-control select2"
-                    :disabled="isShow"
-                    v-model="form.accountId"
-                >
+                <select class="form-control select2" v-model="form.accountId">
                     <option selected="selected" disabled :value="null">
                         -Select Account-
                     </option>
@@ -115,7 +101,6 @@
                 <label for="accountNumber">Account Number</label>
                 <input
                     type="text"
-                    :disabled="isShow"
                     class="form-control"
                     placeholder="Account Number"
                     v-model="form.accountNumber"
@@ -124,11 +109,7 @@
 
             <div class="form-group">
                 <label for="paymentType">Bank</label>
-                <select
-                    class="form-control select2"
-                    :disabled="isShow"
-                    v-model="form.bankId"
-                >
+                <select class="form-control select2" v-model="form.bankId">
                     <option selected="selected" disabled :value="null">
                         -Select Bank-
                     </option>
@@ -272,7 +253,6 @@ export default {
                             });
                     });
             });
-        this.isShow = typeof isShow !== "undefined" ? isShow : false;
     },
 };
 </script>

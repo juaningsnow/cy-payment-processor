@@ -42,6 +42,8 @@
                             :filterable="filterable" :sort-ascending="sortAscending" :to-last-page="toLastPage"
                             :invoice-batch-id="form.id" @reload-data="load">
                         </invoice-list-modal>
+                        <supplier-modal @reload-data="reloadData" v-if="showSupplierModal"
+                            @close="showSupplierModal = false" :supplier-id="supplierIdToUpdate"></supplier-modal>
                     </form>
                 </div>
             </div>
@@ -50,6 +52,7 @@
 </div>
 @endsection
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script type="text/javascript">
     var id = {!! json_encode($id) !!};
     var isShow = true;

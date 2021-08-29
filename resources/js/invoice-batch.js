@@ -7,6 +7,7 @@ import InvoiceBatchDetail from "./components/InvoiceBatchDetail.vue";
 import Datepicker from "vuejs-datepicker";
 import InvoiceListModal from "./components/InvoiceListModal.vue";
 import moment from 'moment';
+import SupplierModal from "./components/SupplierModal.vue";
 Vue.use(VueSweetalert2);
 
 Vue.config.devtools = true;
@@ -31,6 +32,7 @@ new Vue({
         InvoiceBatchDetail,
         Datepicker,
         InvoiceListModal,
+        SupplierModal,
     },
 
     data: {
@@ -64,6 +66,9 @@ new Vue({
 
         supplierSelections: [],
         suppliersInitialized: false,
+        supplierIdToUpdate: null,
+        invoiceBatchDetailIndexForSupplierUpdate: null,
+        showSupplierModal: false,
     },
 
     watch: {
@@ -170,6 +175,14 @@ new Vue({
                     `/api/invoice-batches/${id}?include=invoiceBatchDetails.invoice.supplier`
                 ).then(response => {
                     this.loadData(response.data);
+                    if (response.data.generated) {
+                        Swal.fire({
+                            title: 'Reminder',
+                            width: '800px',
+                            html:
+                                '<span>Please upload your payment file using file Upload in OCBC Velocity</span><br><img src="/img/instruction1.jpg" height="300" width="700"><br><img src="/img/instruction2.jpg" height="300" width="700">'
+                        });
+                    }
                     this.dataInitialized = true;
                 });
         },
@@ -198,11 +211,76 @@ new Vue({
         },
 
         exportTextFile() {
-            this.validateData().then(() => {
-                this.openNewPage().then(() => {
-                    window.location = '/invoice-batches/' + this.form.id;
-                })
-            })
+            this.allSuppliersHasBankDetails().then(() => {
+                if (!this.supplierIdToUpdate) {
+                    this.validateData().then(() => {
+                        this.openNewPage().then(() => {
+                            window.location = '/invoice-batches/' + this.form.id;
+                        })
+                    })
+                }
+            });
+
+        },
+
+        analyzeSuppliers() {
+            return new Promise((resolve, reject) => {
+                if (!this.form.supplierId) {
+                    this.form.invoiceBatchDetails.data.forEach(
+                        (detail, index) => {
+                            if (
+                                !detail.invoice.supplier.bankId ||
+                                !detail.invoice.supplier.accountNumber
+                            ) {
+                                console.log(detail);
+                                this.invoiceBatchDetailIndexForSupplierUpdate =
+                                    index;
+                                this.supplierIdToUpdate =
+                                    detail.invoice.supplier.id;
+                                reject();
+                            }
+                        }
+                    );
+                    resolve();
+                } else {
+                    this.form
+                        .get(`/api/suppliers/${this.form.supplierId}`)
+                        .then((response) => {
+                            if (
+                                !response.data.bankId ||
+                                !response.data.accountNumber
+                            ) {
+                                this.supplierIdToUpdate = response.data.id;
+                                reject();
+                            } else {
+                                resolve();
+                            }
+                        });
+                }
+            });
+        },
+        allSuppliersHasBankDetails() {
+            return new Promise((resolve, reject) => {
+                this.analyzeSuppliers()
+                    .then(() => {
+                        resolve();
+                    })
+                    .catch((error) => {
+                        if (this.supplierIdToUpdate) {
+                            this.$swal({
+                                title: "Missing data!",
+                                text: "Need to Update Supplier Bank Details",
+                                type: "warning",
+                            }).then(() => {
+                                this.showSupplierModal = true;
+                            });
+                        }
+                    });
+            });
+        },
+
+        reloadData() {
+            this.load(this.form.id);
         },
     },
 

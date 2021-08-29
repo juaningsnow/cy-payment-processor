@@ -75,7 +75,7 @@
                         style="width: 100%"
                         :disabled="isShow"
                     >
-                        <option selected="selected" disabled :value="nullValue">
+                        <option selected="selected" :value="nullValue">
                             -Select Supplier-
                         </option>
                         <option
@@ -115,12 +115,6 @@
                     </tr>
                 </tfoot>
             </table>
-            <supplier-modal
-                @reload-data="reloadData"
-                v-if="showSupplierModal"
-                @close="showSupplierModal = false"
-                :supplier-id="supplierIdToUpdate"
-            ></supplier-modal>
         </div>
         <template slot="footer">
             <button
@@ -149,13 +143,12 @@
 <script>
 import ModalWindow from "./ModalWindow";
 import InvoiceBatchDetail from "./InvoiceBatchDetail2";
-import SupplierModal from "./SupplierModal.vue";
 import { Form } from "./Form";
 import moment from "moment";
 import Datepicker from "vuejs-datepicker";
 
 export default {
-    components: { ModalWindow, InvoiceBatchDetail, Datepicker, SupplierModal },
+    components: { ModalWindow, InvoiceBatchDetail, Datepicker },
 
     props: {
         hasEnforcedFocus: {
@@ -187,10 +180,6 @@ export default {
             nullValue: null,
             dataInitialized: true,
             counter: -1,
-            supplierIdToUpdate: null,
-            invoiceBatchDetailIndexForSupplierUpdate: null,
-            showSupplierModal: false,
-
             supplierSelections: [],
             suppliersInitialized: false,
         };
@@ -230,88 +219,29 @@ export default {
             this.$emit("close");
             this.form.reset();
         },
-        analyzeSuppliers() {
-            return new Promise((resolve, reject) => {
-                if (!this.form.supplierId) {
-                    this.form.invoiceBatchDetails.data.forEach(
-                        (detail, index) => {
-                            if (
-                                !detail.invoice.supplier.bankId ||
-                                !detail.invoice.supplier.accountNumber
-                            ) {
-                                console.log(detail);
-                                this.invoiceBatchDetailIndexForSupplierUpdate =
-                                    index;
-                                this.supplierIdToUpdate =
-                                    detail.invoice.supplier.id;
-                                reject();
-                            }
-                        }
-                    );
-                    resolve();
-                } else {
-                    this.form
-                        .get(`/api/suppliers/${this.form.supplierId}`)
-                        .then((response) => {
-                            if (
-                                !response.data.bankId ||
-                                !response.data.accountNumber
-                            ) {
-                                this.supplierIdToUpdate = response.data.id;
-                                reject();
-                            } else {
-                                resolve();
-                            }
-                        });
-                }
-            });
-        },
-        allSuppliersHasBankDetails() {
-            return new Promise((resolve, reject) => {
-                this.analyzeSuppliers()
-                    .then(() => {
-                        resolve();
-                    })
-                    .catch((error) => {
-                        if (this.supplierIdToUpdate) {
-                            this.$swal({
-                                title: "Missing data!",
-                                text: "Need to Update Supplier Bank Details",
-                                type: "warning",
-                            }).then(() => {
-                                this.showSupplierModal = true;
-                            });
-                        }
-                    });
-            });
-        },
         save() {
-            this.allSuppliersHasBankDetails().then(() => {
-                if (!this.supplierIdToUpdate) {
-                    this.form
-                        .post(`/api/invoice-batches`)
-                        .then((response) => {
-                            this.$swal({
-                                title: "Batch Created!",
-                                text: "Invoice Batch has beend saved to database",
-                                type: "success",
-                            }).then(() => {
-                                let showUrl = new URL(
-                                    `${window.location.origin}/invoice-batches/${response.data.id}`
-                                );
-                                window.location = showUrl;
-                                this.close();
-                            });
-                        })
-                        .catch((error) => {
-                            this.$swal({
-                                title: "Error!",
-                                text: error.message,
-                                type: "warning",
-                            });
-                        });
-                }
-            });
+            this.form
+                .post(`/api/invoice-batches`)
+                .then((response) => {
+                    this.$swal({
+                        title: "Batch Created!",
+                        text: "Invoice Batch has beend saved to database",
+                        type: "success",
+                    }).then(() => {
+                        let showUrl = new URL(
+                            `${window.location.origin}/invoice-batches/${response.data.id}`
+                        );
+                        window.location = showUrl;
+                        this.close();
+                    });
+                })
+                .catch((error) => {
+                    this.$swal({
+                        title: "Error!",
+                        text: error.message,
+                        type: "warning",
+                    });
+                });
         },
         reloadData() {
             this.dataInitialized = false;
