@@ -30280,7 +30280,7 @@ var render = function() {
           }
         },
         [
-          _c("table", { staticClass: "table" }, [
+          _c("table", { staticClass: "table table-responsive" }, [
             _c("thead", [
               _c("tr", [
                 _c(

@@ -1,5 +1,5 @@
 <div class="row">
-    <table class="table table-simple">
+    <table class="table table-responsive">
         <thead>
             <tr>
                 <th>Name</th>

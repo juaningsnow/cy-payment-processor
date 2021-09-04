@@ -36,7 +36,7 @@
 </div>
 
 <div class="row">
-    <table class="table">
+    <table class="table table-responsive">
         <thead>
             <tr>
                 <th colspan="3" class="text-center">Companies</th>

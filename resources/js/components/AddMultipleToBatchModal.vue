@@ -47,7 +47,7 @@
                 </select>
             </div>
             <div class="row">
-                <table class="table">
+                <table class="table table-responsive">
                     <thead>
                         <tr>
                             <th>Supplier</th>

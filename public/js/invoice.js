@@ -45811,7 +45811,7 @@ var render = function() {
             _vm._v(" "),
             _c(
               "table",
-              { staticClass: "table" },
+              { staticClass: "table table-responsive" },
               [
                 _c("thead", [
                   _c("tr", [

@@ -35,7 +35,7 @@
 </div>
 
 <div v-if="displayData.length > 0" class="row">
-    <table class="table table-simple">
+    <table class="table table-responsive">
         <tr>
             <th>Supplier</th>
             <th>Account Number</th>

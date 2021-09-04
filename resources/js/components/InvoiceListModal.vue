@@ -16,7 +16,7 @@
             v-on:update-loading="(val) => (isLoading = val)"
             v-on:update-items="(val) => (items = val)"
         >
-            <table class="table">
+            <table class="table table-responsive">
                 <thead>
                     <tr>
                         <td @click="selectAll" class="text-center">

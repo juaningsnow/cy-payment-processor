@@ -40,7 +40,7 @@
                         <div class="card-body">
                             @include('invoices._form')
                             <div class="row">
-                                <table class="table table-simple">
+                                <table class="table table-responsive">
                                     <thead>
                                         <tr>
                                             <th class="text-center">Xero Attachments</th>
@@ -73,7 +73,7 @@
                                     @close="showInvoiceAttachmentModal = false"></invoice-attachment-modal>
                             </div>
                             <div class="row" v-if="form.invoicePayments.data.length > 0">
-                                <table class="table table-simple">
+                                <table class="table table-responsive">
                                     <thead>
                                         <tr>
                                             <th colspan="2" class="text-center">Payments</th>
@@ -95,7 +95,7 @@
                             </div>
 
                             <div class="row" v-if="form.invoiceCredits.data.length > 0">
-                                <table class="table table-simple">
+                                <table class="table table-responsive">
                                     <thead>
                                         <tr>
                                             <th colspan="2" class="text-center">Credits</th>

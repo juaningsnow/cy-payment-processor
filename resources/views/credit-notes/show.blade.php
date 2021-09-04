@@ -26,7 +26,7 @@
                         <div class="card-body">
                             @include('credit-notes._list')
                             <div class="row">
-                                <table class="table">
+                                <table class="table table-responsive">
                                     <thead>
                                         <tr>
                                             <th>Invoice #</th>

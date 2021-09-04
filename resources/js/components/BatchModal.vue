@@ -89,7 +89,7 @@
                 </div>
             </div>
             <br />
-            <table class="table">
+            <table class="table table-responsive">
                 <thead>
                     <tr>
                         <th>Supplier</th>
