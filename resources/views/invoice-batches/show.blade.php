@@ -25,8 +25,10 @@
                             <div class="btn-group">
                                 <button type="button" v-if="!form.cancelled && form.generated" title="Cancel"
                                     @click="cancel" class="btn btn-danger btn-sm">Cancel</button>
-                                <button type="button" title="Export Text File" @click="exportTextFile"
-                                    class="btn btn-success btn-sm">Generate</button>
+                                <button type="button" title="Export Fast Text File" @click="exportTextFile"
+                                    class="btn btn-success btn-sm">Generate FAST</button>
+                                <button type="button" title="Payment Day must be next business day"
+                                    @click="exportGiroFile" class="btn btn-success btn-sm">Generate GIRO</button>
                             </div>
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                 <i class="fas fa-minus"></i>

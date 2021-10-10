@@ -210,6 +210,26 @@ new Vue({
             })
         },
 
+        openNewPageGiro() {
+            return new Promise((resolve, reject) => {
+                let path = new URL(`${window.location.origin}/invoice-batches/giro/${id}/generate`);
+                window.open(path);
+                resolve();
+            })
+        },
+
+        exportGiroFile() {
+            this.allSuppliersHasBankDetails().then(() => {
+                if (!this.supplierIdToUpdate) {
+                    this.validateData().then(() => {
+                        this.openNewPageGiro().then(() => {
+                            window.location = '/invoice-batches/' + this.form.id;
+                        })
+                    })
+                }
+            });
+        },
+
         exportTextFile() {
             this.allSuppliersHasBankDetails().then(() => {
                 if (!this.supplierIdToUpdate) {

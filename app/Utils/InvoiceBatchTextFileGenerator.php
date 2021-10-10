@@ -11,9 +11,9 @@ use function PHPSTORM_META\map;
 
 class InvoiceBatchTextFileGenerator
 {
-    public static function generate(InvoiceBatch $batch, User $user)
+    public static function generate(InvoiceBatch $batch, User $user, $isGiro = false)
     {
-        $heading = static::generateHeadingLine($batch, $user);
+        $heading = static::generateHeadingLine($batch, $user, $isGiro);
         $lines = $batch->hasSupplier() ? static::generateLineDetailsForSingleSupplier($batch) : static::generateLineDetails($batch);
         $combined = array_merge([$heading], $lines);
         $finalOutput = implode("\n", $combined);
@@ -114,14 +114,14 @@ class InvoiceBatchTextFileGenerator
         return substr($combination, 0, 1000);
     }
 
-    private static function generateHeadingLine(InvoiceBatch $batch, User $user)
+    private static function generateHeadingLine(InvoiceBatch $batch, User $user, $isGiro)
     {
         $transactionTypeCode = "10";                                                        //transaction code 2  characters
         $filler1 = static::rightPaddingGenerator(" ", " ", 11);                             //space filler 11 characters
         $originatingBankCode = substr($user->getActiveCompany()->getDefaultBank()->bank->swift, 0, 11);                           //originating bank code(swift) 11 characters
         $accountNumber = static::rightPaddingGenerator($user->getActiveCompany()->getDefaultAccountNumber(), " ", 34);     //account number 34 characters
         $filler2 = static::rightPaddingGenerator(" ", " ", 147);                            // 147 space filler
-        $clearing = "FAST";                                                                 //Clearing 4 characters(FAST OR GIRO)
+        $clearing = $isGiro ? "GIRO" : "FAST";                                                                 //Clearing 4 characters(FAST OR GIRO)
         $referenceNumber = static::rightPaddingGenerator($batch->batch_name, " ", 16);      // References Number(Batch #) 16 characters
         $date = $batch->date->format('dmY');                                                //Date formatted as (ddmmyyyy) 8 characters
         $combinedHeadingLine =

@@ -46368,38 +46368,58 @@ new vue__WEBPACK_IMPORTED_MODULE_9__.default({
         resolve();
       });
     },
-    exportTextFile: function exportTextFile() {
+    openNewPageGiro: function openNewPageGiro() {
+      return new Promise(function (resolve, reject) {
+        var path = new URL("".concat(window.location.origin, "/invoice-batches/giro/").concat(id, "/generate"));
+        window.open(path);
+        resolve();
+      });
+    },
+    exportGiroFile: function exportGiroFile() {
       var _this7 = this;
 
       this.allSuppliersHasBankDetails().then(function () {
         if (!_this7.supplierIdToUpdate) {
           _this7.validateData().then(function () {
-            _this7.openNewPage().then(function () {
+            _this7.openNewPageGiro().then(function () {
               window.location = '/invoice-batches/' + _this7.form.id;
             });
           });
         }
       });
     },
-    analyzeSuppliers: function analyzeSuppliers() {
+    exportTextFile: function exportTextFile() {
       var _this8 = this;
 
+      this.allSuppliersHasBankDetails().then(function () {
+        if (!_this8.supplierIdToUpdate) {
+          _this8.validateData().then(function () {
+            _this8.openNewPage().then(function () {
+              window.location = '/invoice-batches/' + _this8.form.id;
+            });
+          });
+        }
+      });
+    },
+    analyzeSuppliers: function analyzeSuppliers() {
+      var _this9 = this;
+
       return new Promise(function (resolve, reject) {
-        if (!_this8.form.supplierId) {
-          _this8.form.invoiceBatchDetails.data.forEach(function (detail, index) {
+        if (!_this9.form.supplierId) {
+          _this9.form.invoiceBatchDetails.data.forEach(function (detail, index) {
             if (!detail.invoice.supplier.bankId || !detail.invoice.supplier.accountNumber) {
               console.log(detail);
-              _this8.invoiceBatchDetailIndexForSupplierUpdate = index;
-              _this8.supplierIdToUpdate = detail.invoice.supplier.id;
+              _this9.invoiceBatchDetailIndexForSupplierUpdate = index;
+              _this9.supplierIdToUpdate = detail.invoice.supplier.id;
               reject();
             }
           });
 
           resolve();
         } else {
-          _this8.form.get("/api/suppliers/".concat(_this8.form.supplierId)).then(function (response) {
+          _this9.form.get("/api/suppliers/".concat(_this9.form.supplierId)).then(function (response) {
             if (!response.data.bankId || !response.data.accountNumber) {
-              _this8.supplierIdToUpdate = response.data.id;
+              _this9.supplierIdToUpdate = response.data.id;
               reject();
             } else {
               resolve();
@@ -46409,19 +46429,19 @@ new vue__WEBPACK_IMPORTED_MODULE_9__.default({
       });
     },
     allSuppliersHasBankDetails: function allSuppliersHasBankDetails() {
-      var _this9 = this;
+      var _this10 = this;
 
       return new Promise(function (resolve, reject) {
-        _this9.analyzeSuppliers().then(function () {
+        _this10.analyzeSuppliers().then(function () {
           resolve();
         })["catch"](function (error) {
-          if (_this9.supplierIdToUpdate) {
-            _this9.$swal({
+          if (_this10.supplierIdToUpdate) {
+            _this10.$swal({
               title: "Missing data!",
               text: "Need to Update Supplier Bank Details",
               type: "warning"
             }).then(function () {
-              _this9.showSupplierModal = true;
+              _this10.showSupplierModal = true;
             });
           }
         });
@@ -46432,17 +46452,17 @@ new vue__WEBPACK_IMPORTED_MODULE_9__.default({
     }
   },
   created: function created() {
-    var _this10 = this;
+    var _this11 = this;
 
     this.form.get("/api/suppliers").then(function (response) {
-      _this10.supplierSelections = response.data;
-      _this10.suppliersInitialized = true;
+      _this11.supplierSelections = response.data;
+      _this11.suppliersInitialized = true;
 
       if (id != null) {
-        _this10.dataInitialized = false;
-        _this10.isEdit = true;
+        _this11.dataInitialized = false;
+        _this11.isEdit = true;
 
-        _this10.load(id);
+        _this11.load(id);
       }
     });
     this.isShow = typeof isShow !== "undefined" ? isShow : false;
@@ -46452,14 +46472,14 @@ new vue__WEBPACK_IMPORTED_MODULE_9__.default({
       this.form.get("/api/invoice-batches/".concat(this.getUrlParams("source_invoice_batch_id"), "?include=invoiceBatchDetails.invoice.supplier")).then(function (response) {
         if (response.data.cancelled) {
           response.data.invoiceBatchDetails.data.forEach(function (data) {
-            _this10.form.invoiceBatchDetails.data.push({
-              id: _this10.counter--,
+            _this11.form.invoiceBatchDetails.data.push({
+              id: _this11.counter--,
               invoiceId: data.invoice.id,
               invoice: data.invoice
             });
           });
         } else {
-          _this10.$swal({
+          _this11.$swal({
             title: "Notice!",
             text: "The Batch you want to copy has not yet been cancelled.",
             type: "success"

@@ -146,7 +146,9 @@ class InvoiceBatchApiController extends ResourceApiController
         if (!$request->user()->getActiveCompany()->getDefaultBank()->account) {
             throw new GeneralApiException('Company Default Bank does not have an account yet!');
         }
+
         $batch = InvoiceBatch::find($request->input('id'));
+
         $batch->setGenerated(true);
         $batch->save();
 

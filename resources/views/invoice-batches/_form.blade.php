@@ -20,7 +20,6 @@
     </div>
 </div>
 <div class="row">
-
     <div class="col-6">
         <div class="form-group">
             <label for="name">Batch Name</label>
