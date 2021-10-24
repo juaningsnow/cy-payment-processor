@@ -6,14 +6,16 @@ use App\Models\InvoiceBatch;
 use App\Models\InvoiceBatchDetail;
 use App\Models\Supplier;
 use App\Models\User;
+use Carbon\Carbon;
+use DateTime;
 
 use function PHPSTORM_META\map;
 
 class InvoiceBatchTextFileGenerator
 {
-    public static function generate(InvoiceBatch $batch, User $user, $isGiro = false)
+    public static function generate(InvoiceBatch $batch, User $user, $isGiro = false, $date = null)
     {
-        $heading = static::generateHeadingLine($batch, $user, $isGiro);
+        $heading = static::generateHeadingLine($batch, $user, $isGiro, $date);
         $lines = $batch->hasSupplier() ? static::generateLineDetailsForSingleSupplier($batch) : static::generateLineDetails($batch);
         $combined = array_merge([$heading], $lines);
         $finalOutput = implode("\n", $combined);
@@ -114,8 +116,11 @@ class InvoiceBatchTextFileGenerator
         return substr($combination, 0, 1000);
     }
 
-    private static function generateHeadingLine(InvoiceBatch $batch, User $user, $isGiro)
+    private static function generateHeadingLine(InvoiceBatch $batch, User $user, $isGiro, $dateOverride)
     {
+        $dateOverride = str_replace("-", "/", $dateOverride);
+        $newDate = $dateOverride ? new DateTime($dateOverride) : null;
+
         $transactionTypeCode = "10";                                                        //transaction code 2  characters
         $filler1 = static::rightPaddingGenerator(" ", " ", 11);                             //space filler 11 characters
         $originatingBankCode = substr($user->getActiveCompany()->getDefaultBank()->bank->swift, 0, 11);                           //originating bank code(swift) 11 characters
@@ -123,7 +128,7 @@ class InvoiceBatchTextFileGenerator
         $filler2 = static::rightPaddingGenerator(" ", " ", 147);                            // 147 space filler
         $clearing = $isGiro ? "GIRO" : "FAST";                                                                 //Clearing 4 characters(FAST OR GIRO)
         $referenceNumber = static::rightPaddingGenerator($batch->batch_name, " ", 16);      // References Number(Batch #) 16 characters
-        $date = $batch->date->format('dmY');                                                //Date formatted as (ddmmyyyy) 8 characters
+        $date = $newDate ? $newDate->format('dmY') : $batch->date->format('dmY');
         $combinedHeadingLine =
             substr($transactionTypeCode, 0, 2).
             substr($filler1, 0, 11).

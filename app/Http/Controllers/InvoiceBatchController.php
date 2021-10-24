@@ -106,14 +106,14 @@ class InvoiceBatchController extends Controller
         return Response::make($fileText, 200, $headers);
     }
 
-    public function downloadTextFileGiro($id)
+    public function downloadTextFileGiro($id, $date)
     {
         if (!auth()->user()->getActiveCompany()->isXeroConnected()) {
             return redirect()->route('xero_status');
         }
        
         $batch = InvoiceBatch::find($id);
-        $fileText = InvoiceBatchTextFileGenerator::generate($batch, auth()->user(), true);
+        $fileText = InvoiceBatchTextFileGenerator::generate($batch, auth()->user(), true, $date);
         $currentDateTime = Carbon::now();
         $myName = "{$batch->batch_name}{$currentDateTime->format('dmYHis')}.txt";
         $headers = [

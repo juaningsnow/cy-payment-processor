@@ -12,6 +12,8 @@
                 </div>
                 <div v-else>
                     <div class="card-header">
+                        <span>For GIRO, select next working day as batch Date, or the payment file will not
+                            work.</span>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                 <i class="fas fa-minus"></i>

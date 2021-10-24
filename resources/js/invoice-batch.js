@@ -8,6 +8,7 @@ import Datepicker from "vuejs-datepicker";
 import InvoiceListModal from "./components/InvoiceListModal.vue";
 import moment from 'moment';
 import SupplierModal from "./components/SupplierModal.vue";
+import { defaultsDeep } from 'lodash';
 Vue.use(VueSweetalert2);
 
 Vue.config.devtools = true;
@@ -69,6 +70,7 @@ new Vue({
         supplierIdToUpdate: null,
         invoiceBatchDetailIndexForSupplierUpdate: null,
         showSupplierModal: false,
+        giroDate: null,
     },
 
     watch: {
@@ -210,24 +212,55 @@ new Vue({
             })
         },
 
-        openNewPageGiro() {
+        openNewPageGiro(date) {
+            console.log(date);
             return new Promise((resolve, reject) => {
-                let path = new URL(`${window.location.origin}/invoice-batches/giro/${id}/generate`);
-                window.open(path);
+                // let path = new URL(`${window.location.origin}/invoice-batches/giro/${id}/generate/${date}`);
+                // window.open(path);
                 resolve();
             })
+        },
+
+        askFordate() {
+
         },
 
         exportGiroFile() {
             this.allSuppliersHasBankDetails().then(() => {
                 if (!this.supplierIdToUpdate) {
                     this.validateData().then(() => {
-                        this.openNewPageGiro().then(() => {
-                            window.location = '/invoice-batches/' + this.form.id;
-                        })
+                        Swal.fire({
+                            title: 'Pick a date:',
+                            type: 'question',
+                            html: '<input id="datepicker" readonly class="swal2-input">',
+                            customClass: 'swal2-overflow',
+                            onOpen: function () {
+                                $('#datepicker').datepicker({
+                                    dateFormat: 'mm-dd-yy'
+                                });
+                            }
+                        }).then(function (result) {
+                            if (result.value) {
+                                let date = $('#datepicker').val();
+                                let openGiro = new Promise((resolve, reject) => {
+                                    let path = new URL(`${window.location.origin}/invoice-batches/giro/${id}/generate/${date}`);
+                                    window.open(path);
+                                    resolve();
+                                })
+                                openGiro.then(() => {
+                                    window.location = '/invoice-batches/' + this.form.id;
+                                });
+                            }
+                        });
                     })
                 }
             });
+
+
+            // let date = $('#datepicker').val();
+            // this.openNewPageGiro().then(() => {
+            //     window.location = '/invoice-batches/' + this.form.id;
+            // })
         },
 
         exportTextFile() {

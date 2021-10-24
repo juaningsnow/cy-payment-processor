@@ -83,7 +83,7 @@ Route::prefix('invoice-batches')->group(function () {
     Route::get('/', [InvoiceBatchController::class, 'index'])->name('invoice-batches');
     Route::get('/create', [InvoiceBatchController::class, 'create'])->name('invoice_create');
     Route::get('/{id}/generate', [InvoiceBatchController::class, 'downloadTextFile'])->name('invoice-batches_generate');
-    Route::get('/giro/{id}/generate', [InvoiceBatchController::class, 'downloadTextFileGiro'])->name('invoice-batches_generate_giro');
+    Route::get('/giro/{id}/generate/{date}', [InvoiceBatchController::class, 'downloadTextFileGiro'])->name('invoice-batches_generate_giro');
     Route::get('/{id}', [InvoiceBatchController::class, 'show'])->name('invoice-batches_show');
     Route::get('/{id}/edit', [InvoiceBatchController::class, 'edit'])->name('invoice-batches_edit');
 });
